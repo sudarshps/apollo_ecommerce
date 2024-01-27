@@ -1,0 +1,31 @@
+
+  
+ 
+  
+  .resend {
+    font-size: 12px;
+  }
+  
+  .footer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: black;
+    font-size: 12px;
+    text-align: right;
+    font-family: monospace;
+  }
+  
+  .footer a {
+    color: black;
+    text-decoration: none;
+  }#wrnmsg{
+    text-align: center;
+    border: 1px solid #ccc;
+    padding: 20px;
+    font-size: medium;
+}
+
+#otpError{
+  color: red;
+}

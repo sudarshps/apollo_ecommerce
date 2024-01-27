@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Apollo Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <!-- <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg" /> -->
+        <!-- Template CSS -->
+        <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+    </head>
+
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="/admin/dashboard" class="brand-wrap">
+                    <h4>Apollo <br> Furniture.</h4>
+                    <!-- <img src="/admin/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" /> -->
+
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <!-- <li class="menu-item has-submenu"> -->
+                        <a class="menu-link" href="/admin/productList">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text"> Products</span>
+                        </a>
+
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text"> Category</span>
+                        </a>
+
+                        <li class="menu-item active">
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text"> Users</span>
+                        </a>
+                    </li>
+                       
+            </nav>
+        </aside>
+
+        <main class="main-wrap">
+            
+            <section class="content-main">
+                <div class="content-header">
+                    <h2 class="content-title">Users list</h2>
+                    <!-- <div>
+                        <a href="#" class="btn btn-primary"><i class="material-icons md-plus"></i> Create new</a>
+                    </div> -->
+                </div>
+                <div class="card mb-4">
+                    <header class="card-header">
+                        <div class="row gx-3">
+                            <div class="col-lg-4 col-md-6 me-auto">
+                                <input type="text" placeholder="Search..." class="form-control" />
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Status</option>
+                                    <option>Active</option>
+                                    <option>Disabled</option>
+                                    <option>Show all</option>
+                                </select>
+                            </div>
+                            <div class="col-lg-2 col-md-3 col-6">
+                                <select class="form-select">
+                                    <option>Show 20</option>
+                                    <option>Show 30</option>
+                                    <option>Show 40</option>
+                                </select>
+                            </div>
+                        </div>
+                    </header>
+                    <!-- card-header end// -->
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Users</th>
+                                        <th>Email</th>
+                                        <th>Mobile</th>
+                                        <th>Status</th>
+                                        <th class="text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% for(let i=0;i<users.length;i++){ %>
+
+                                    <tr>   
+                                        <td><%= i+1 %></td>
+                                        <td><h6 class="mb-0 title"><%= users[i].username %></h6></td>
+                                        <td><%= users[i].email %></td>
+                                        <td><%= users[i].mobile %></td>
+                                        <td><% if(users[i].isBlocked===false){ %>
+                                            <span class="text-success">Active</span></td>
+                                        
+                                        <%} else{ %>
+                                            <span class="text-danger">Blocked</span></td>
+                                            <% } %>
+                                            <td class="text-end">
+                                                <% if(users[i].isBlocked===false){ %>
+                                                <a href="/admin/changeUserStatus?userId=<%= users[i]._id %>"><button class="btn btn-md rounded-pill font-sm block-user"  style="background-color:rgb(210, 27, 27)" >Block</button></a>
+                                              <% }else{ %>
+                                                <a href="/admin/unblockUser?userId=<%= users[i]._id %>"><button class="btn btn-md rounded-pill font-sm block-user" style="background-color:green" >Unblock</button></a>
+                                                <% } %>
+                                                
+                                                <!-- dropdown //end -->
+                                            </td>
+                                    </tr>
+                              <%  } %>
+                                   
+                                </tbody>
+                            </table>
+                            <!-- table-responsive.// -->
+                        </div>
+                    </div>
+                    <!-- card-body end// -->
+                </div>
+                <!-- card end// -->
+                <div class="pagination-area mt-15 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </section>
+
+
+
+
+
+
+
+            <!-- <script>
+
+
+
+                async function changeUserStatus(event,userId){
+     try {
+        event.preventDefault()
+        const response = await axios.post('/admin/changeUserStatus',{userId})
+
+        if(response.data.success==true){
+   
+        $('#reloadDiv').load('/admin/users #reloadDiv', function() {
+        initializeDataTable();
+        });
+
+        }
+
+      
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+            </script> -->
+
+
+
+
+
+
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+    </body>
+</html>

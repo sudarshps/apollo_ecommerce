@@ -1,0 +1,205 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="css/tiny-slider.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+        <link href="css/login.css" rel="stylesheet">
+		<title>Apollo Furniture </title>
+	</head>
+
+	<body>
+
+		<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="/">Apollo Furniture<span>.</span></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+						<li class="nav-item active">
+							<a class="nav-link" href="/home">Home</a>
+						</li>
+						<li><a class="nav-link" href="/shop">Shop</a></li>
+						<li><a class="nav-link" href="/about">About us</a></li>
+						<li><a class="nav-link" href="/services">Services</a></li>
+						<li><a class="nav-link" href="/blog">Blog</a></li>
+						<li><a class="nav-link" href="/contact">Contact us</a></li>
+					</ul>
+
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li><a class="nav-link" href="/login"><img src="images/user.svg"></a></li>
+						<li><a class="nav-link" href="/cart"><img src="images/cart.svg"></a></li>
+					</ul>
+				</div>
+			</div>
+				
+		</nav>
+		<!-- End Header/Navigation -->
+<div id="wrnmsg">
+    <%
+    if(typeof message !== 'undefined'){
+        %>
+        <p style="color:rgb(125, 6, 2)"><%=message%></p>
+        <%
+    }
+    %>
+  </div>
+
+        <section class="vh-50">
+
+            <div class="container-fluid h-custom">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+          
+                <div class="col-md-9 col-lg-6 col-xl-5">
+                  <img src="/images/img-grid-1.jpg"
+                    class="img-fluid" alt="Sample image" id="imglogin">
+                </div>
+                <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1" id="regform">
+                 
+                    <h1 class="text-success">Create Account</h1>
+                    <br>
+
+                    <!--username input-->
+                    <form  action="/register" method="post" onsubmit="return validateForm(event)">
+                    <div class="form-outline mb-4 reginput" >
+                        <label class="form-label text-dark" for="form3Example3">Enter Your Name</label>
+                      <input type="text" id="form3Example3_username" class="form-control form-control-lg usernamein"
+                        placeholder="Enter Name" name="username"/>
+                        <span id="userNameError" class="error"></span>
+                        
+                      
+                    </div>
+
+
+                    <!-- Email input -->
+                    <div class="form-outline mb-4 reginput">
+                        <label class="form-label text-dark" for="form3Example3">Enter Email</label>
+                      <input type="email" id="form3Example3_email" class="form-control form-control-lg emailin"
+                        placeholder="Enter a valid email address" name="email" required/>
+                        <span id="emailError" class="error"></span>
+                        
+                      
+                    </div>
+
+                    <!--mobile input-->
+                    <div class="form-outline mb-4 reginput">
+                        <label class="form-label text-dark" for="form3Example3">Enter Mobile</label>
+                      <input type="text" id="form3Example3_mobile" class="form-control form-control-lg mobilein"
+                        placeholder="Enter your mobile" name="mobile" required/>
+                        <span id="mobileNumberError" class="error"></span>
+                        
+                      
+                    </div>
+          
+                    <!-- Password input -->
+                    <div class="form-outline mb-3">
+                        <label class="form-label text-dark" for="form3Example4">Enter Password</label>
+                      <input type="password" id="form3Example4_password" class="form-control form-control-lg passwordin"
+                        placeholder="Enter password" name="password" required/>
+                        
+                        <span id="confirmPasswordError" class="error"></span>
+                      
+                        <br>
+                        <p class="text-dark">To verify your E-mail, we will send a OTP to your mail.</p>
+                      
+                    </div>
+          
+                    
+          
+                    <div class="text-center text-lg-start mt-4 pt-2">
+                      <button type="submit" class="btn btn-primary btn-lg"
+                        style="padding-left: 2.5rem; padding-right: 2.5rem;">Verify Email</button>
+                      <p class="small fw-bold mt-2 pt-1 mb-0">have an account? <a href="/login"
+                          class="link-dark">Login</a></p>
+                    </div>
+          
+                  </form>
+                </div>
+              </div>
+            </div>
+            
+          
+              
+            </div>
+            
+          </section>
+
+
+          <script>
+              function validateForm(event) {
+                event.preventDefault();
+            
+
+
+            var username = document.getElementById("form3Example3_username").value.trim();
+            var email = document.getElementById("form3Example3_email").value.trim();
+            var mobile = document.getElementById("form3Example3_mobile").value.trim();
+            var password = document.getElementById("form3Example4_password").value.trim();
+
+           
+            document.getElementById("userNameError").innerText = "";
+            document.getElementById("emailError").innerText = "";
+            document.getElementById("mobileNumberError").innerText = "";
+            document.getElementById("confirmPasswordError").innerText = "";
+
+            var isValid = true;
+
+            // Validation for username
+            const nameRegex =/^[a-zA-Z][a-zA-Z0-9]*$/
+            if (!nameRegex.test(username)) {
+                document.getElementById("userNameError").innerText = "Please enter your name.";
+                isValid = false;
+            }
+
+            // Validation for email
+            const emailOne = /^[^\s@]+@/;
+             const emailTwo=/[a-zA-Z\d-]+\.(com|net|org)$/
+             const combinedRegex=new RegExp(emailOne.source+emailTwo.source)
+            if (!combinedRegex.test(email)) {
+                document.getElementById("emailError").innerText = "Please enter a valid email address.";
+                isValid = false;
+            }
+
+            // Validation for mobile number
+            const mobileRegex=/^\d{10}$/
+            if (!mobileRegex.test(mobile)) {
+                document.getElementById("mobileNumberError").innerText = "Please enter a valid 10-digit mobile number.";
+                isValid = false;
+            }
+
+            // Validation for password
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                document.getElementById("confirmPasswordError").innerText = "Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one digit, and one special character (@ $ ! % * ? &)";
+                isValid = false;
+            }
+
+            if (!isValid) {
+                return false;
+            }
+
+            // Continue with form submission if all validations pass
+            event.target.submit();
+        }
+
+            </script>
+        
+
+  <%- include('../partials/footer') -%>
