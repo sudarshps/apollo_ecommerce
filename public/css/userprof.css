@@ -1,0 +1,218 @@
+body {
+    background: #f5f5f5;
+    margin-top: 20px;
+}
+
+.ui-w-80 {
+    width : 80px !important;
+    height: auto;
+}
+
+.btn-default {
+    border-color: rgba(24, 28, 33, 0.1);
+    background  : rgba(0, 0, 0, 0);
+    color       : #4E5155;
+}
+
+label.btn {
+    margin-bottom: 0;
+}
+
+.btn-outline-primary {
+    border-color: #26B4FF;
+    background  : transparent;
+    color       : #26B4FF;
+}
+
+.btn {
+    cursor: pointer;
+}
+
+.text-light {
+    color: #babbbc !important;
+}
+
+.btn-facebook {
+    border-color: rgba(0, 0, 0, 0);
+    background  : #3B5998;
+    color       : #fff;
+}
+
+.btn-instagram {
+    border-color: rgba(0, 0, 0, 0);
+    background  : #000;
+    color       : #fff;
+}
+
+.card {
+    background-clip: padding-box;
+    box-shadow     : 0 1px 4px rgba(24, 28, 33, 0.012);
+}
+
+.row-bordered {
+    overflow: hidden;
+}
+
+.account-settings-fileinput {
+    position  : absolute;
+    visibility: hidden;
+    width     : 1px;
+    height    : 1px;
+    opacity   : 0;
+}
+
+.account-settings-links .list-group-item.active {
+    font-weight: bold !important;
+}
+
+html:not(.dark-style) .account-settings-links .list-group-item.active {
+    background: transparent !important;
+}
+
+.account-settings-multiselect~.select2-container {
+    width: 100% !important;
+}
+
+.light-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.light-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+}
+
+.material-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+
+.material-style .account-settings-links .list-group-item.active {
+    color: #4e5155 !important;
+}
+
+.dark-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(255, 255, 255, 0.03) !important;
+}
+
+.dark-style .account-settings-links .list-group-item.active {
+    color: #fff !important;
+}
+
+.light-style .account-settings-links .list-group-item.active {
+    color: #4E5155 !important;
+}
+
+.light-style .account-settings-links .list-group-item {
+    padding     : 0.85rem 1.5rem;
+    border-color: rgba(24, 28, 33, 0.03) !important;
+}
+#uploadbtn{
+    width: 60px;
+    height:40px;
+}
+#divsave{
+    margin-left: 70%;
+}
+#maindiv{
+    height: 1000px;
+}
+.error{
+    color: red;
+}
+
+#addreditbtn{
+    margin-top: 30px;
+}
+#addrdltbtn{
+    margin-top: 40px;
+}
+
+
+
+
+/* orders interface */
+
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+
+
+
+
+  /* ordermng */
+
+
+  .order {
+   
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+  }
+  .order img {
+    width: 100px; /* Adjust size as needed */
+    margin-right: 20px;
+  }
+  .order-details {
+    flex: 1;
+  }
+  .order-details h3 {
+    margin: 0 0 5px 0;
+  }
+  .order-details p {
+    margin: 0;
+  }
+  .status {
+    margin-left: 130px; /* Push status to the right */
+  }
+  .error{
+    color: red;
+}
+.divcon {
+    /* display: flex; */
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cancel-button {
+    margin-left: auto;
+}
+
+
+#account-wallet .card-body {
+    background-color: #f8f9fa; 
+    border-radius: 10px;
+    padding: 20px;
+    width: 40%;
+    margin-top: 30px;
+    margin-left: 50%;
+}
+
+#account-wallet h4 {
+    color: #333;
+    margin-bottom: 15px;
+}
+
+#account-wallet h3 {
+    color: #007bff; 
+    font-weight: bold;
+    font-size: 36px; 
+}
+
+
+

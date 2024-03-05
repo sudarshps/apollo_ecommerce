@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="css/tiny-slider.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+        <!-- <link href="css/orderDetails.css" rel="stylesheet"> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<title>Apollo Furniture </title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+	</head>
+
+	<body>
+
+		<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="/">Apollo Furniture<span>.</span></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+						<li>
+							<a class="nav-link" href="/">Home</a>
+						</li>
+						<li><a class="nav-link" href="/shop">Shop</a></li>
+						<li ><a class="nav-link" href="/about">About us</a></li>
+						<li><a class="nav-link" href="/services">Services</a></li>
+						<li><a class="nav-link" href="/blog">Blog</a></li>
+						<li><a class="nav-link" href="/contact">Contact us</a></li>
+					</ul>
+
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li><a class="nav-link" href="/userProf"><img src="images/user.svg"></a></li>
+						<li><a class="nav-link" href="/cart"><img src="images/cart.svg"></a></li>
+            <li><a class="nav-link" href="/wishlist"><i class="fa-regular fa-heart" id="wishicon"></i></a></li>
+					</ul>
+				</div>
+			</div>
+				
+		</nav>
+
+
+        <section class="h-100 gradient-custom">
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-lg-10 col-xl-8">
+                  <div class="card" style="border-radius: 10px;" id="topdf">
+                    <!-- <div class="card-header px-4 py-5">
+                      <h5 class="text-muted mb-0">Thanks for your Order, <span style="color: #a8729a;">Anna</span>!</h5>
+                    </div> -->
+                    <div class="card-body p-4">
+                      
+                      
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <p class="lead fw-normal mb-0" style="color: #3b5d50;">Orders</p>
+                                <% if (orderData && orderData.items.length>=0) { %>
+                                  <% for(let i=0;i<orderData.items.length;i++){ %>
+                                <%if (orderData.items[i].status==='delivered'){ %>
+                                    <a style="text-decoration: none; cursor: pointer;" onclick="downloadInvoice('<%= orderData._id %>')"><i class="bi bi-file-earmark-arrow-down"></i>Invoice</a>
+        
+                               <% } %>
+                              </div>
+                      <div class="card shadow-0 border mb-4">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <img src="<%= orderData.items[i].product_id.images[0] %>"
+                                class="img-fluid" alt="">
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0"><%= orderData.items[i].product_id.name %></p>
+                            </div>
+                            <!-- <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0 small">White</p>
+                            </div> -->
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                                <% if(orderData.items[i].status==='delivered'){ %>
+                              <p class="text-muted mb-0 small">Status: <span class="badge rounded-pill bg-success"><%= orderData.items[i].status %></span></p>
+                                <% }else if(orderData.items[i].status==='Cancelled'){ %>
+                                    <p class="text-muted mb-0 small">Status: <span class="badge rounded-pill bg-danger"><%= orderData.items[i].status %></span></p>
+                                <% }else{ %>
+                                    <p class="text-muted mb-0 small">Status: <span class="badge rounded-pill bg-info"><%= orderData.items[i].status %></span></p>
+                                <% } %>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0 small">Qty: <%= orderData.items[i].quantity %></p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0 small">₹<%= orderData.items[i].total_price %>.00</p>
+                            </div>
+                          </div>
+                          <!-- <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                          <div class="row d-flex align-items-center">
+                            <div class="col-md-2">
+                              <p class="text-muted mb-0 small">Track Order</p>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="progress" style="height: 6px; border-radius: 16px;">
+                                <div class="progress-bar" role="progressbar"
+                                  style="width: 65%; border-radius: 16px; background-color: #3b5d50" aria-valuenow="65"
+                                  aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <div class="d-flex justify-content-around mb-1">
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                              </div>
+                            </div>
+                          </div> -->
+                        </div>
+                      </div>
+                      <% } %>
+                      <% } %>
+                      <!-- <div class="card shadow-0 border mb-4">
+                        <div class="card-body">
+                          <div class="row">
+                            <div class="col-md-2">
+                              <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/1.webp"
+                                class="img-fluid" alt="Phone">
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0">iPad</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0 small">Pink rose</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0 small">Capacity: 32GB</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0 small">Qty: 1</p>
+                            </div>
+                            <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
+                              <p class="text-muted mb-0 small">$399</p>
+                            </div>
+                          </div>
+                          <hr class="mb-4" style="background-color: #e0e0e0; opacity: 1;">
+                          <div class="row d-flex align-items-center">
+                            <div class="col-md-2">
+                              <p class="text-muted mb-0 small">Track Order</p>
+                            </div>
+                            <div class="col-md-10">
+                              <div class="progress" style="height: 6px; border-radius: 16px;">
+                                <div class="progress-bar" role="progressbar"
+                                  style="width: 20%; border-radius: 16px; background-color: #3b5d50" aria-valuenow="20"
+                                  aria-valuemin="0" aria-valuemax="100"></div>
+                              </div>
+                              <div class="d-flex justify-content-around mb-1">
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Out for delivary</p>
+                                <p class="text-muted mt-1 mb-0 small ms-xl-5">Delivered</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div> -->
+          
+                      <div class="d-flex justify-content-between pt-2">
+                        <p class="fw-bold mb-0">Order Details</p>
+                       
+                      </div>
+          
+                      <div class="d-flex justify-content-between pt-2">
+                        <p class="text-muted mb-0">Invoice Id : <%= orderData._id %></p>
+                        <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p> -->
+                      </div>
+          
+                      <div class="d-flex justify-content-between">
+                        <p class="text-muted mb-0">Ordered Date : <%= orderData.date %></p>
+                        <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
+                        <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p> -->
+                      </div>
+                      
+                      <div class="d-flex justify-content-between mb-5">
+                        <p class="text-muted mb-0">Payment Method : <%= orderData.paymentMethod.toUpperCase() %></p>
+                        <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> ₹<%= orderData.reducedTotal %>.00</p>
+                        
+                      </div>
+
+                      <div class="d-flex justify-content-between pt-2">
+                        <p class="fw-bold mb-0">Shipping Address</p>
+                       
+                      </div>
+
+                      <div class="d-flex justify-content-between pt-2">
+                        <p class="text-muted mb-0"><%= orderData.deliveryAddress %></p>
+                        
+                      </div>
+
+                    </div>
+                    <div class="card-footer border-0 px-4 py-5"
+                      style="background-color: #3b5d50; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+                      <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">Total
+                        paid: <span class="h2 mb-0 ms-2">₹<%= orderData.reducedTotal %>.00</span></h5>
+                    </div>
+
+                    
+
+
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <script>
+           function downloadInvoice(orderId){
+            const content = document.getElementById('topdf').innerHTML
+
+            html2pdf().from(content).save(`invoice_${orderId}.pdf`);
+
+            }
+          </script>
+
+
+
+          <%- include('../partials/footer') -%>

@@ -4309,4 +4309,42 @@ body.dark .dropdown-menu .dropdown-item.text-danger {
 #adminicon{
   margin-left: 92%;
 }
+
+.error{
+  color: red;
+}
+
+#addcoupondiv{
+  margin-top: 5%;
+}
+.delete-icon{
+  position: absolute;
+    top: 5px; /* Adjust as needed */
+    right: 5px; /* Adjust as needed */
+    font-size: 16px; /* Adjust as needed */
+    color: rgb(255, 0, 0); /* Adjust as needed */
+    cursor: pointer;
+}
+.image-container {
+  display: inline-block;
+  margin-right: 10px; /* Adjust as needed */
+}
+
+#addofferdiv{
+  margin-left: 17%;
+  margin-top: 5%;
+}
+.offerdivitem{
+  margin-left: 10px;
+}
+.col-offer{
+  margin-left: 20px;
+}
+.reportheaderdiv{
+ margin-bottom: 50px;
+}
+.dateinput{
+  border: 1px solid #ccc;
+        padding: 5px 10px;
+}
 /*# sourceMappingURL=main.css.map */

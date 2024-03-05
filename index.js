@@ -1,11 +1,15 @@
+require('dotenv').config()
 const mongoose = require('mongoose')
-mongoose.connect("mongodb://127.0.0.1:27017/user_detailsFurni")
+const uri = process.env.MONGO_URI
+mongoose.connect(uri)
+
 
 const express = require('express')
-const  morgan = require('morgan')
+// const  morgan = require('morgan')
 const app = express()
 const path = require('path')
 //app.use(morgan('tiny'))
+const port = process.env.PORT || 3000
 app.use(express.static(path.join(__dirname,'public')))
 app.use(express.static(path.join(__dirname,'/public/style')))
 
@@ -17,6 +21,7 @@ app.use('/',userRoute)
 const adminRoute = require('./routes/adminRoute')
 app.use('/admin',adminRoute)
 
-app.listen(3000,()=>{
-    console.log('server running ')
+app.listen(port,()=>{
+    console.log(`port is running at http://localhost:${port}
+port is running at http://localhost:${port}/admin`)
 })

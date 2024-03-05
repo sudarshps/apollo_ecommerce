@@ -15,6 +15,8 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 		<link href="css/tiny-slider.css" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        
 		<title>Apollo Furniture </title>
 	</head>
 
@@ -33,7 +35,7 @@
 				<div class="collapse navbar-collapse" id="navbarsFurni">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li>
-							<a class="nav-link" href="/home">Home</a>
+							<a class="nav-link" href="/">Home</a>
 						</li>
 						<li class="nav-item active"><a class="nav-link" href="/shop">Shop</a></li>
 						<li><a class="nav-link" href="/about">About us</a></li>
@@ -43,8 +45,9 @@
 					</ul>
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="/login"><img src="images/user.svg"></a></li>
+						<li><a class="nav-link" href="/userProf"><img src="images/user.svg"></a></li>
 						<li><a class="nav-link" href="/cart"><img src="images/cart.svg"></a></li>
+                        <li><a class="nav-link" href="/wishlist"><i class="fa-regular fa-heart" id="wishicon"></i></a></li>
 					</ul>
 				</div>
 			</div>
@@ -53,8 +56,10 @@
 		<!-- End Header/Navigation -->
 
 
+        
+
 <!-- Start Hero Section -->
-<div class="hero">
+<!-- <div class="hero">
     <div class="container">
         <div class="row justify-content-between">
             <div class="col-lg-5">
@@ -65,152 +70,236 @@
             <div class="col-lg-7">
                 
             </div>
+            
         </div>
     </div>
-</div>
+</div> -->
 <!-- End Hero Section -->
 
-<div class="category-dropdown">
-    <label for="category">Select Category:</label>
-    <select id="category" name="category">
-        <option value="all">All Categories</option>
+<div class="container pt-3 filterdiv">
+   <div class="row justify-content-between">
+    <div class="col-lg-10">
+        <h6>Filter By:</h6>
+        <div class="category-dropdown">
+            <!-- <label for="category">Select Category:</label> -->
+            
+            <select id="category" name="category" class="category-dropdown-btn" onchange="categoryChange(this.value)">
+                <a href="/shop"><option value="all">All Categories</option></a>
+                
+                <% for (let i=0;i<categoryModel.length;i++) { %>
+                    <% if(categoryModel[i].is_Listed==true){ %>
+                      
+                              <option value="<%= categoryModel[i].name %>">
+                                <%= categoryModel[i].name.toUpperCase() %>
+                              </option>
+                                  
+                            
+                      <% } %>
+                      <% } %>
+                
+            </select>
+
+            <select name="price" id="" class="category-dropdown-btn" onchange="priceChange(this.value)">
+                <option value="select">Select Price</option>
+                <option value="1000-5000"> ₹1000- ₹5000 </option>
+                <option value="5000-10000"> ₹5000- ₹10000 </option>
+                <option value="10000-15000"> ₹10000- ₹15000 </option>
+                <option value="15000-20000"> ₹15000- ₹20000 </option>
+
+            </select>
+
+            <input type="text" id="searchInput" placeholder="Search Products" class="searchinput">
+        <button onclick="search()" class="btn btn-primary btn-sm">Search</button>
+
+        </div>
+
         
-        <% for (let i=0;i<categoryModel.length;i++) { %>
-            <% if(categoryModel[i].is_Listed==true){ %>
-              
-                      <option value="<%= categoryModel[i].name %>">
-                        <%= categoryModel[i].name %>
-                      </option>
-                          
+
+        </div>
+
+        <div class="col-lg-2">
+            <h6>Sort By:</h6>
+            <div class="category-dropdown">
+                <select name="sort" id="" class="category-dropdown-btn">
+    
+                    <option value="New Arrival"> New Arrival </option>
+                    <option value="PLowToHigh"> Price: Low to High </option>
+                    <option value="PHighToLow"> Price: High to Low </option>
+                    <option value="relevence"> Relevence </option>
                     
-              <% } %>
-              <% } %>
+    
+                </select>
+            </div>
         
-    </select>
+    </div>
+   </div>
+
 </div>
+
+
+
+
 
 
 <div class="untree_co-section product-section before-footer-section">
 <div class="container">
-      <div class="row">
+    <h1 class="text-muted" id="textdiv"></h1>
+      <div class="row" id="productdiv">
         
           <!-- Start Column 1 -->
-          <% for(let i=0;i<products.length;i++){ %>
+          <% for(let i=products.length-1;i>=0;i--){ %>
+            <% if(products[i].isListed === false){ %>
+                
+            <% }else{ %>
         <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
+            <a class="product-item" href="/productDetails?id=<%= products[i]._id %>">
                 <img src="<%= products[i].images[0] %>" class="img-fluid product-thumbnail">
                 <h3 class="product-title"><%= products[i].name %></h3>
-                <strong class="product-price">$<%= products[i].price %></strong>
-
+                
+                <% if(products[i].offer!==null || products[i].categoryId.offer!==null){ %>
+                    <strong class="product-price" style=" color: red;
+                    text-decoration: line-through;">₹<%= products[i].price %>.00</strong><br>
+                    <% if(products[i].offer!==null){ %>
+                <strong class="product-price">₹<%= products[i].price - products[i].price*(products[i].offer.percentage/100)%>.00</strong>
+                <span style="color: green;"> <%= products[i].offer.percentage %>% off</span>
+                <% }else{ %>
+                    <strong class="product-price">₹<%= products[i].price - products[i].price*(products[i].categoryId.offer.percentage/100)%>.00</strong>
+                    <span style="color: green;"> <%= products[i].categoryId.offer.percentage %>% off</span>
+                <% } %>
+                <% }else if(products[i].categoryId.offer!==null && products[i].offer===null){ %>
+                    <strong class="product-price" style=" color: red;
+                    text-decoration: line-through;">₹<%= products[i].price %>.00</strong><br>
+                <strong class="product-price">₹<%= products[i].price - products[i].price*(products[i].categoryId.offer.percentage/100)%>.00</strong>
+                <span style="color: green;"><%= products[i].categoryId.offer.percentage %>% off</span>
+                <%} else{ %>
+                    <strong class="product-price">₹<%= products[i].price %>.00</strong>
+                <% } %>
                 <span class="icon-cross">
                     <img src="images/cross.svg" class="img-fluid">
                 </span>
             </a>
         </div> 
         <% } %>
+        <% } %>
         <!-- End Column 1 -->
             
-        <!-- Start Column 2 -->
-        <!-- <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
-                <img src="images/product-1.png" class="img-fluid product-thumbnail">
-                <h3 class="product-title">Nordic Chair</h3>
-                <strong class="product-price">$50.00</strong>
-
-                <span class="icon-cross">
-                    <img src="images/cross.svg" class="img-fluid">
-                </span>
-            </a>
-        </div>  -->
-        <!-- End Column 2 -->
-
-        <!-- Start Column 3 -->
-        <!-- <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
-                <img src="images/product-2.png" class="img-fluid product-thumbnail">
-                <h3 class="product-title">Kruzo Aero Chair</h3>
-                <strong class="product-price">$78.00</strong>
-
-                <span class="icon-cross">
-                    <img src="images/cross.svg" class="img-fluid">
-                </span>
-            </a>
-        </div> -->
-        <!-- End Column 3 -->
-
-        <!-- Start Column 4 -->
-        <!-- <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
-                <img src="images/product-3.png" class="img-fluid product-thumbnail">
-                <h3 class="product-title">Ergonomic Chair</h3>
-                <strong class="product-price">$43.00</strong>
-
-                <span class="icon-cross">
-                    <img src="images/cross.svg" class="img-fluid">
-                </span>
-            </a>
-        </div> -->
-        <!-- End Column 4 -->
-
-
-        <!-- Start Column 1 -->
-        <!-- <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
-                <img src="images/product-3.png" class="img-fluid product-thumbnail">
-                <h3 class="product-title">Nordic Chair</h3>
-                <strong class="product-price">$50.00</strong>
-
-                <span class="icon-cross">
-                    <img src="images/cross.svg" class="img-fluid">
-                </span>
-            </a>
-        </div>  -->
-        <!-- End Column 1 -->
-            
-        <!-- Start Column 2 -->
-        <!-- <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
-                <img src="images/product-1.png" class="img-fluid product-thumbnail">
-                <h3 class="product-title">Nordic Chair</h3>
-                <strong class="product-price">$50.00</strong>
-
-                <span class="icon-cross">
-                    <img src="images/cross.svg" class="img-fluid">
-                </span>
-            </a>
-        </div>  -->
-        <!-- End Column 2 -->
-
-        <!-- Start Column 3 -->
-        <!-- <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
-                <img src="images/product-2.png" class="img-fluid product-thumbnail">
-                <h3 class="product-title">Kruzo Aero Chair</h3>
-                <strong class="product-price">$78.00</strong>
-
-                <span class="icon-cross">
-                    <img src="images/cross.svg" class="img-fluid">
-                </span>
-            </a>
-        </div> -->
-        <!-- End Column 3 -->
-
-        <!-- Start Column 4 -->
-        <!-- <div class="col-12 col-md-4 col-lg-3 mb-5">
-            <a class="product-item" href="#">
-                <img src="images/product-3.png" class="img-fluid product-thumbnail">
-                <h3 class="product-title">Ergonomic Chair</h3>
-                <strong class="product-price">$43.00</strong>
-
-                <span class="icon-cross">
-                    <img src="images/cross.svg" class="img-fluid">
-                </span>
-            </a>
-        </div> -->
-        <!-- End Column 4 -->
+        
 
       </div>
 </div>
 </div>
+
+<script>
+    function categoryChange(categoryName){
+        fetch(`/shop?category=${categoryName}`,{
+            method:'get',
+            headers:{
+                'Content-Type':'application/json'
+            },
+
+        }).then(response=>{
+            return response.json()
+        }).then(data => {
+    if(data.success === true || data.allSuccess) {
+        const { products } = data;
+        const productdiv = document.getElementById('productdiv');
+        let html = '';
+        for(let i = 0; i < products.length; i++) {
+            if(products[i].isListed === false) {
+                continue;
+            } else {
+                html += `
+                    <div class="col-12 col-md-4 col-lg-3 mb-5">
+                        <a class="product-item" href="/productDetails?id=${products[i]._id}">
+                            <img src="${products[i].images[0]}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">${products[i].name}</h3>`;
+                
+                if(products[i].offer !== null) { 
+                    html += `<strong class="product-price" style=" color: red; text-decoration: line-through;">₹${products[i].price}.00</strong><br>`;
+                    html += `<span style="color: green;">Offer Price : </span><strong style="color: green;" class="product-price">₹${products[i].price - products[i].price*(products[i].offer.percentage/100)}.00</strong>`;
+                } else { 
+                    html += `<strong class="product-price">₹${products[i].price}.00</strong>`;
+                } 
+                html += `
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>`;
+             } 
+         }
+         productdiv.innerHTML = html;
+    }
+})
+.catch(error=>{
+            console.log('error',error)
+        })
+    }
+
+
+
+    function search(){
+        const searchResult = document.getElementById('searchInput').value.trim()
+        
+
+        fetch(`/searchItems?value=${searchResult}`,{
+            method:'get',
+            headers:{
+                'Content-Type':'application/json'
+            },
+
+        }).then(response=>{
+            return response.json()
+        }).then(data => {
+    if(data.success === true) {
+        const textdiv = document.getElementById('textdiv')
+        textdiv.innerText = ''
+        const { products } = data;
+        const productdiv = document.getElementById('productdiv');
+        let html = '';
+        for(let i = 0; i < products.length; i++) {
+            if(products[i].isListed === false) {
+                continue;
+            } else {
+                html += `
+                    <div class="col-12 col-md-4 col-lg-3 mb-5">
+                        <a class="product-item" href="/productDetails?id=${products[i]._id}">
+                            <img src="${products[i].images[0]}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">${products[i].name}</h3>`;
+                
+                if(products[i].offer !== null) { 
+                    html += `<strong class="product-price" style=" color: red; text-decoration: line-through;">₹${products[i].price}.00</strong><br>`;
+                    html += `<span style="color: green;">Offer Price : </span><strong style="color: green;" class="product-price">₹${products[i].price - products[i].price*(products[i].offer.percentage/100)}.00</strong>`;
+                } else { 
+                    html += `<strong class="product-price">₹${products[i].price}.00</strong>`;
+                } 
+                html += `
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>`;
+             } 
+         }
+         productdiv.innerHTML = html;
+    }else{
+        const textdiv = document.getElementById('textdiv')
+        const productdiv = document.getElementById('productdiv').innerHTML = ''
+        textdiv.innerText = 'No matching items found!'
+    }
+})
+.catch(error=>{
+            console.log('error',error)
+        })
+        
+    }
+
+
+    //price changing filter
+
+    function priceChange(priceRange){
+        
+    }
+</script>
 
 <%- include('../partials/footer') -%>

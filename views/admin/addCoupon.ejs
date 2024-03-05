@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Apollo Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <!-- <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg" /> -->
+        <!-- Template CSS -->
+        <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="/admin/dashboard" class="brand-wrap">
+                    <h4>Apollo <br> Furniture.</h4>
+                    <!-- <img src="/admin/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" /> -->
+
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item has-submenu"> 
+                         <a class="menu-link" href="/admin/productList">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text"> Products</span>
+                        </a> 
+                    </li>
+                         
+
+                        <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text"> Category</span>
+                        </a>
+                        </li>
+
+
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text"> Users</span>
+                        </a>
+                        
+                     
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+
+                        <li class="menu-item active">
+                        <a class="menu-link active" href="/admin/coupon">
+                            <i class="bi bi-ticket-perforated-fill">
+                                <span class="text">Coupon</span></i>
+                            
+                        </a>
+                      </li>
+
+                        <a class="menu-link" href="/admin/offer">
+                          <i class="bi bi-percent" style="font-size: 15px;">
+                              <span class="text">Offer</span></i>
+                          
+                      </a>
+                    
+                        
+            </nav>
+        </aside>
+
+
+
+<main class="main-wrap">
+   
+
+
+    <section class="container-fluid">
+        <div class="row justify-content-center" id="addcoupondiv">
+          <div class="card mb-4" style="max-width: 700px;">
+            <div class="card-body">
+              <h4 class="card-title text-center">Add Coupon</h4>
+              <div id="successContainer" class="alert alert-success" style="display: none;"></div>
+              <div id="errorContainer" class="alert alert-danger" style="display: none;"></div>
+              <div id="reloadDiv">
+                <form id="couponForm" class="forms-sample" action="/admin/addCoupon" onsubmit="return validateForm(event)">
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-4">
+                        <label for="coupon-name" class="form-label">Coupon Name</label>
+                        <input type="text" class="form-control" id="couponName" name="name" placeholder="Enter coupon name" required>
+                        <span id="nameError" class="text-danger"></span>
+                      </div>
+                      <div class="form-group mb-4">
+                        <label class="form-label" for="coupon-code">Coupon Code</label>
+                        <input type="text" class="form-control" id="couponCode" name="couponCode" placeholder="Enter coupon code" required>
+                        <span id="codeError" class="text-danger"></span>
+                      </div>
+                      <div class="form-group mb-4">
+                        <label class="form-label" for="">Availability</label>
+                        <input type="text" class="form-control" id="couponAvailability" name="couponAvailability" placeholder="Enter availability" required>
+                        <span id="availabilityError" class="text-danger"></span>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-4">
+                        <label class="form-label" for="">Description</label>
+                        <input type="text" class="form-control" id="couponDescription" name="couponDescription" placeholder="Enter description" required>
+                        <span id="descriptionError" class="text-danger"></span>
+                      </div>
+                      <div class="form-group mb-4">
+                        <label class="form-label" for="">Discount Amount</label>
+                        <input type="text" class="form-control" id="couponDiscountAmount" name="discountAmount" placeholder="Enter discount amount" required>
+                        <span id="discountError" class="text-danger"></span>
+                      </div>
+                      <div class="form-group mb-4">
+                        <label class="form-label" for="">Minimum Amount</label>
+                        <input type="text" class="form-control" id="minAmount" name="minAmount" placeholder="Enter minimum amount" required>
+                        <span id="minError" class="text-danger"></span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-5">
+                    <label class="form-label" for="">Expiry Date</label>
+                    <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                  </div>
+                  <div class="mt-4 text-center mt-4">
+                    <button type="submit" class="btn btn-primary mr-2" onclick="postCoupon(event)">Submit</button>
+                    <a href="/admin/coupon" class="btn btn-secondary">Cancel</a>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+      <script>
+
+
+async function postCoupon(event){
+ event.preventDefault()
+
+
+  let couponName = document.getElementById('couponName').value;
+  let couponCode = document.getElementById('couponCode').value;
+  let couponDescription = document.getElementById('couponDescription').value;
+  let couponAvailability = document.getElementById('couponAvailability').value;
+  let couponDiscountAmount = document.getElementById('couponDiscountAmount').value;
+  let minAmount = document.getElementById('minAmount').value;
+
+const nameRegex = /^[a-zA-Z0-9]+$/;
+const codeRegex = /^[a-zA-Z0-9]+$/;
+// const descriptionRegex = /^[a-zA-Z0-9\s.,;:'"()?!]+$/m;
+const numericRegex = /^[0-9]+$/;
+
+
+  if (!nameRegex.test(couponName)) {
+    document.getElementById('nameError').innerHTML = 'Name should only contain alphabets';
+    return false;
+  } else {
+    document.getElementById('nameError').innerHTML = '';
+  }
+
+  if (!codeRegex.test(couponCode)) {
+    document.getElementById('codeError').innerHTML = 'coupon code should not contain spaces and special characters!';
+    return false;
+  } else {
+    document.getElementById('codeError').innerHTML = '';
+  }
+
+  // if (!descriptionRegex.test(couponDescription)) {
+  //   document.getElementById('descriptionError').innerHTML = 'Description should only contain alphabets';
+  //   return false;
+  // } else {
+  //   document.getElementById('descriptionError').innerHTML = '';
+  // }
+
+  if (!numericRegex.test(couponAvailability) || parseFloat(couponAvailability) <= 0) {
+    document.getElementById('availabilityError').innerHTML = 'Availability should be a positive numeric value';
+    return false;
+  } else {
+    document.getElementById('availabilityError').innerHTML = '';
+  }
+
+  if (!numericRegex.test(couponDiscountAmount) || parseInt(couponDiscountAmount) < 0) {
+    document.getElementById('discountError').innerHTML = 'Discount amount should be a non-negative integer';
+    return false;
+  } else {
+    document.getElementById('discountError').innerHTML = '';
+  }
+  if (!numericRegex.test(minAmount) || parseInt(minAmount) < 0) {
+    document.getElementById('minError').innerHTML = 'Minimum amount should be a non-negative integer';
+    return false;
+  } else {
+    document.getElementById('minError').innerHTML = '';
+  }
+
+
+ var verifyData=$('#couponForm').serialize();
+$.ajax({
+    type:'POST',
+    url:'/admin/addCoupon',
+    data:verifyData,
+    success:function(response){
+    
+
+  if(response.success==true){
+  if (response.message){
+
+
+   $("#successContainer").css("display","block").html(response.message);
+
+   setTimeout(()=>{
+    $("#successContainer").css("display","none").html('');
+    $('#reloadDiv').load('/admin/addCoupon #reloadDiv')
+   },3000)
+
+  }
+}
+  if (response.success==false){
+    if(response.message){
+
+   $("#errorContainer").css("display","block").html(response.message);
+      setTimeout(()=>{
+    $("#errorContainer").css("display","none").html('');
+    
+   },3000)
+
+    }
+  }
+    }
+})
+
+}
+
+
+
+
+      </script>
+      
+      
+
+
+
+</head>
+</html>

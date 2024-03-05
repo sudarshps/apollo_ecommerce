@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Apollo Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <!-- <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg" /> -->
+        <!-- Template CSS -->
+        <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    </head>
+
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="/admin/dashboard" class="brand-wrap">
+                    <h4>Apollo <br> Furniture.</h4>
+                    <!-- <img src="/admin/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" /> -->
+
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="menu-item has-submenu"> 
+                         <a class="menu-link" href="/admin/productList">
+                            <i class="icon material-icons md-shopping_bag"></i>
+                            <span class="text"> Products</span>
+                        </a> 
+                    </li>
+                         
+
+                        <li class="menu-item">
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text"> Category</span>
+                        </a>
+                        </li>
+
+
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text"> Users</span>
+                        </a>
+                        
+                     
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+
+                        
+                        <a class="menu-link active" href="/admin/coupon">
+                            <i class="bi bi-ticket-perforated-fill">
+                                <span class="text">Coupon</span></i>
+                            
+                        </a>
+                        <li class="menu-item active">
+                        <a class="menu-link" href="/admin/offer">
+                            <i class="bi bi-percent" style="font-size: 15px;">
+                                <span class="text">Offer</span></i>
+                            
+                        </a>
+                    </li>
+                        
+            </nav>
+        </aside>
+
+
+        <main class="main-wrap">
+            
+                
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        <h2 class="content-title card-title">Offers</h2>
+                    </div>
+            
+                    <div>
+                        <a href="/admin/addOffer" class="btn btn-primary btn-sm rounded">Add Offer</a>
+                    </div>
+                </div>
+                <div class="card mb-4">
+                    
+                    <!-- card-header end// -->
+                    <div class="card-body" id="reloadDiv">
+                        <div class="table-responsive">
+                            <% if(offerData && offerData.length>0){ %>
+                            <table class="table table-hover">
+                                
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>Name</th>
+                                        <th>Starting Date</th>
+                                        <th>Expire Date</th>
+                                        <th>Percentage</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% offerData.forEach((offer,index)=>{ %>
+                                        <tr>
+                                            <td><%= index+1 %></td>
+                                            <td><%= offer.offerName %></td>
+                                            <td><%= offer.startingDate.toLocaleDateString() %></td>
+                                           <td><%= offer.expiryDate.toLocaleDateString() %></td> 
+                                            <td><%= offer.percentage %>%</td>
+                                            <td><% if(offer.status===true){ %>
+                                                <span class="badge rounded-pill alert-success">Active</span>
+                                           <% }else{ %>
+                                            <span class="badge rounded-pill alert-warning">Inactive</span>
+                                           <% } %></td>
+                                            
+                                            
+                                            <td> <a onclick="removeOffer(event,'<%= offer._id %>')"><i class="bi bi-trash-fill" style="font-size: 20px; color: rgb(216, 15, 15);"></i></a></td>
+
+                                        </tr>
+                                    
+                                   
+                                   
+                                   
+                                   
+                                            <!-- dropdown //end -->
+                                        <% }) %>
+                                </tbody>
+                            </table>
+                        <% }else{ %>
+                            <h5>Data not found!</h5>
+                        <% } %>
+                        </div>
+                        <!-- table-responsive //end -->
+                    </div>
+                    <!-- card-body end// -->
+                </div>
+                <!-- card end// -->
+                <!-- <div class="pagination-area mt-15 mb-50">
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-start">
+                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                            <li class="page-item"><a class="page-link" href="#">02</a></li>
+                            <li class="page-item"><a class="page-link" href="#">03</a></li>
+                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div> -->
+            </section>
+
+            <script>
+               function removeOffer(event,offerid){
+                    event.preventDefault()
+
+                    Swal.fire({
+                            title: 'Are you sure?',
+                            text: "You want to delete!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButton: '#3085d6',
+                            cancelButton: '#d33',
+                            confirmButtonText: 'Yes, remove!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                    $.ajax({
+                        url:'/admin/dltOffer',
+                        method:'post',
+                        data:{offerId:offerid},
+                        success: (response) => {
+                                        if (response.success) {
+
+                                            $('#reloadDiv').load('/admin/offer #reloadDiv', () => {
+
+                                                Swal.fire({
+                                                    title: 'Deleted!',
+                                                    text: 'Your item has been deleted.',
+                                                    icon: 'success',
+                                                    timer: 1500,
+                                                    showConfirmButton: false
+                                                });
+                                            });
+                                        } else {
+                                            Swal.fire({
+                                                title: 'Error!',
+                                                text: 'Failed to delete item.',
+                                                icon: 'error',
+                                                showConfirmButton: false
+                                            });
+                                        }
+                                    },
+                                    error: (error) => {
+                                        console.log(error);
+                                        Swal.fire({
+                                            title: 'Error!',
+                                            text: 'An error occurred while deleting the coupon.',
+                                            icon: 'error',
+                                            showConfirmButton: false
+                                        });
+                                    }
+
+                        
+                    })
+                }
+            })
+               }
+            </script>
+          
+    </body>
+</html>
+
+
+ 
+ 
+
+

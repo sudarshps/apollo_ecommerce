@@ -1,0 +1,51 @@
+#accordiondiv{
+    margin-top: 100px;
+}
+#placebtn{
+    margin-top: 30px;
+    margin-left: 88%;
+}
+#addrbtn{
+    margin-left: 80%;
+}
+#addrusebtn{
+    margin-left: 78%;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+#useaddrbtn{
+    margin-left: 70%;
+    
+}
+#addaddrbtn{
+    margin-left: 20px;
+    margin-bottom: 20px;
+}
+#selectpmbtn{
+    margin-left: 94%;
+}
+.pmdiv{
+    margin-left: 20px;
+}
+#addreditbt{
+    margin-left: 70%;
+    margin-top: 40px;
+}
+#address_{
+    width: 110%;
+}
+#couponinput{
+    width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 16px;
+  margin-bottom: 10px;
+  width: 300px;
+}
+#coupbtn{
+    margin-left: 170px;
+    margin-bottom: 30px;
+}
+

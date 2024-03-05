@@ -34,7 +34,7 @@
 				<div class="collapse navbar-collapse" id="navbarsFurni">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li class="nav-item active">
-							<a class="nav-link" href="/home">Home</a>
+							<a class="nav-link" href="/">Home</a>
 						</li>
 						<li><a class="nav-link" href="/shop">Shop</a></li>
 						<li><a class="nav-link" href="/about">About us</a></li>
@@ -44,8 +44,9 @@
 					</ul>
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="/login"><img src="images/user.svg"></a></li>
+						<li><a class="nav-link" href="/userProf"><img src="images/user.svg"></a></li>
 						<li><a class="nav-link" href="/cart"><img src="images/cart.svg"></a></li>
+            <li><a class="nav-link" href="/wishlist"><i class="fa-regular fa-heart" id="wishicon"></i></a></li>
 					</ul>
 				</div>
 			</div>
@@ -107,6 +108,15 @@
                         
                       
                     </div>
+
+                    <div class="form-outline mb-4 reginput">
+                      <label class="form-label text-dark" for="form3Example3">Enter Referral Code (optional)</label>
+                    <input type="text" id="form3Example3_referral" class="form-control form-control-lg referralin"
+                      placeholder="Enter code" name="referral"/>
+                     
+                      
+                    
+                  </div>
           
                     <!-- Password input -->
                     <div class="form-outline mb-3">
@@ -152,7 +162,8 @@
             var email = document.getElementById("form3Example3_email").value.trim();
             var mobile = document.getElementById("form3Example3_mobile").value.trim();
             var password = document.getElementById("form3Example4_password").value.trim();
-
+            var referralCodeIn = document.getElementById("form3Example3_referral").value.trim()
+                console.log(referralCodeIn);
            
             document.getElementById("userNameError").innerText = "";
             document.getElementById("emailError").innerText = "";

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Apollo Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <!-- <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg" /> -->
+        <!-- Template CSS -->
+        <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="/admin/dashboard" class="brand-wrap">
+                    <h4>Apollo <br> Furniture.</h4>
+                    <!-- <img src="/admin/imgs/theme/logo.svg" class="logo" alt="Nest Dashboard" /> -->
+
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    
+                        <li class="menu-item has-submenu"> 
+                            <a class="menu-link" href="/admin/productList">
+                               <i class="icon material-icons md-shopping_bag"></i>
+                               <span class="text"> Products</span>
+                           </a> 
+                       </li>
+
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text"> Category</span>
+                        </a>
+
+
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text"> Users</span>
+                        </a>
+
+                        <li class="menu-item active">
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+                    </li>
+
+                    <a class="menu-link" href="/admin/coupon">
+                        <i class="bi bi-ticket-perforated-fill">
+                            <span class="text">Coupon</span></i>
+                        
+                    </a>
+
+                    <a class="menu-link" href="/admin/offer">
+                        <i class="bi bi-percent" style="font-size: 15px;">
+                            <span class="text">Offer</span></i>
+                        
+                    </a>
+                        
+            </nav>
+        </aside>
+        <main class="main-wrap">
+            
+                
+            <section class="content-main">
+                <div class="content-header">
+                    <div>
+                        
+                        <h2 class="content-title card-title">Order Details</h2>
+                        <p class="text-dark">#ID: <%= order._id %></p>
+                        
+                    </div>
+                    <!-- <div>
+                        <input type="text" placeholder="Search order ID" class="form-control bg-white" />
+                    </div> -->
+                </div>
+                <% if(order && order.items.length>0) { %>
+                    <% order.items.forEach((orderItem)=>{ %>
+                        
+                        
+                <div class="card mb-4" id="reload">
+                    
+                    <div class="card-body">
+                        <div class="row">
+                        <div class="col-md-2">
+                            <img src="<%= orderItem.product_id.images[0] %>" alt="<%= orderItem.product_id.name %>" class="img-fluid" style="max-width: 100%;">
+                            </div>
+                        <div class="col-md-6">
+                            <div class="table-responsive">
+                                <div>
+                            <p><strong>Product:</strong> <span class="fw-bold"><%= orderItem.product_id.name %></span></p>
+                            <p><strong>Price:</strong> <span class="fw-bold">₹<%= orderItem.product_id.price %>.00</span></p>
+                            <p><strong>Quantity:</strong> <span class="fw-bold"><%= orderItem.quantity %></span></p>
+                            <p><strong>Ordered on:</strong> <span class="fw-bold"><%= order.date %></span></p>
+                            <p><strong>Payment Method:</strong> <span class="fw-bold"><%= order.paymentMethod %></span></p>
+                            
+                            <% if(orderItem.status !== 'Cancelled'){ %>
+                                <p><strong>Current Status:</strong> <span class="fw-bold"><%= orderItem.status %></span></p>
+                            <!-- <p><strong>Delivery Expected on :</strong> <span class="fw-bold"><%= order.expectedDelivery %></span></p> -->
+                            <% } %>
+                        </div>
+                        
+                        
+                        <% if(orderItem.status !== 'Cancelled'){ %>
+                        <!-- Form to change order status -->
+                        <form action="" method="POST">
+                            <label for="status">Status:</label>
+                            <select name="status" id="status">
+                                <option value="">Select...</option>
+                                <option value="placed">Placed</option>
+                                <option value="processing">Processing</option>
+                                <option value="shipped">Shipped</option>
+                                <option value="delivered">Delivered</option>
+                                <option value="Cancelled">Cancel</option>
+                            </select>
+                            <button type="submit" onclick="updateStatus(event,'<%= order._id %>','<%= orderItem._id %>')">Update Status</button>
+                            <p id="statusError" style="color: red;"></p>
+                        </form>
+                        <% }else{ %>
+                            <p><strong>Status :</strong> <span class="fw-bold" style="color: red;"><%= orderItem.status %></span></p>
+                        <% } %>
+                        <!-- table-responsive //end -->
+                        </div>
+                        
+                    </div>
+                    <div class="col-md-3">
+                        <p><strong>Shipping Address: </strong></p>
+                        <% const addressName = order.deliveryAddress.split('-') %>
+                        <% const customerName = addressName[0].trim() %>
+                        <span class="fw-bold"><%= customerName %></span>
+                        
+                        </div>
+                    
+                </div>
+                
+                    </div>
+                    
+                    </div>
+
+                    <% if(orderItem.length>0){ %>
+                        <div class="pagination-area mt-15 mb-50">
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-start">
+                                    <li class="page-item active"><a class="page-link" href="#">01</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">02</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">03</a></li>
+                                    <li class="page-item"><a class="page-link dot" href="#">...</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">16</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                   <% } %>
+                    
+
+
+
+                    
+                    <% }) %>
+                    <% } %>
+                    
+                <!-- card end// -->
+               
+            </section>
+            <!-- content-main end// -->
+            <footer class="main-footer font-xs">
+                <div class="row pb-30 pt-15">
+                    <div class="col-sm-6">
+                        <script>
+                            document.write(new Date().getFullYear());
+                        </script>
+                        &copy; Nest - HTML Ecommerce Template .
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="text-sm-end">All rights reserved</div>
+                    </div>
+                </div>
+            </footer>
+        </main>
+        <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+        <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+        <script src="assets/js/vendors/select2.min.js"></script>
+        <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+        <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+        <!-- Main Script -->
+        <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+
+
+        <script>
+
+            function updateStatus(event,orderId,itemId){
+                event.preventDefault()
+                const statusError = $('#statusError')
+                statusError.text("")
+                const status = $('#status').val()
+                if(status===""){
+                    statusError.text("Select a status!")
+                }else{
+
+                $.ajax({
+                    url:'/admin/updateStatus',
+                    method:'POST',
+                    data:{orderId:orderId,
+                    status:status,
+                itemId:itemId}
+                }).then((response)=>{
+                    if(response.success){
+                        Swal.fire({
+            title: 'Success!',
+            text: 'Status updated successfully',
+             icon: 'success',
+            confirmButtonText: 'OK',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                    window.location.reload()
+                }else{
+                    console.log('error:',result)
+                }
+            })
+            
+                    }else{
+                        Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: "Something went wrong!"
+});
+                    }
+                })
+            }
+            }
+
+
+
+        </script>
+    </body>
+</html>

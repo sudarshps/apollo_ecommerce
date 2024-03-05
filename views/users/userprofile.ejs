@@ -15,6 +15,13 @@
 		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 		<link href="css/tiny-slider.css" rel="stylesheet">
 		<link href="css/style.css" rel="stylesheet">
+		<link href="css/userprof.css" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+
+   
 		<title>Apollo Furniture </title>
 	</head>
 
@@ -33,7 +40,7 @@
 				<div class="collapse navbar-collapse" id="navbarsFurni">
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li class="nav-item active">
-							<a class="nav-link" href="/home">Home</a>
+							<a class="nav-link" href="/">Home</a>
 						</li>
 						<li><a class="nav-link" href="/shop">Shop</a></li>
 						<li><a class="nav-link" href="/about">About us</a></li>
@@ -43,8 +50,9 @@
 					</ul>
 
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="/login"><img src="images/user.svg"></a></li>
+						<li><a class="nav-link" href="/userProf"><img src="images/user.svg"></a></li>
 						<li><a class="nav-link" href="/cart"><img src="images/cart.svg"></a></li>
+                        <li><a class="nav-link" href="/wishlist"><i class="fa-regular fa-heart" id="wishicon"></i></a></li>
 					</ul>
 				</div>
 			</div>
@@ -52,11 +60,1037 @@
 		</nav>
 		<!-- End Header/Navigation -->
 
-        <h1>
-            Hi <%= user.username %>
-        </h1>
+        <div class="container light-style flex-grow-1 container-p-y">
+            <h4 class="font-weight-bold py-3 mb-4">
+                Account settings
+            </h4>
+            
+            <div class="card-body media align-items-center">
+                <img src="/images/2176366.png" alt
+                    class="d-block ui-w-80">
+                <div class="media-body ml-4">
+                    <label class="btn btn-outline-primary btn-sm">
+                        Upload new photo
+                        <input type="file" class="account-settings-fileinput">
+                    </label> &nbsp;
+                    <button type="button" class="btn btn-default md-btn-flat btn-sm" >Reset</button>
+                    <div class="text-muted small mt-1">Allowed JPG, GIF or PNG. Max size of 800K</div>
+                    
+                </div>
+            </div>
+            <div class="fs-3 text-dark fw-bold">Hi, <%= user.username %></div>
+            <div class="card overflow-hidden">
+                <div class="row no-gutters row-bordered row-border-light">
+                    <div class="col-md-3 pt-0">
+                        <div class="list-group list-group-flush account-settings-links">
+                            <a class="list-group-item list-group-item-action active" data-toggle="list"
+                                href="#account-general">General</a>
+                            <a class="list-group-item list-group-item-action" data-toggle="list"
+                                href="#account-change-password">Change password</a>
+                            <a class="list-group-item list-group-item-action" data-toggle="list"
+                                href="#account-info">Manage Address</a>
+                                <a class="list-group-item list-group-item-action" data-toggle="list"
+                                href="#account-orders">Orders</a>
+                                <a class="list-group-item list-group-item-action" data-toggle="list"
+                                href="#account-wallet">Wallet</a>
+                                <a class="list-group-item list-group-item-action" data-toggle="list"
+                                href="#account-referral">Refer a friend</a>
+                            
+                                <a class="list-group-item list-group-item-action text-danger"
+                                href="/logout"><i class="bi bi-box-arrow-left">  Logout</i></a>
+                        </div>
+                    </div>
+                    <div class="col-md-9" id="reload">
+                        <div class="tab-content">
+                            <div class="tab-pane fade active show" id="account-general">
+                                <hr class="border-light m-0">
+                                <form action="" method="post" id="userDetailsForm">
+                                <div class="card-body">
+                                    
+                                    <div class="form-group">
+                                        <label class="form-label">Username</label>
+                                        <input type="text" class="form-control mb-1" name="username" id="userin" value="<%= user.username %>" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Mobile</label>
+                                        <input type="text" class="form-control" name="mobile" id="mobilein" value="<%= user.mobile %>" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">E-mail</label>
+                                        <input type="text" class="form-control mb-1" name="email" id="emailin" value="<%= user.email %>" readonly>
+                                        
+                                    </div>
+                                    
+                                    <div class="text-right mt-3">
+                                        <button type="button" class="btn btn-primary" id="editBtn" onclick="enableEditing()">Edit</button>
+                                        <button type="submit" class="btn btn-success" id="saveBtn" style="display: none;">Save</button>
+                                    
+                                    </div>
+                               
+                                </div>
+                            </form>
+                            </div>
+                            <div class="tab-pane fade" id="account-change-password">
+                                <div class="card-body pb-2">
+                                    <form action="#" method="post" id="changepassform">
+                                    <div class="form-group">
+                                        <label class="form-label">Current password</label>
+                                        <input type="password" class="form-control" name="currentpass" id="currentpass">
+                                        <span id="currentPasswordError" class="error"></span>
+                                </div>  
+                                    <div class="form-group">
+                                        <label class="form-label">New password</label>
+                                        <input type="password" id='newpass' class="form-control" name="newpass">
+                                        <span id="passwordError" class="error"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Repeat new password</label>
+                                        <input type="password" id="cnfmpass" class="form-control" name="cnfmpass">
+                                        <span id="confirmPasswordError" class="error"></span>
+                                    </div>
+                                    <div class="text-right mt-3" id="divsave">
+                                        <button type="submit" class="btn btn-primary" >Save changes</button>
+                                    </div>
+                                </form>
+                               
+                                </div>
+                            </div>
 
-        <a href="/logout">Log Out</a>
 
+                            <div class="tab-pane fade" id="account-orders">
+                                <div class="card-body pb-2" id="reloadorder">
+                                    
+                                    <div class="container">
+                                        <% if (orderData && orderData.length > 0 ) { %>
+                                            <% orderData.forEach((order) => { %>
+                                                <% order.items.forEach((orderItem) => { %>
+                                                    <% if(order.status!=='pending'){ %>
+                                                    <div class="order">
+                                                        <img src="<%= orderItem.product_id.images[0] %>" alt="<%= orderItem.product_id.name %>">
+                                                        <div class="order-details">
+                                                            <% if(orderItem.status==='Cancelled'){ %>
+                                                                <a href="#" style="text-decoration: none; color: black;"><h6><%= orderItem.product_id.name %></h6></a>
+                                                           <% }else{ %>
+                                                            <a href="/orderDetails?id=<%= order._id %>" style="text-decoration: none; color: black;"><h6><%= orderItem.product_id.name %></h6></a>
+                                                           <% } %>
+                                                           
+                                                            
+                                                        </div>
+                                                        <div class="status">
+                                                            
+                                                                <p> Total: ₹<%= order.reducedTotal%>.00</p>
+                                                           
+    
+                                                            <p>Quantity: <%= orderItem.quantity %></p>
+                                                           
+                                                        </div>
+                                                        
+
+                                                        <div class="status">
+                                                            <% if (orderItem.status === 'Cancelled') { %>
+                                                                <p> Status:<span style="color: red; font-weight: bold;"><%= orderItem.status %></span></p>
+                                                            <% } else if (orderItem.status === 'delivered') { %>
+                                                                <p> Status:<span style="color:green; font-weight: bold;"><%= orderItem.status %></span></p>
+                                                                <a href="" class="btn btn-sm btn-danger">Return Order</a>
+                                                            <% } else { %>
+                                                                <p> Status:<span style="font-weight: bold;"><%= orderItem.status %></span></p>
+                                                                <div class="divcon">
+                                                                    <h6 style="color: green;">Expected<br> Delivery:</h6>
+                                                                    <p><%= order.expectedDelivery %></p>
+                                                                    
+                                                                    <div class="cancel-button">
+                                                                        <button class="btn btn-sm btn-danger" onclick="cancelOrder(event,'<%= orderItem.product_id._id %>','<%= order._id %>','<%= orderItem.total_price %>')">Cancel</button>
+                                                                    </div>
+                                                                </div>
+                                                            <% } %>
+                                                        </div>
+                                                        
+                                                        
+                                                    </div>
+                                                <% } %>
+                                                <% }) %>
+                                            <% }) %>
+                                        <% } else { %>
+                                            <p>Your order list is empty</p>
+                                        <% } %>
+                                    </div>
+                                    
+                                      
+                               
+                                </div>
+                            </div>
+
+
+                            <div class="tab-pane fade" id="account-wallet">
+                                <div class="card-body pb-2">
+                                    <h4>Wallet Balance:</h4>
+                                    <h3>₹<%= user.wallet %>.00</h3>
+                                </div>
+                            </div>
+
+
+                            <div class="tab-pane fade" id="account-referral">
+                                <div class="card-body pb-2">
+                                    <h4>Referral Code:</h4>
+                                    <h3><%= user.referralCode %></h3>
+                                    <p>Refer a friend and earn ₹100.00 in your wallet</p>
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class="tab-pane fade" id="account-info">
+                                <div class="card-body pb-2">
+                                    <div class="text-right mt-3" id="divsave">
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addressmodal"><i class="bi bi-plus-circle-dotted">Add New Address</i></button>
+                                    </div>
+
+
+                                    <div class="modal" id="addressmodal">
+                                        <div class="modal-dialog">
+                                          <div class="modal-content">
+                                      
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                              <h4 class="modal-title">Enter Your Address</h4>
+                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                      
+                                        
+                                            <div class="modal-body">
+                                              <form method="post" id="addaddressform" onsubmit="return newAddress(event)">
+                                               
+                                                <div class="form-group">
+                                                  <label for="exampleFormControlInput1">Name</label>
+                                                  <input type="text" class="form-control" id="namein" name="name" placeholder="eg: Rooney">
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlInput1">Local Address</label>
+                                                    <input type="text" class="form-control" id="addressin" name="address" placeholder="Enter Address Here">
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">City</label>
+                                                    <input type="text" class="form-control" id="cityin" name="city" placeholder="Enter City">
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">State</label>
+                                                    <input type="text" class="form-control" id="statein" name="state" placeholder="Enter State">
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">Contact No.</label>
+                                                    <input type="text" class="form-control" id="contactin" name="contact" placeholder="Enter Contact No.">
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">E-mail</label>
+                                                    <input type="email" class="form-control" id="emailinadd" name="email" placeholder="eg: rooney@gmail.com">
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">Pincode</label>
+                                                    <input type="text" class="form-control" id="pincodein" name="pincode" placeholder="Enter Pincode">
+                                                  </div>
+                                                
+                                      
+                                                <button type="submit" class="btn btn-primary">Submit</button>
+                                              </form>
+                                            </div>
+                                      
+                                    
+                                      
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+
+
+                                      <div class="modal" id="addressEditmodal">
+                                        <div class="modal-dialog">
+                                          <div class="modal-content">
+                                      
+                                            <!-- Modal Header -->
+                                            <div class="modal-header">
+                                              <h4 class="modal-title">Edit Address</h4>
+                                              <button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+                                            </div>
+                                      
+                                        
+                                            <div class="modal-body">
+                                              <form id="editaddressform" method="post">
+                                               
+                                                <div class="form-group">
+                                                  <label for="exampleFormControlInput1">Name</label>
+                                                  <input type="text" class="form-control" id="nameinedit" name="name" placeholder="eg: Rooney">
+                                                  <span id="nameError" class="error"></span>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <label for="exampleFormControlInput1">Local Address</label>
+                                                    <input type="text" class="form-control" id="addressinedit" name="address" placeholder="Enter Address Here">
+                                                    <span id="addressError" class="error"></span>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">City</label>
+                                                    <input type="text" class="form-control" id="cityinedit" name="city" placeholder="Enter City">
+                                                    <span id="cityError" class="error"></span>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">State</label>
+                                                    <input type="text" class="form-control" id="stateinedit" name="state" placeholder="Enter State">
+                                                    <span id="stateError" class="error"></span>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">Contact No.</label>
+                                                    <input type="text" class="form-control" id="contactinedit" name="contact" placeholder="Enter Contact No.">
+                                                    <span id="mobileError" class="error"></span>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">E-mail</label>
+                                                    <input type="email" class="form-control" id="emailinedit" name="email" placeholder="eg: rooney@gmail.com">
+                                                    <span id="emailError" class="error"></span>
+                                                  </div>
+
+                                                  <div class="form-group">
+                                                    <label for="exampleFormControlInput1">Pincode</label>
+                                                    <input type="text" class="form-control" id="pincodeinedit" name="pincode" placeholder="Enter Pincode">
+                                                    <span id="pinError" class="error"></span>
+                                                  </div>
+                                                
+                                      
+                                                <button type="submit" class="btn btn-primary" id="submitedit">Submit</button>
+                                              </form>
+                                            </div>
+                                      
+                                    
+                                      
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+
+
+
+                                      
+                                      <% for(let i=0;i<user.address.length;i++){ %>
+            
+                    
+                                    <div class="form-group position-relative">
+                                        <label class="form-label">Address <%= i+1 %></label>
+                                        <div class="d-flex">
+                                            <textarea class="form-control flex-grow-1" rows="4" readonly><%= user.address[i].name %>, <%= user.address[i].localAddress %>, <%= user.address[i].city %>, <%= user.address[i].state %>, 
+<%= user.address[i].pincode %>,
+<%= user.address[i].phone %></textarea>
+                                            <a href="#" class="fs-3 position-absolute top-30 end-0 translate-middle-y" id="addreditbtn" data-toggle="modal" onclick="return addreditbtn(event,'<%= user.address[i]._id %>')">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            
+                                            <a href="#" class="fs-3 position-absolute top-50 end-0 translate-middle-y" id="addrdltbtn" onclick="return addrdltbtn(event,'<%= user.address[i]._id %>')">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                                    
+                                </div>
+                            </div>
+                            
+                       
+                                    
+                                   
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <script>
+           
+    $(document).ready(function() {
+        $('#changepassform').submit(function(event) {
+            event.preventDefault();
+
+            var currentpass = $('#currentpass').val();
+            var password = $("#newpass").val();
+            var cpassword = $("#cnfmpass").val();
+            
+            $("#passwordError").text("");
+            $("#confirmPasswordError").text("");
+            
+            var isValid = true;
+
+            // Validation for password
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordRegex.test(password)) {
+                $("#passwordError").text("Password must be at least 8 characters long and include at least one lowercase letter, one uppercase letter, one digit, and one special character (@ $ ! % * ? &)");
+                isValid = false;
+            }
+
+            if(currentpass===""){
+                $("#currentPasswordError").text('Enter Your Current Password!');
+                isValid = false
+            }
+
+            if (password !== cpassword) {
+                $("#confirmPasswordError").text('The given passwords do not match!');
+                isValid = false;
+            }
+
+            if (isValid) {
+                $.ajax({
+                    url: '/changepass',
+                    method: 'post',
+                    data: {
+                        currentpass: currentpass,
+                        password: password,
+                        cpassword: cpassword
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            Swal.fire("Password Changed Successfully!");
+                            $('#reload').load('/userprof #reload');
+                        } else {
+                            Swal.fire({
+                                title: 'Current password is wrong!',
+                                icon: 'error',
+                                text: response.message,
+                                timer: 2000,
+                            });
+                        }
+                    },
+                    error: function(error) {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: error.responseJSON.message,
+                            timer: 1500,
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+
+
+
+
+        //edit
+
+
+
+
+
+        function enableEditing() {
+    $('#userin, #mobilein, #emailin').prop('readonly', false);
+
+    
+    $('#saveBtn').show();
+    $('#editBtn').hide();
+}
+
+$('#userDetailsForm').submit(function (e) {
+    e.preventDefault();
+
+    let username = $('#userin').val();
+    let email = $('#emailin').val();
+    let mobile = $('#mobilein').val();
+
+    $.ajax({
+        url: '/changedet',
+        method: 'post',
+        data: {
+            username: username,
+            email: email,
+            mobile: mobile
+        },
+        success: (response) => {
+            if (response.success) {
+                Swal.fire("Edit Successful!");
+                $('#reload').load('/userprof #reload');
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    icon: 'error',
+                    text: response.message,
+                    timer: 2000,
+                });
+            }
+        },
+        error: (error) => {
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: response.message,
+                timer: 1500,
+            });
+        }
+    });
+});
+
+
+
+
+function newAddress(event) {
+    event.preventDefault();
+
+    let username = $('#namein').val();
+    let email = $('#emailinadd').val();
+    let mobile = $('#contactin').val();
+    let address = $('#addressin').val();
+    let pincode = $('#pincodein').val();
+    let city = $('#cityin').val();
+    let state = $('#statein').val();
+
+    // Clear any existing error messages
+    $('#nameError').text("");
+    $('#emailError').text("");
+    $('#mobileError').text("");
+    $('#addressError').text("");
+    $('#pinError').text("");
+    $('#cityError').text("");
+    $('#stateError').text("");
+
+    let isValid = true;
+
+    // Validate required fields
+    if (!username || !email || !mobile || !address || !pincode || !city || !state) {
+        isValid = false;
+        // If any required field is empty, display an error message
+        Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: 'Please fill out all the required fields.',
+            timer: 2000,
+        });
+        return; // Exit the function if validation fails
+    }
+
+    // Regular expression for name validation
+    const nameRegex = /^[a-zA-Z][a-zA-Z0-9 ]*$/;
+    if (!nameRegex.test(username)) {
+        // $('#nameError').text("Please enter a valid name.");
+        Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: 'Please enter the name in correct format.',
+            timer: 2000,
+        });
+        isValid = false;
+    }
+
+    // Regular expression for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        // $('#emailError').text("Please enter a valid email address.");
+        Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: 'Enter valid mail!',
+            timer: 2000,
+        });
+        isValid = false;
+    }
+
+    // Regular expression for mobile validation (10 digits)
+    const mobileRegex = /^\d{10}$/;
+    if (!mobileRegex.test(mobile)) {
+        // $('#mobileError').text("Please enter a valid 10-digit mobile number.");
+        Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: 'contact fields should be 10 digits!',
+            timer: 2000,
+        });
+        isValid = false;
+    }
+
+    // Regular expression for pincode validation (numbers only)
+    const pincodeRegex = /^[0-9]+$/;
+    if (!pincodeRegex.test(pincode)) {
+        // $('#pinError').text("Pincode must be a number.");
+        Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: 'Pincode should be in numbers!',
+            timer: 2000,
+        });
+        isValid = false;
+    }
+
+    // If validation fails, return
+    if (!isValid) {
+        return false
+    }else{
+        $.ajax({
+        url: '/addAddress',
+        method: 'post',
+        data: {
+            username: username,
+            email: email,
+            mobile: mobile,
+            address: address,
+            pincode: pincode,
+            city: city,
+            state: state
+        },
+        success: (response) => {
+            if (response.success) {
+                Swal.fire("Address added successfully!")
+                    .then(() => {
+                        $('#addressmodal').hide();
+                        window.location.reload();
+                    });
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    icon: 'error',
+                    text: response.message,
+                    timer: 2000,
+                });
+            }
+        },
+        error: (error) => {
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: 'There was an error processing your request.',
+                timer: 1500,
+            });
+        }
+    });
+
+    }
+
+    // If all validations pass, proceed with AJAX request
+   
+}
+
+
+
+
+
+
+function newEditAddress(event, addrid) {
+    event.preventDefault();
+    
+        console.log("hui", addrid);
+        let username = $('#nameinedit').val();
+        let email = $('#emailinedit').val();
+        let mobile = $('#contactinedit').val();
+        let address = $('#addressinedit').val();
+        let pincode = $('#pincodeinedit').val();
+        let city = $('#cityinedit').val();
+        let state = $('#stateinedit').val();
+
+        // Clear any existing error messages
+        $('#nameError').text("");
+        $('#emailError').text("");
+        $('#mobileError').text("");
+        $('#addressError').text("");
+        $('#pinError').text("");
+        $('#cityError').text("");
+        $('#stateError').text("");
+
+        let isValid = true;
+
+        // Validate required fields
+        if (!username || !email || !mobile || !address || !pincode || !city || !state) {
+            isValid = false;
+            // If any required field is empty, display an error message
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: 'Please fill out all the required fields.',
+                timer: 2000,
+            });
+            return; // Exit the function if validation fails
+        }
+
+        // Regular expression for name validation
+        const nameRegex = /^[a-zA-Z][a-zA-Z0-9 ]*$/;
+        if (!nameRegex.test(username)) {
+            // $('#nameError').text("Please enter a valid name.");
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: 'Please enter the name in correct format.',
+                timer: 2000,
+            });
+            isValid = false;
+        }
+
+        // Regular expression for email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            // $('#emailError').text("Please enter a valid email address.");
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: 'Enter valid mail!',
+                timer: 2000,
+            });
+            isValid = false;
+        }
+
+        // Regular expression for mobile validation (10 digits)
+        const mobileRegex = /^\d{10}$/;
+        if (!mobileRegex.test(mobile)) {
+            // $('#mobileError').text("Please enter a valid 10-digit mobile number.");
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: 'contact fields should be 10 digits!',
+                timer: 2000,
+            });
+            isValid = false;
+        }
+
+        // Regular expression for pincode validation (numbers only)
+        const pincodeRegex = /^[0-9]+$/;
+        if (!pincodeRegex.test(pincode)) {
+            // $('#pinError').text("Pincode must be a number.");
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: 'Pincode should be in numbers!',
+                timer: 2000,
+            });
+            isValid = false;
+        }
+
+        // If validation fails, return
+        if (!isValid) {
+            return false
+        } else {
+            $.ajax({
+                
+                url: '/editAddress',
+                method: 'post',
+                data: {
+                    addrid:addrid,
+                    username: username,
+                    email: email,
+                    mobile: mobile,
+                    address: address,
+                    pincode: pincode,
+                    city: city,
+                    state: state
+                },
+                success: (response) => {
+                    if (response.success) {
+                        Swal.fire("Address edited successfully!")
+                            .then(() => {
+                                $('#addressmodal').hide();
+                                window.location.reload();
+                            });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: response.message,
+                            timer: 2000,
+                        });
+                    }
+                },
+                error: (error) => {
+                    Swal.fire({
+                        title: 'Error',
+                        icon: 'error',
+                        text: 'There was an error processing your request.',
+                        timer: 1500,
+                    });
+                }
+            });
+
+
+
+        }
+
+        
+
+        // If all validations pass, proceed with AJAX request
+
+    
+}
+
+
+
+
+    
+
+
+
+function addrdltbtn(event,addrid){
+event.preventDefault()
+
+$.ajax({
+    method:'post',
+    url:`/addrdlt?id=${addrid}`,
+    success: (response) => {
+        if (response.success) {
+            Swal.fire({
+  title: "Are you sure?",
+  text: "Want to delete this address?",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: "Deleted!",
+      text: "Deletion Successful.",
+      icon: "success"
+    })
+    $('#reload').load('/userprof #reload');
+    
+
+  }
+});
+            
+        } else {
+            Swal.fire({
+                title: 'Error',
+                icon: 'error',
+                text: response.message,
+                timer: 2000,
+            });
+        }
+    },
+    error: (error) => {
+        Swal.fire({
+            title: 'Error',
+            icon: 'error',
+            text: response.message,
+            timer: 1500,
+        });
+    }
+    
+})
+
+
+
+}
+
+
+
+
+
+
+function addreditbtn(event,addrid){
+    
+event.preventDefault()
+fetch("/getAddressDetails",{
+    method:'POST',
+    headers:{
+        'Content-Type':'application/json'
+    },
+    body:JSON.stringify({
+        addressId:addrid
+    })
+}).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json(); // Parse response as JSON
+    })
+    .then(data => {
+        if (data.success) {
+            
+            const addressDetails = data.addressIndex;
+            $('#nameinedit').val(addressDetails.name);
+            $('#emailinedit').val(addressDetails.email);
+            $('#contactinedit').val(addressDetails.phone);
+            $('#addressinedit').val(addressDetails.localAddress);
+            $('#pincodeinedit').val(addressDetails.pincode);
+            $('#cityinedit').val(addressDetails.city);
+            $('#stateinedit').val(addressDetails.state);
+
+            $('#addressEditmodal').modal('show');
+            $('#submitedit').on('click',function(event){
+                newEditAddress(event,addressDetails)
+            })
+            
+            
+        } else {
+            console.error('Error:', data.message);
+            // Optionally display an error message to the user
+        }
+    })
+    .catch(error => {
+        console.error('Fetch Error:', error.message);
+        // Handle fetch errors
+    });
+}
+
+
+
+function cancelOrder(event,productId,orderId,itemAmount){
+    event.preventDefault()
+    $.ajax({
+        url:'/cancelOrder',
+        method:'post',
+        data:{productId:productId,
+                orderId:orderId,
+                itemAmount:itemAmount},
+        success: (response) => {
+                    if (response.success) {
+                        Swal.fire("Order cancelled successfully!")
+                            .then(() => {
+                                // window.location.reload();
+                                $('#reloadorder').load('/userProf #reloadorder')
+                            });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: response.message,
+                            timer: 2000,
+                        });
+                    }
+                },
+                error: (error) => {
+                    Swal.fire({
+                        title: 'Error',
+                        icon: 'error',
+                        text: 'There was an error processing your request.',
+                        timer: 1500,
+                    });
+                }
+    })
+
+}
+
+//address edit submition
+
+
+
+
+
+
+// $.ajax({
+//         url: "/getAddressDetails", // Update the URL to your backend route to fetch address details
+//         method: 'GET',
+//         data: {
+//             addrid // Pass the addressId as a parameter to the backend
+//         },
+//         success: function(response) {
+//             // Handle successful response
+//             if (response.success) {
+//                 // Assuming response.data contains the address details
+//                 var addressDetails = response.data;
+
+//                 // Populate form fields with address details
+//                 $('#namein').val(addressDetails.username);
+//                 $('#emailin').val(addressDetails.email);
+//                 $('#mobilein').val(addressDetails.mobile);
+//                 $('#addressin').val(addressDetails.address);
+//                 $('#pincodein').val(addressDetails.pincode);
+//                 $('#cityin').val(addressDetails.city);
+//                 $('#statein').val(addressDetails.state);
+
+//                 // Show the modal
+//                 $('#addressEditmodal').modal('show');
+//             } else {
+//                 // Handle error response
+//                 console.error('Error:', response.message);
+//                 // Optionally display an error message to the user
+//             }
+//         },
+//         error: function(xhr, status, error) {
+//             // Handle AJAX error
+//             console.error('AJAX Error:', error);
+//             // Optionally display an error message to the user
+//         }
+//     });
+
+
+
+// $('#addressEditmodal').modal('show');
+
+
+
+
+
+
+
+// $.ajax({
+//     method:'post',
+//     url:`/addrdlt?id=${addrid}`,
+//     success: (response) => {
+//         if (response.success) {
+//             Swal.fire({
+//   title: "Are you sure?",
+//   text: "Want to delete this address?",
+//   icon: "warning",
+//   showCancelButton: true,
+//   confirmButtonColor: "#3085d6",
+//   cancelButtonColor: "#d33",
+//   confirmButtonText: "Yes, delete it!"
+// }).then((result) => {
+//   if (result.isConfirmed) {
+//     Swal.fire({
+//       title: "Deleted!",
+//       text: "Deletion Successful.",
+//       icon: "success"
+//     })
+//     $('#reload').load('/userprof #reload');
+    
+
+//   }
+// });
+            
+//         } else {
+//             Swal.fire({
+//                 title: 'Error',
+//                 icon: 'error',
+//                 text: response.message,
+//                 timer: 2000,
+//             });
+//         }
+//     },
+//     error: (error) => {
+//         Swal.fire({
+//             title: 'Error',
+//             icon: 'error',
+//             text: response.message,
+//             timer: 1500,
+//         });
+//     }
+    
+// })
+
+
+
+
+
+
+
+
+
+
+        </script>
+        
+        <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+        <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript">
+            </script>
+
+        
 
         <%- include('../partials/footer') -%>

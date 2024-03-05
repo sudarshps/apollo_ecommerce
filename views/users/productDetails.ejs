@@ -1,0 +1,384 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+		<link href="css/tiny-slider.css" rel="stylesheet">
+		<link href="css/style.css" rel="stylesheet">
+        <link href="css/pdetails.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<title>Apollo Furniture </title>
+	</head>
+
+	<body>
+
+		<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="/">Apollo Furniture<span>.</span></a>
+
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+						<li>
+							<a class="nav-link" href="/">Home</a>
+						</li>
+						<li class="nav-item active"><a class="nav-link" href="/shop">Shop</a></li>
+						<li><a class="nav-link" href="/about">About us</a></li>
+						<li><a class="nav-link" href="/services">Services</a></li>
+						<li><a class="nav-link" href="/blog">Blog</a></li>
+						<li><a class="nav-link" href="/contact">Contact us</a></li>
+					</ul>
+
+					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+						<li><a class="nav-link" href="/userProf"><img src="images/user.svg"></a></li>
+						<li><a class="nav-link" href="/cart"><img src="images/cart.svg"></a></li>
+            <li><a class="nav-link" href="/wishlist"><i class="fa-regular fa-heart" id="wishicon"></i></a></li>
+					</ul>
+				</div>
+			</div>
+				
+		</nav>
+		<!-- End Header/Navigation -->
+
+
+<!-- Start Hero Section -->
+
+  
+  <!-- content -->
+  <section class="py-5">
+    <div class="container">
+      <div class="row gx-5">
+        <aside class="col-lg-6">
+            <a href="" class="btn btn-light border border-secondary py-2 icon-hover px-3" id="wishlistbtn" onclick="addToWishlist(event,'<%= products._id %>')"> <i class="me-1 fa fa-heart fa-lg"></i></a>
+          <div class="mb-3 d-flex justify-content-center" style="overflow: hidden;">
+            <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image">
+              <img style="max-width: 100%; max-height: 55vh; margin: auto;" class="rounded-4 fit" id="productZoom" src="<%= products.images[0] %>" />
+            </a>
+            
+          </div>
+          
+          <div class="d-flex justify-content-center mb-3" id="thumbnail-container">
+            <!-- <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
+              <img width="60" height="60" class="rounded-2" src="<%= products.images[0] %>" />
+            </a> -->
+            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
+              <img width="60" height="60" class="rounded-2" src="<%= products.images[1] %>" />
+            </a>
+            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
+              <img width="60" height="60" class="rounded-2" src="<%= products.images[2] %>" />
+            </a>
+            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
+              <img width="60" height="60" class="rounded-2" src="<%= products.images[3] %>" />
+            </a>
+            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
+              <img width="60" height="60" class="rounded-2" src="<%= products.images[4] %>" />
+            </a>
+           
+            
+          </div>
+          <!-- thumbs-wrap.// -->
+          <!-- gallery-wrap .end// -->
+        </aside>
+        <main class="col-lg-6">
+          <div class="ps-lg-3">
+            
+            <h4 class="title text-dark">
+             <%= products.name %>
+            </h4>
+            
+            <div class="d-flex flex-row my-3">
+                
+              <div class="text-warning mb-1 me-2">
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fa fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+                <span class="ms-1">
+                  4.5
+                </span>
+                
+              </div>
+              <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
+              <span class="text-success ms-2">In stock</span>
+              
+            </div>
+            
+  
+            <div class="mb-3">
+              <% if(products.offer!==null && products.categoryId.offer!==null){ %>
+              <span class="h5">₹<%= products.price - products.price*(products.offer.percentage/100) %>.00</span>
+              <span class="text-success"><%= products.offer.percentage %>% off</span>
+              <p class="text-muted text-decoration-line-through">₹<%= products.price %>.00</p>
+
+             <% } else if (products.categoryId.offer!==null && products.offer===null){ %>
+              <span class="h5">₹<%= products.price - products.price*(products.categoryId.offer.percentage/100)%>.00</span>
+              <span class="text-success"><%= products.categoryId.offer.percentage %>% off</span>
+              <p class="text-muted text-decoration-line-through">₹<%= products.price %>.00</p>
+             
+              <% } else if (products.categoryId.offer===null && products.offer!==null){ %>
+                <span class="h5">₹<%= products.price - products.price*(products.offer.percentage/100) %>.00</span>
+                <span class="text-success"><%= products.offer.percentage %>% off</span>
+                <p class="text-muted text-decoration-line-through">₹<%= products.price %>.00</p>
+
+              <% }else{ %>
+                <span class="h5">₹<%= products.price %>.00</span>
+              <% } %>
+            </div>
+  
+            <p>
+              <%= products.description %>
+            </p>
+  
+            
+  
+            <hr />
+  
+            
+              <!-- col.// -->
+              <div class="col-md-4 col-6 mb-3">
+                <!-- <label class="mb-2 d-block">Quantity</label> -->
+                <div class="input-group mb-3" style="width: 170px;">
+                  <!-- <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon1" data-mdb-ripple-color="dark">
+                    <i class="fas fa-minus"></i>
+                  </button> -->
+                  <!-- <input type="text" class="form-control text-center border border-secondary" value="1" aria-label="Example text with button addon" aria-describedby="button-addon1" /> -->
+                  <!-- <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon2" data-mdb-ripple-color="dark">
+                    <i class="fas fa-plus"></i>
+                  </button> -->
+                </div>
+              </div>
+            </div>
+            <!-- <a href="#" class="btn btn-warning shadow-0"> Buy now </a> -->
+            <!-- <a href="/addToCart?id=<%= products._id %>" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a> -->
+            <a href="#" class="btn btn-primary shadow-0" onclick="addToCart(event,'<%= products._id %>')"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+            
+          </div>
+        </main>
+      </div>
+    </div>
+  </section>
+  <!-- content -->
+
+  <script>
+
+//image selection
+
+
+document.addEventListener("DOMContentLoaded", function () {
+    const mainImage = document.getElementById("productZoom");
+    const thumbnailContainer = document.getElementById("thumbnail-container");
+
+    thumbnailContainer.addEventListener("click", function (event) {
+        // Remove active class from previously selected thumbnail
+        const prevActiveThumbnail = thumbnailContainer.querySelector(".item-thumb.active");
+        if (prevActiveThumbnail) {
+            prevActiveThumbnail.classList.remove("active");
+        }
+        
+        // Add active class to the clicked thumbnail
+        if (event.target.classList.contains("item-thumb")) {
+            event.target.classList.add("active");
+            
+            // Update main image source with the clicked thumbnail image source
+            mainImage.src = event.target.querySelector("img").src;
+        }
+    });
+});
+
+
+
+
+
+
+
+
+
+
+//image zoom
+
+
+
+
+function changeMainImage(element) {
+       var mainImage = document.getElementById('productZoom');
+       mainImage.src = element.src;
+      }
+
+// for Zoom image 
+ const img = document.getElementById('productZoom');
+let isZoomed = false;
+
+img.addEventListener('mouseenter', function () {
+    // Apply zoom effect on mouseenter
+    if (!isZoomed) {
+        img.style.transform = 'scale(2.5)';
+        img.style.transition = 'transform 0.5s ease'; // Optional: Add a transition for smooth effect
+        isZoomed = true;
+    } 
+});
+
+img.addEventListener('mousemove', function (e) {
+    if (isZoomed) {
+        const boundingBox = img.getBoundingClientRect();
+        const offsetX = (e.clientX - boundingBox.left) / boundingBox.width;
+        const offsetY = (e.clientY - boundingBox.top) / boundingBox.height;
+
+        // Move the image according to mouse movement
+        img.style.transformOrigin = `${offsetX * 100}% ${offsetY * 100}%`;
+    }
+});
+
+img.addEventListener('mouseleave', function () {
+    // Reset to normal size on mouseleave
+    img.style.transform = '';
+    isZoomed = false;
+});
+
+
+
+
+
+
+
+    async function addToCart(event,productId) {
+
+try {
+event.preventDefault()
+  
+
+
+  // const productPriceElement = document.getElementById('productPrice_'+productId).value
+
+  // const productPrice= parseInt(productPriceElement,10)
+
+ 
+
+  const data = {
+    productId: productId,
+    
+  };
+
+const response = await axios.post("/addToCart", data);
+
+
+                if (response.data.success) {
+                              Swal.fire({
+                                  title: "Success",
+                                  text: "Product added to cart",
+                                  icon: "success",
+                                  showCancelButton: true,
+                                  confirmButtonText: "Go to Cart", // Text for the "Go to Cart" button
+                                  cancelButtonText: "Cancel", // Text for the "Cancel" button
+                              }).then((result) => {
+                                  if (result.isConfirmed) {
+                                      // Redirect to the cart page when the "Go to Cart" button is clicked
+                                      window.location.href = "/cart"; // Replace "/cart" with your actual cart page URL
+                                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                     
+                                  }
+                              });
+
+                          }
+
+                           else if(response.data.success===false && response.data.message!==undefined){
+                              Swal.fire({
+                                  title: "Error adding to cart",
+                                  text: response.data.message,
+                                  icon: "error",
+                                  confirmButtonText: "OK", // Text for the login button
+                                  
+                              }).then((result) => {
+                                  if (result.isConfirmed) {
+                                      // Redirect to the login section when the "Login" button is clicked
+                                      window.location.href= '/shop' // Replace "/login" with your actual login page URL
+                                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                      // Handle the cancel action if needed (not needed in this case)
+                                  }
+                              });
+
+
+                          }else{
+                            Swal.fire({
+                                  title: "Error adding to cart",
+                                  text: "Please login to continue",
+                                  icon: "error",
+                                  showCancelButton: true,
+                                  confirmButtonText: "Login", // Text for the login button
+                                  cancelButtonText: "Cancel", // Text for the cancel button
+                              }).then((result) => {
+                                  if (result.isConfirmed) {
+                                      // Redirect to the login section when the "Login" button is clicked
+                                      window.location.href = "/login"; // Replace "/login" with your actual login page URL
+                                  } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                      // Handle the cancel action if needed (not needed in this case)
+                                  }
+                              });
+                          }
+                      
+
+      }catch (error) {
+console.error('An error occurred during the request', error);
+}
+
+}
+
+
+//add to wishlist
+
+
+
+function addToWishlist(event,productId){
+  event.preventDefault()
+  $.ajax({
+    url:'/addToWishlist',
+    method:'post',
+    data:{productId:productId}
+  }).then((response)=>{
+    if(response.success){
+      Swal.fire({
+  title: "Success!",
+  text: "Item added to your wishlist!",
+  icon: "success"
+}).then(()=>{
+    window.location.reload()
+  })
+    }else{
+      
+        Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: "Please login to continue!",
+}).then(()=>{
+    window.location.href='/login'
+})
+     
+      
+    }
+  })
+
+}
+
+  </script>
+  
+  
+        
+
+<%- include('../partials/footer') -%>

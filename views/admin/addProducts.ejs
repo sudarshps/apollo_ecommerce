@@ -14,6 +14,13 @@
         <!-- <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg" /> -->
         <!-- Template CSS -->
         <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        
+        <link href="/public/cropperjs/cropper.min.css" rel="stylesheet">
+       
+        
     </head>
 
     <body>
@@ -55,70 +62,36 @@
                             <i class="icon material-icons md-person"></i>
                             <span class="text"> Users</span>
                         </a>
+
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+
+                        <a class="menu-link" href="/admin/coupon">
+                            <i class="bi bi-ticket-perforated-fill">
+                                <span class="text">Coupon</span></i>
+                            
+                        </a>
+
+                        <a class="menu-link" href="/admin/offer">
+                            <i class="bi bi-percent" style="font-size: 15px;">
+                                <span class="text">Offer</span></i>
+                            
+                        </a>
                         
             </nav>
         </aside>
     <main class="main-wrap">
-        <!-- <header class="main-header navbar">
-            <div class="col-search">
-                <form class="searchform">
-                    <div class="input-group">
-                        <input list="search_terms" type="text" class="form-control" placeholder="Search term">
-                        <button class="btn btn-light bg" type="button"> <i class="material-icons md-search"></i></button>
-                    </div>
-                    <datalist id="search_terms">
-                        <option value="Products">
-                        <option value="New orders">
-                        <option value="Apple iphone">
-                        <option value="Ahmed Hassan">
-                    </datalist>
-                </form>
-            </div>
-            <div class="col-nav">
-                <button class="btn btn-icon btn-mobile me-auto" data-trigger="#offcanvas_aside"> <i class="material-icons md-apps"></i> </button>
-                <ul class="nav">
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon" href="#">
-                            <i class="material-icons md-notifications animation-shake"></i>
-                            <span class="badge rounded-pill">3</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn-icon darkmode" href="#"> <i class="material-icons md-nights_stay"></i> </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="requestfullscreen nav-link btn-icon"><i class="material-icons md-cast"></i></a>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownLanguage" aria-expanded="false"><i class="material-icons md-public"></i></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownLanguage">
-                            <a class="dropdown-item text-brand" href="#"><img src="assets/imgs/theme/flag-us.png" alt="English">English</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-fr.png" alt="Français">Français</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-jp.png" alt="Français">日本語</a>
-                            <a class="dropdown-item" href="#"><img src="assets/imgs/theme/flag-cn.png" alt="Français">中国人</a>
-                        </div>
-                    </li>
-                    <li class="dropdown nav-item">
-                        <a class="dropdown-toggle" data-bs-toggle="dropdown" href="#" id="dropdownAccount" aria-expanded="false"> <img class="img-xs rounded-circle" src="/admin/imgs/people/avatar-2.png" alt="User"></a>
-                        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownAccount">
-                            <a class="dropdown-item" href="#"><i class="material-icons md-perm_identity"></i>Edit Profile</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-settings"></i>Account Settings</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-account_balance_wallet"></i>Wallet</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-receipt"></i>Billing</a>
-                            <a class="dropdown-item" href="#"><i class="material-icons md-help_outline"></i>Help center</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </header> -->
+        
         <section class="content-main">
             <div class="row">
                 <div class="col-6">
                     <div class="content-header">
                         <h2 class="content-title">Add New Product</h2>
                         
+                            <span id="addmessage"></span>
+
                     </div>
                 </div>
             </div>
@@ -127,27 +100,22 @@
                     <div class="card mb-4">
                         <div class="card-body">
                             <div class="row">
-                                <form action="/admin/addProducts" method="post" enctype="multipart/form-data">
+                                <form action="" method="post" enctype="multipart/form-data" onsubmit="return addProduct()">
                                 <div class="col-md-3">
                                     <h6>1. General info</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Product Name</label>
-                                        <input type="text" placeholder="Type here" class="form-control" name="productname">
+                                        <input id="namein" type="text" placeholder="Type here" class="form-control" name="productname">
+                                        <span id="nameError" class="error"></span>
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Description</label>
-                                        <textarea placeholder="Type here" class="form-control" rows="4" name="description"></textarea>
+                                        <textarea id="descin" placeholder="Type here" class="form-control" rows="4" name="description" value="enter description"></textarea>
+                                        <span id="descError" class="error"></span>
                                     </div>
-                                    <!-- <div class="mb-4">
-                                        <label class="form-label">Brand name</label>
-                                        <select class="form-select">
-                                            <option> Adidas </option>
-                                            <option> Nike </option>
-                                            <option> Puma </option>
-                                        </select>
-                                    </div> -->
+                                    
                                 </div> <!-- col.// -->
                             </div> <!-- row.// -->
                             <hr class="mb-4 mt-0">
@@ -157,8 +125,9 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
-                                        <label class="form-label">Cost in USD</label>
-                                        <input type="text" placeholder="$00.0" class="form-control" name="price">
+                                        <label class="form-label">Cost in INR</label>
+                                        <input id="pricein" type="text" placeholder="Enter Amount" class="form-control" name="price">
+                                        <span id="priceError" class="error"></span>
                                     </div>
                                 </div> <!-- col.// -->
                             </div> <!-- row.// -->
@@ -171,7 +140,8 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         
-                                        <input type="number" placeholder="Type here" class="form-control" name="quantity">
+                                        <input type="text" id='qtyin' placeholder="Type here" class="form-control" name="quantity">
+                                        <span id="qtyError" class="error"></span>
                                     </div>
                                 </div> <!-- col.// -->
                             </div> <!-- row.// -->
@@ -183,51 +153,39 @@
                                 <div class="col-md-3">
                                     <h6>4. Category</h6>
                                 </div>
+
                                 <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <!-- <label for="categoryDropdown">Select Category:</label> -->
+                                        <select class="form-select" id="categoryDropdown" name="category">
+                                            <option value="">Select a category...</option> <!-- Default option -->
+                                            <% for(let i=0; i<category.length; i++) { %>
+                                                <% if(category[i].is_Listed === true) { %>
+                                                    <option value="<%= category[i].name %>"><%= category[i].name %></option>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+                                        <span id="ctgError" class="error"></span>
+                                    </div>
+                                </div>
+                                
+                                
+
+                                <!-- <div class="col-md-9">
                                     <div class="mb-4">
                                         <% for(let i=0;i<category.length;i++){ %>
                                            <% if(category[i].is_Listed===true){ %>
                                             <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                <input class="form-check-input" name="category" type="radio" value="<%= category[i].name %>">
+                                                <input class="form-check-input radio-cls" id='ctgin' name="category" type="radio" value="<%= category[i].name %>">
                                                 <span class="form-check-label"> <%= category[i].name %> </span>
+                                                
                                             </label>
                                             <% } %>
                                        <% } %>
                                         
-                                        <!-- <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Electronics </span>
-                                        </label>
-                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Sports </span>
-                                        </label>
-                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Automobiles </span>
-                                        </label>
-                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Home interior </span>
-                                        </label>
-                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Smartphones </span>
-                                        </label>
-                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Books </span>
-                                        </label>
-                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Kids item </span>
-                                        </label>
-                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                            <input class="form-check-input" name="mycategory" type="radio">
-                                            <span class="form-check-label"> Others </span>
-                                        </label> -->
+                                       <span id="ctgError" class="error"></span>
                                     </div>
-                                </div> <!-- col.// -->
+                                </div> col.// -->
                             </div> <!-- row.// -->
                             <hr class="mb-4 mt-0">
                             <div class="row">
@@ -237,10 +195,14 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">Images</label>
-                                        <input class="form-control" type="file" multiple name="image" required>
+                                        <input class="form-control" type="file" multiple name="image" id="imageInput" required>
+                                    </div>
+                                    <div id="imagePreview">
+                                        
                                     </div>
                                 </div> <!-- col.// -->
                             </div> <!-- .row end// -->
+                            
                             <div id="btnadd">
                                 <button class="btn btn-md rounded font-sm hover-up">Publish</button>
                             </div>
@@ -248,6 +210,11 @@
                         </div>
                         </div>
                     </div>
+
+                    <div class="col-lg-6">
+                        
+                    </div>
+
                     
             </div>
             </div>
@@ -267,6 +234,153 @@
             </div>
         </footer>
     </main>
+
+   
+
+
+    <script>
+
+
+        //image preview
+
+
+        document.addEventListener("DOMContentLoaded", function () {
+    const imageInput = document.getElementById("imageInput");
+    const imagePreview = document.getElementById("imagePreview");
+
+    imageInput.addEventListener("change", function () {
+       
+        imagePreview.innerHTML = "";
+
+        for (let i = 0; i < imageInput.files.length; i++) {
+            const file = imageInput.files[i];
+
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    
+                    const imgElement = document.createElement("img");
+                    imgElement.classList.add("preview-image");
+                    imgElement.src = event.target.result;
+                    imgElement.style.maxWidth = "70px"; 
+                    imgElement.style.maxHeight = "70px";
+                    imgElement.style.marginRight = "10px"
+
+                    
+                    imagePreview.appendChild(imgElement);
+                };
+
+                // Read the file as a data URL
+                reader.readAsDataURL(file);
+            }else {
+                alert("Please select only image files.");
+                imageInput.value = "";
+                imagePreview.innerHTML = "";
+                return;
+            }
+        }
+    });
+});
+
+
+        function addProduct(){
+
+            event.preventDefault();
+
+        const name = document.getElementById('namein').value.trim()
+        const price = document.getElementById('pricein').value.trim()
+        const qty = document.getElementById('qtyin').value.trim()
+        const description = document.getElementById('descin').value.trim()
+        const categoryDropdown = document.getElementById('categoryDropdown').value.trim()
+
+        document.getElementById('nameError').innerText = ""
+        document.getElementById('priceError').innerText = ""
+        document.getElementById('qtyError').innerText = ""
+        document.getElementById('ctgError').innerText = ""
+
+        var isValid = true
+
+
+        const nameRegex = /^[a-zA-Z][a-zA-Z0-9 ]*$/;
+
+        if(!nameRegex.test(name)){
+            document.getElementById('nameError').innerText = "Please enter name in correct format!"
+            isValid = false
+        }
+
+        const priceRegex = /^[0-9]+$/
+        if(!priceRegex.test(price)){
+            document.getElementById('priceError').innerText = "price field must be a number!"
+            isValid = false
+        }
+
+        const qtyRegex = /^[0-9]+$/
+        if(!qtyRegex.test(qty)){
+            document.getElementById('qtyError').innerText = "Quantity field must be a number!"
+            isValid = false
+        }
+
+        if(description===""){
+            document.getElementById('descError').innerText = "Description should not empty!"
+            isValid = false
+        }
+
+
+        // let selectedCtg = null
+
+        // allRadio.forEach((radio)=>{
+        //     if(radio.checked){
+        //         selectedCtg = radio.id
+        //     }
+        // })
+
+        if (categoryDropdown === "") {
+        // No category is selected, display an error message or handle validation
+        document.getElementById('ctgError').textContent = 'Please select a category';
+        isValid =  false;
+    }
+
+
+
+        if (!isValid) {
+                return false;
+            }else{
+            Swal.fire({
+            title: 'Success!',
+            text: 'Product added successfully',
+             icon: 'success',
+            confirmButtonText: 'OK',
+            })
+            .then((result) => {
+    if (result.isConfirmed) {
+        const form = document.querySelector('form');
+        const formData = new FormData(form);
+
+        fetch("/admin/addProducts", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+        window.location.href = '/admin/addProducts'          // Additional logic based on server response
+        })
+        .catch(error => console.error('Error:', error));
+    }
+})
+
+
+
+
+}
+
+            }
+
+
+    </script>
+
+
     <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="assets/js/vendors/select2.min.js"></script>
@@ -274,6 +388,8 @@
     <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+    <script src="/public/cropperjs/cropper.min.js"></script>
+
 </body>
 
 </html>

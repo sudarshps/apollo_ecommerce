@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Apollo Dashboard</title>
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="description" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta property="og:title" content="" />
+        <meta property="og:type" content="" />
+        <meta property="og:url" content="" />
+        <meta property="og:image" content="" />
+        <!-- Favicon -->
+        <!-- <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg" /> -->
+        <!-- Template CSS -->
+        <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <div class="screen-overlay"></div>
+        <aside class="navbar-aside" id="offcanvas_aside">
+            <div class="aside-top">
+                <a href="/admin/dashboard" class="brand-wrap">
+                    <h4>Apollo <br> Furniture.</h4>
+
+                </a>
+                <div>
+                    <button class="btn btn-icon btn-aside-minimize"><i class="text-muted material-icons md-menu_open"></i></button>
+                </div>
+            </div>
+            <nav>
+                <ul class="menu-aside">
+                    <li class="menu-item active">
+                        <a class="menu-link" href="/admin/dashboard">
+                            <i class="icon material-icons md-home"></i>
+                            <span class="text">Dashboard</span>
+                        </a>
+                    </li>
+                    
+                        <li class="menu-item has-submenu"> 
+                            <a class="menu-link" href="/admin/productList">
+                               <i class="icon material-icons md-shopping_bag"></i>
+                               <span class="text"> Products</span>
+                           </a> 
+                       </li>
+
+                        <a class="menu-link" href="/admin/category">
+                            <i class="icon material-icons md-add_box"></i>
+                            <span class="text"> Category</span>
+                        </a>
+
+
+                        <a class="menu-link" href="/admin/users">
+                            <i class="icon material-icons md-person"></i>
+                            <span class="text"> Users</span>
+                        </a>
+
+                        <a class="menu-link" href="/admin/orders">
+                            <i class="icon material-icons md-shopping_cart"></i>
+                            <span class="text">Orders</span>
+                        </a>
+
+                        <a class="menu-link active" href="/admin/coupon">
+                            <i class="bi bi-ticket-perforated-fill">
+                                <span class="text">Coupon</span></i>
+                            
+                        </a>
+
+                        <a class="menu-link" href="/admin/offer">
+                            <i class="bi bi-percent" style="font-size: 15px;">
+                                <span class="text">Offer</span></i>
+                            
+                        </a>
+                        
+            </nav>
+        </aside>
+    <main class="main-wrap">
+        
+        <section class="content-main">
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Product</h2>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body" id="reloaddiv">
+                            <div class="row">
+                                <form action="" method="post" enctype="multipart/form-data" onsubmit="return editProduct('<%= productData._id %>')">
+                                <div class="col-md-3">
+                                    <h6>1. General info</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Product Name</label>
+                                        <input type="text" id='namein' value="<%= productData.name %>" class="form-control" name="productname">
+                                        <span id="nameError" class="error"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea value="<%= productData.description %>" id="descin" class="form-control" rows="4" name="description"><%= productData.description %></textarea>
+                                        <span id="descError" class="error"></span>
+                                    </div>
+                                    
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>2. Pricing</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Cost in INR</label>
+                                        <input type="text" value="<%= productData.price %>" id="pricein" class="form-control" name="price">
+                                        <span id="priceError" class="error"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>3. Quantity</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        
+                                        <input type="number" value="<%= productData.quantity %>" id="qtyin" class="form-control" name="quantity">
+                                        <span id="qtyError" class="error"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+
+
+
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>4. Category</h6>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <!-- <label for="categoryDropdown">Select Category:</label> -->
+                                        <select class="form-select" id="categoryDropdown" name="category">
+                                            <option value="<%= productData.category %>"><%= productData.category %></option> <!-- Default option -->
+                                            <% for(let i=0; i<category.length; i++) { %>
+                                                <% if(category[i].is_Listed === true && category[i].name !== productData.category) { %>
+                                                    <option value="<%= category[i].name %>"><%= category[i].name %></option>
+                                                <% } %>
+                                            <% } %>
+                                        </select>
+                                        <span id="ctgError" class="error"></span>
+                                    </div>
+                                </div>
+
+
+                                <!-- <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <% for(let i=0;i<category.length;i++){ %>
+                                           <% if(category[i].is_Listed===true){ %>
+                                            <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                                                <input class="form-check-input radio-cls" name="category" id="<%= category[i].name %>" type="radio" value="<%= category[i].name %>">
+                                                <span class="form-check-label"> <%= category[i].name %> </span>
+                                            </label>
+                                            
+                                           
+                                            <% } %>
+                                       <% } %>
+                                       <span id="ctgError" class="error"></span>
+                                        
+                                    </div>
+                                </div> col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>5. Media</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Change Images</label>
+                                        <input class="form-control" type="file" multiple name="image" id="imageInput" onclick="changeImages()">
+                                    </div>
+
+                                    <div id="existPreview">
+                                    <% productData.images.forEach((image) => { %>
+                                        <div class="image-container">
+                                            <div class="image-wrapper" style="position: relative;">
+                                        <img src="<%= image %>" style="width: 70px; height: 70px;" alt="">
+                                            <i class="bi bi-x-circle-fill delete-icon" id="imgcancel" onclick="dltImage(event,'<%= image %>','<%= productData._id %>')"></i>
+                                        
+                                    </div>
+                                </div>
+                                    <% }) %>
+                                </div>
+                                    <div id="imagePreview">
+                                        <div class="image-container">
+                                            <div class="image-wrapper" style="position: relative;">
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                
+                                </div> <!-- col.// -->
+                            </div> <!-- .row end// -->
+                            <div id="btnadd">
+                                <button class="btn btn-md rounded font-sm hover-up">Submit</button>
+                            </div>
+                        </form>
+                        </div>
+                        </div>
+                    </div>
+                    
+            </div>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> &copy; Nest - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+
+
+    <script>
+
+
+
+function changeImages(){
+    const imageInput = document.getElementById("imageInput");
+    const imagePreview = document.getElementById("imagePreview");
+
+    imageInput.addEventListener("change", function () {
+       
+        
+
+        for (let i = 0; i < imageInput.files.length; i++) {
+            console.log('infiles',imageInput.files.length);
+            const file = imageInput.files[i];
+
+            
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+
+                reader.onload = function (event) {
+                    
+                    const imgElement = document.createElement("img");
+                    imgElement.classList.add("preview-image");
+                    imgElement.src = event.target.result;
+                    imgElement.style.maxWidth = "70px"; 
+                    imgElement.style.maxHeight = "70px";
+                    imgElement.style.marginRight = "10px"
+
+                    
+                    imagePreview.appendChild(imgElement);
+                };
+
+                // Read the file as a data URL
+                reader.readAsDataURL(file);
+            }else {
+                alert("Please select only image files.");
+                imageInput.value = "";
+                return;
+            }
+        }
+    });
+}
+
+
+
+
+
+        function editProduct(productid){
+
+            event.preventDefault();
+
+        const name = document.getElementById('namein').value.trim()
+        
+        const price = document.getElementById('pricein').value.trim()
+
+        const description = document.getElementById('descin').value.trim()
+        
+        const qty = document.getElementById('qtyin').value.trim()
+
+        const categoryDropdown = document.getElementById('categoryDropdown').value.trim()
+
+            console.log('ioi:',categoryDropdown);
+
+        
+        
+        // const ctg = document.getElementById('ctgin').value.trim()
+        
+            
+        // document.getElementById('nameError').innerText = ""
+        // document.getElementById('priceError').innerText = ""
+        // document.getElementById('qtyError').innerText = ""
+        // document.getElementById('ctgError').innerText = ""
+
+        var isValid = true
+
+
+        const nameRegex = /^[a-zA-Z][a-zA-Z0-9 ]*$/;
+
+        if(!nameRegex.test(name)){
+            document.getElementById('nameError').innerText = "Please enter name in correct format!"
+            isValid = false
+        }
+
+        const priceRegex = /^[0-9]+$/
+        if(!priceRegex.test(price)){
+            document.getElementById('priceError').innerText = "price field must be a number!"
+            isValid = false
+        }
+
+        const qtyRegex = /^[0-9]+$/
+        if(!qtyRegex.test(qty)){
+            document.getElementById('qtyError').innerText = "Quantity field must be a number!"
+            isValid = false
+        }
+
+        
+        if(description===""){
+            document.getElementById('descError').innerText = "Description should not empty!"
+            isValid = false
+        }
+
+
+        // let selectedCtg = null
+
+        // allRadio.forEach((radio)=>{
+        //     if(radio.checked){
+        //         selectedCtg = radio.id
+        //     }
+        // })
+
+        if (categoryDropdown === "") {
+        // No category is selected, display an error message or handle validation
+        document.getElementById('ctgError').textContent = 'Please select a category';
+        isValid =  false;
+    }
+
+
+
+        if (!isValid) {
+                return false;
+            }else{
+                Swal.fire({
+  title: "Edit Done!",
+  
+  icon: "success"
+})
+            .then((result) => {
+    if (result.isConfirmed) {
+        const form = document.querySelector('form');
+        const formData = new FormData(form);
+
+        fetch("/admin/editProduct?id=<%= productData._id %>", {
+            method: "POST",
+            body: formData
+        })
+        
+        .then(result => {
+            
+        window.location.href = '/admin/productList'         
+        })
+        .catch(error => console.error('Error:', error));
+    }
+})
+
+            }
+            
+
+        }
+
+
+
+        //delete exist preview image 
+
+        function dltImage(event,imageUrl,productId){
+            event.preventDefault()
+            $.ajax({
+                url:'/admin/dltPreviewImg',
+                method:'POST',
+                data:{imageUrl:imageUrl,
+                    productId:productId},
+
+            }).then((response)=>{
+                if(response.success){
+                    $('#existPreview').load(`/admin/editProduct?id=${productId} #existPreview`)
+
+                
+                }else{
+                    console.log('res:',response.status)
+                }
+            })
+        }
+
+
+    </script>
+
+
+
+
+    <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/vendors/select2.min.js"></script>
+    <script src="assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="assets/js/main.js?v=1.1" type="text/javascript"></script>
+</body>
+
+</html>
