@@ -109,15 +109,17 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3">
-                                <form action="/admin/category" method="post">
+                                <form action="" method="post" onsubmit="addCategory(event)">
                                     <div class="mb-4">
                                         <label for="product_name" class="form-label">Name</label>
                                         <input type="text" placeholder="Type here" name="name" class="form-control" id="product_name" />
+                                        <span id="nameError" class="text-danger"></span>
                                     </div>
                                     
                                     <div class="mb-4">
                                         <label class="form-label">Description</label>
-                                        <textarea placeholder="Type here" name ='description' class="form-control"></textarea>
+                                        <textarea placeholder="Type here" name ='description' class="form-control" id="desc"></textarea>
+                                        <span id="descError"></span>
                                     </div>
                                     <div class="d-grid">
                                         <button class="btn btn-primary">Create category</button>
@@ -263,6 +265,80 @@
 
 
 <script>
+
+    function addCategory(event){
+        event.preventDefault()
+
+        const name = document.getElementById('product_name').value.trim()
+        const description = document.getElementById('desc').value.trim()
+
+        document.getElementById('nameError').innerText = ''
+        document.getElementById('descError').innerText = ''
+
+        isValid = true
+
+        var nameRegex = /^[a-zA-Z]+$/;
+
+        if(!nameRegex.test(name)){
+            document.getElementById('nameError').innerText = 'Name should only contain alphabets!'
+            isValid = false
+        }
+
+
+        if(!isValid){
+            return false
+        }else{
+            $.ajax({
+            url:'/admin/category',
+            method:'post',
+            data:{name,description},
+            success:((response)=>{
+                if(response.success){
+                    Swal.fire({
+            title: 'Success!',
+            text: 'Category added successfully',
+             icon: 'success',
+            confirmButtonText: 'OK',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                   
+                    window.location.reload()
+                }
+            })
+                }else if(response.existCategory){
+                    Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: response.message,
+}).then((result)=>{
+                if(result.isConfirmed){
+                   
+                    window.location.reload()
+                }
+            })
+                }
+                
+                
+                
+                else{
+                    Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: 'Something went wrong!',
+});
+                }
+            })
+        })
+        }
+
+        
+
+    }
+
+
+
+
+
     function dltctg(){
            const btn =  document.getElementById('dltbtn')
             btn.addEventListener('click',(()=>{

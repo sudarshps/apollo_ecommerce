@@ -14,6 +14,9 @@
         <!-- <link rel="shortcut icon" type="image/x-icon" href="/admin/imgs/theme/favicon.svg" /> -->
         <!-- Template CSS -->
         <link href="/admin/css/main.css?v=1.1" rel="stylesheet" type="text/css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     </head>
 
     <body>
@@ -155,20 +158,20 @@
                             <div class="col-md-3">
                                 
                                     <div class="mb-4">
-                                        <form action="/admin/editCategory" method="post">
+                                        <form action="" method="post" onsubmit="validateForm(event)">
                                         <label for="product_name" class="form-label">Name</label>
-                                        <input type="hidden" name="id" value="<%= ctg._id  %>">
+                                        <input type="hidden" name="id" value="<%= ctg._id  %>" id="ctgid">
                                         <input type="text" value="<%= ctg.name %>" name="name" placeholder="type here" class="form-control" id="product_name" />
                                         <span id="nameError" class="text-danger"></span>
                                     </div>
                                         <label class="form-label">Description</label>
-                                        <textarea  name ='description' placeholder="type here" class="form-control"><%= ctg.description %></textarea>
+                                        <textarea  name ='description' placeholder="type here" class="form-control" id="desc"><%= ctg.description %></textarea>
                                         <span id="descriptionError" class="text-danger"></span>
                                         <br>
                                     </div>
                                     
                                     <div class="d-grid">
-                                        <button class="btn btn-primary" id="editbtn" onclick="return validateForm()">Edit category</button>
+                                        <button class="btn btn-primary" id="editbtn">Edit category</button>
                                     </form>
                                     </div>
                                 
@@ -200,38 +203,86 @@
             </footer>
         </main>
         <script>
-            function validateForm(){
+            function validateForm(event){
 
-                alert("Edit Successful")
+                event.preventDefault()
 
         
-            let categoryName = document.getElementById('name').value
-            let description=document.getElementById('description').value.trim()
+            let categoryName = document.getElementById('product_name').value.trim()
+            let description=document.getElementById('desc').value.trim()
+            let id = document.getElementById('ctgid').value
+
+            document.getElementById('nameError').innerHTML = '';
+            document.getElementById('descriptionError').innerHTML = '';
+
+            var isValid = true
           
           const nameRegex = /^[a-zA-Z]+$/;
           const descriptionRegex = /^[a-zA-Z\s]+$/;
           
           if (!nameRegex.test(categoryName)) {
             document.getElementById('nameError').innerHTML = 'Name should only contain alphabets';
-            
-
             return false;
-          } else {
-            document.getElementById('nameError').innerHTML = '';
           }
+          
           
           if (!descriptionRegex.test(description)) {
             document.getElementById('descriptionError').innerHTML = 'Description should only contain alphabets';
             return false;
-          } else {
-            document.getElementById('descriptionError').innerHTML = '';
-          }
+          } 
           
-          alert('edit successful')
-          return true
+          if(!isValid){
+            return false
+        }else{
+            $.ajax({
+            url:'/admin/editCategory',
+            method:'post',
+            data:{categoryName,description,id},
+            success:((response)=>{
+                if(response.success){
+                    Swal.fire({
+            title: 'Success!',
+            text: 'Category edit successful!',
+             icon: 'success',
+            confirmButtonText: 'OK',
+            }).then((result)=>{
+                if(result.isConfirmed){
+                   
+                    window.location.href = '/admin/category'
+                }
+            })
+                }else if(response.existCategory){
+                    Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: response.message,
+}).then((result)=>{
+                if(result.isConfirmed){
+                   
+                    window.location.reload()
+                }
+            })
+                }
+                
+                
+                
+                else{
+                    Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: 'Something went wrong!',
+});
+                }
+            })
+        })
+        }
+
+        
+
+    }
          
           
-            }
+            
           
           </script>
         <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>

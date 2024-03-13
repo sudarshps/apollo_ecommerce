@@ -17,8 +17,8 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10/dist/sweetalert2.min.css">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-        
-        <link href="/public/cropperjs/cropper.min.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
        
         
     </head>
@@ -200,6 +200,7 @@
                                     <div id="imagePreview">
                                         
                                     </div>
+                                    <button id="cropButton" type="button" style="display: none;">Crop Image</button>
                                 </div> <!-- col.// -->
                             </div> <!-- .row end// -->
                             
@@ -212,7 +213,10 @@
                     </div>
 
                     <div class="col-lg-6">
-                        
+                        <h3 id="croppedHeader" style="display: none;">Cropped Images</h3>
+                        <div id="croppedImageContainer">
+                            
+                        </div>
                     </div>
 
                     
@@ -247,6 +251,9 @@
         document.addEventListener("DOMContentLoaded", function () {
     const imageInput = document.getElementById("imageInput");
     const imagePreview = document.getElementById("imagePreview");
+    const cropButton = document.getElementById("cropButton");
+    const croppedImageContainer =document.getElementById('croppedImageContainer')
+    let cropper
 
     imageInput.addEventListener("change", function () {
        
@@ -264,9 +271,15 @@
                     const imgElement = document.createElement("img");
                     imgElement.classList.add("preview-image");
                     imgElement.src = event.target.result;
-                    imgElement.style.maxWidth = "70px"; 
-                    imgElement.style.maxHeight = "70px";
+                    imgElement.style.maxWidth = "150px"; 
+                    imgElement.style.maxHeight = "150px";
                     imgElement.style.marginRight = "10px"
+
+                    imgElement.setAttribute("data-index", i+1);
+
+                    imgElement.addEventListener("click", function() {
+                                selectImageForCropping(i+1,imgElement);
+                            });
 
                     
                     imagePreview.appendChild(imgElement);
@@ -282,6 +295,101 @@
             }
         }
     });
+
+
+    cropButton.addEventListener("click", function () {
+        if (cropper) {
+                    document.getElementById('croppedHeader').style.display = 'block'
+                    const croppedCanvas = cropper.getCroppedCanvas();
+                    const croppedImage = document.createElement("img");
+                    croppedImage.style.width = '200px';
+                    croppedImage.style.height = '200px'
+                    croppedImage.src = croppedCanvas.toDataURL();
+
+                    const croppedImageUrl = croppedCanvas.toDataURL();
+
+                    croppedImageContainer.appendChild(croppedImage);
+
+                    const blob = dataURLtoBlob(croppedImageUrl)
+
+                    const file = new File([blob], 'cropped_image.png')
+
+                    const inputElement = document.createElement('input');
+                    inputElement.type = 'file';
+                    inputElement.name = 'image';
+
+    
+                    const fileList = new DataTransfer();
+                    fileList.items.add(file);
+                    inputElement.files = fileList.files;
+
+                    
+                    //send data to server
+
+        //             const croppedImageBlob = croppedCanvas.toBlob(blob => {
+        //     // Create a FormData object
+        //     const formData = new FormData();
+        //     // Append the cropped image blob to the FormData object
+        //     formData.append('croppedImage', blob);
+
+        //     // Send FormData to server using fetch API
+        //     fetch('/admin/addProducts', {
+        //         method: 'POST',
+        //         body: formData
+        //     })
+        //     .then(response => {
+        //         if (response.ok) {
+        //             alert("Cropped image uploaded successfully!");
+        //         } else {
+        //             alert("Failed to upload cropped image.");
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.error('Error uploading cropped image:', error);
+        //     });
+        // }, 'image/jpeg');
+
+
+                    
+    } else {
+        alert("No image selected for cropping.");
+    }
+
+                
+            });
+
+
+
+
+            function dataURLtoBlob(dataURL) {
+    const parts = dataURL.split(';base64,');
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+    for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+    }
+    return new Blob([uInt8Array], { type: contentType });
+}
+
+
+
+
+
+    function selectImageForCropping(index,imgElement) {
+                // Example: Highlight the selected image
+                document.getElementById('cropButton').style.display= 'block'
+                if(cropper){
+                    cropper.destroy()
+
+                }
+                cropper = new Cropper(imgElement,{
+                    aspectRatio:1,
+                    viewMode:1
+                })
+            }
+
 });
 
 
@@ -358,6 +466,21 @@
         const form = document.querySelector('form');
         const formData = new FormData(form);
 
+        // const croppedImage = document.getElementById('croppedImageContainer').getElementsByTagName('img')[0];
+        //         if (croppedImage) {
+        //             const blob = dataURLtoBlob(croppedImage.src);
+        //             const file = new File([blob], 'cropped_image.png');
+
+        //             // Replace the original image file with the cropped image file in FormData
+        //             formData.append('image', file);
+        //         }
+                
+               
+                
+
+
+                
+        
         fetch("/admin/addProducts", {
             method: "POST",
             body: formData
@@ -373,6 +496,18 @@
 
 
 
+}
+
+function dataURLtoBlob(dataURL) {
+    const parts = dataURL.split(';base64,');
+    const contentType = parts[0].split(':')[1];
+    const raw = window.atob(parts[1]);
+    const rawLength = raw.length;
+    const uInt8Array = new Uint8Array(rawLength);
+    for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+    }
+    return new Blob([uInt8Array], { type: contentType });
 }
 
             }

@@ -9,7 +9,7 @@ const couponModel = require('../model/couponModel')
 
 
 const loadCart = async(req,res)=>{
-    try {
+    try { 
         const productid = req.query.id
         const userid = req.session.user_id
         const cart = await cartModel.find()

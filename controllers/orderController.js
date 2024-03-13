@@ -59,7 +59,10 @@ const placeOrder = async(req,res)=>{
         const payment = req.body.selectedpayment
         const reducedTotal = req.body.reducedTotal
         const couponid = req.body.couponid
-    
+        
+        const addressData = await User.findOne({_id:userid,'address._id':address})
+        const deliveryAddress = addressData.address.find(addr => addr._id.toString() === address.toString());
+        
         const cartItems = await cartModel.findOne({user_id:userid}).populate({path:'items'})
         
         
@@ -67,12 +70,15 @@ const placeOrder = async(req,res)=>{
 
 
         let status = '';
-        if (payment === 'cod') {
+        if (payment === 'cod' || payment ==='wallet') {
      status = 'placed';
-    } else if (payment === 'debit') {
-      status = 'pending';
-    } else if (payment === 'upi') {
-      status = 'pending';
+    }  else if (payment === 'upi') {
+        if(reducedTotal>12000){
+            res.json({upiAmountExceed:true,message:'Orders above 12000.00 not allowed for UPI!'})
+        }else{
+            status = 'pending';
+        }
+      
      } else {
        status = 'pending';
      }
@@ -92,16 +98,16 @@ const placeOrder = async(req,res)=>{
        
             const order = new orderModel({  
                userId:userid,
-               deliveryAddress:address,
+               deliveryAddress:deliveryAddress,
                paymentMethod:payment,
                reducedTotal:reducedTotal,
                status:status,
                date:dateShort,
                expectedDelivery:deliveryDate,
                items:cartItem,
-               
-       
             })
+
+
             let orderData = await order.save()
             const orderId = orderData._id
             const reducedAmount = orderData.reducedTotal
@@ -123,10 +129,10 @@ const placeOrder = async(req,res)=>{
                                    await couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
             }else if(orderData && payment==='upi'){
             //    if(reducedAmount){
-                   generateRazorpay(orderId,orderData.reducedTotal,orderData,couponid).then(async(response)=>{
+                   generateRazorpay(orderId,orderData.reducedTotal,orderData,couponid).then((response)=>{
                        res.json(response)
-                      await couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
-                       await couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
+                         couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
+                        couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
                        console.log('resss:',response);
                        
                    })
@@ -201,6 +207,24 @@ const verifyPayment = async(req,res)=>{
 }
 
 
+const pendingPayment = async(req,res)=>{
+    try {
+        const {orderId,totalPrice} = req.body
+        
+        generateRazorpay(orderId,totalPrice).then((response)=>{
+            res.json(response)
+            //   couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
+            //  couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
+            console.log('resss:',response);
+            
+        })
+
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
 
 
 const cancelOrder = async(req,res)=>{
@@ -213,7 +237,7 @@ const cancelOrder = async(req,res)=>{
         
 
         if(orderData){
-            if(orderData.paymentMethod==='upi'){
+            if(orderData.paymentMethod==='upi' || orderData.paymentMethod==='wallet'){
                 await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},$push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount}}})
                 
                 res.json({success:true})
@@ -234,10 +258,10 @@ const cancelOrder = async(req,res)=>{
 const loadOrderDetailsAdmin = async(req,res)=>{
     try {
         const orderId = req.query.id
-        console.log('ooooid:',orderId);
+        
         const users = await User.find()
         const order = await orderModel.findOne({_id:orderId}).populate('userId').populate('items.product_id')
-        console.log(order);
+        
         if(order){
             res.render('orderDetails',{order})
         }else{
@@ -276,5 +300,6 @@ module.exports = {
     cancelOrder,
     loadOrderDetailsAdmin,
     updateStatus,
-    verifyPayment
+    verifyPayment,
+    pendingPayment
 }

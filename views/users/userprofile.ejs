@@ -20,6 +20,8 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        
 
    
 		<title>Apollo Furniture </title>
@@ -164,7 +166,7 @@
                                         <% if (orderData && orderData.length > 0 ) { %>
                                             <% orderData.forEach((order) => { %>
                                                 <% order.items.forEach((orderItem) => { %>
-                                                    <% if(order.status!=='pending'){ %>
+                                                    
                                                     <div class="order">
                                                         <img src="<%= orderItem.product_id.images[0] %>" alt="<%= orderItem.product_id.name %>">
                                                         <div class="order-details">
@@ -191,7 +193,11 @@
                                                                 <p> Status:<span style="color: red; font-weight: bold;"><%= orderItem.status %></span></p>
                                                             <% } else if (orderItem.status === 'delivered') { %>
                                                                 <p> Status:<span style="color:green; font-weight: bold;"><%= orderItem.status %></span></p>
-                                                                <a href="" class="btn btn-sm btn-danger">Return Order</a>
+                                                                <button class="btn btn-sm btn-danger" onclick="returnOrder(event,'<%= orderItem.product_id._id %>','<%= order._id %>','<%= orderItem.total_price %>')">Return Order</button>
+
+                                                                <% }else if(order.status==='pending' && order.paymentMethod==='upi'){ %>
+                                                                    <p> Status:<span style="color:rgb(4, 123, 170); font-weight: bold;"><%= order.status %></span></p>
+                                                                    <button class="btn btn-sm btn-warning font-sm" onclick="completePayment(event,'<%= order._id %>','<%= order.reducedTotal %>')">Complete<br> Payment</button>
                                                             <% } else { %>
                                                                 <p> Status:<span style="font-weight: bold;"><%= orderItem.status %></span></p>
                                                                 <div class="divcon">
@@ -207,7 +213,7 @@
                                                         
                                                         
                                                     </div>
-                                                <% } %>
+                                               
                                                 <% }) %>
                                             <% }) %>
                                         <% } else { %>
@@ -416,6 +422,36 @@
                                       
                                     
                                       
+                                          </div>
+                                        </div>
+                                      </div>
+
+
+
+
+
+                                      <div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                          <div class="modal-content">
+                                            <div class="modal-header">
+                                              <h5 class="modal-title" id="returnModalLabel">Select a reason</h5>
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                              </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="dropdown">Select an option:</label>
+                                                    <select id="dropdown">
+                                                     <option value="option1">Option 1</option>
+                                                     <option value="option2">Option 2</option>
+                                                    <option value="option3">Option 3</option>
+                                                    <option value="option4">Option 4</option>
+                                                  </select>
+                                            </div>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                              <button type="button" class="btn btn-primary">Select</button>
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
@@ -1017,6 +1053,108 @@ function cancelOrder(event,productId,orderId,itemAmount){
     })
 
 }
+
+
+
+
+//return order
+
+function returnOrder(event,productId,orderId,itemAmount){
+    event.preventDefault()
+
+    $('#returnModal').modal('show')
+
+
+
+
+
+}
+
+
+//complete order payment
+
+
+
+function completePayment(event,orderId,totalPrice){
+    event.preventDefault()
+
+    $.ajax({
+        url:'/pendingPayment',
+        method:'post',
+        data:{orderId,totalPrice},
+        success:(response)=>{
+            razorpayPayment(response)
+        }
+    })
+}
+
+
+function razorpayPayment(order){
+		var options = {
+    "key": "rzp_test_cnVfltu2ex0dJP", // Enter the Key ID generated from the Dashboard
+    "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Apollo Group",
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        // alert(response.razorpay_payment_id);
+        // alert(response.razorpay_order_id);
+        // alert(response.razorpay_signature)
+
+		verifyPayment(response,order)
+    },
+    "prefill": {
+        "name": "Gaurav Kumar",
+        "email": "gaurav.kumar@example.com",
+        "contact": "9000090000"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3b5d50"
+    }
+};
+var rzp1 = new Razorpay(options);
+rzp1.open();
+	}
+
+
+
+    function verifyPayment(payment,order){
+		$.ajax({
+			url:'/verifyPayment',
+			method:'post',
+			data:{payment,
+					order}
+		}).then((response)=>{
+			if(response.success===true){
+				window.location.href='/thankyou'
+
+			}else if(response.success===false){
+				Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: response.message,
+  
+});
+			}else{
+				Swal.fire({
+  icon: "error",
+  title: "Oops...",
+  text: "Something went wrong!",
+  
+});
+			}
+		})
+	}
+
+
+
+
+
 
 //address edit submition
 

@@ -230,20 +230,32 @@
 								<div class="form-group row">
 								  <div class="col-md-10">
 									
-									<input type="radio" name="address" id="address_<%= i %>" class="form-check-input" value="<%= user.address[i] %>">
-									<textarea name="c_order_notes" id="address_" rows="4" class="form-control" readonly>
+									<input type="radio" name="address" id="address_<%= i %>" class="form-check-input" value="<%= user.address[i]._id %>">
+									 <textarea name="c_order_notes" id="address_" rows="4" class="form-control" readonly>
 <%= user.address[i].name %>
 <%= user.address[i].localAddress %>,<%= user.address[i].city %>            
 <%= user.address[i].state %>,<%= user.address[i].pincode %>
 <%= user.address[i].phone %>                                  
-									</textarea>
+									</textarea> 
 
-									<input type="hidden" name="name_<%= i %>" value="<%= user.address[i].name %>">
+									<!-- <input type="hidden" name="name_<%= i %>" value="<%= user.address[i].name %>" id="addressName">
 <input type="hidden" name="localAddress_<%= i %>" value="<%= user.address[i].localAddress %>">
 <input type="hidden" name="city_<%= i %>" value="<%= user.address[i].city %>">
 <input type="hidden" name="state_<%= i %>" value="<%= user.address[i].state %>">
 <input type="hidden" name="pincode_<%= i %>" value="<%= user.address[i].pincode %>">
-<input type="hidden" name="phone_<%= i %>" value="<%= user.address[i].phone %>">
+<input type="hidden" name="phone_<%= i %>" value="<%= user.address[i].phone %>">  -->
+
+
+<!-- <div>
+	<span> <%= user.address[i].name %></span><br>
+	<span> <%= user.address[i].localAddress %></span><br>
+	<span> <%= user.address[i].city %></span><br>
+	<span> <%= user.address[i].state %></span><br>
+	<span> <%= user.address[i].pincode %></span><br>
+	<span> <%= user.address[i].phone %></span><br>
+  </div> -->
+
+
 								  </div>
 								  <div class="col-md-2">
 									<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editaddressmodal" id="addreditbt" onclick="addreditbtn(event, '<%= user.address[i]._id %>')">Edit</button>								  </div>
@@ -354,10 +366,11 @@
 									<td><%= cart.items[i].product_id.name %> <strong class="mx-2">x</strong> <%= cart.items[i].quantity %></td>
 									<td>₹<%= cart.items[i].total_price %>.00</td>
 									<!-- <%= cartSum+=cart.items[i].total_price %> -->
-									<input type="hidden" id="totAmt" value="<%= cartSum %>">
-									<input type="hidden" id="couponid" value="">
+									
 								  </tr>
 								  <% } %>
+								  <input type="hidden" id="totAmt" value="<%= cartSum %>">
+									<input type="hidden" id="couponid" value="">
 			
 								  <tr>
 									<td>Cart Subtotal</td>
@@ -677,9 +690,8 @@
 
 	
 	const address = document.querySelector('input[name = "address"]:checked').value
-  	const payment=document.querySelector('input[name = "selectedPayment"]:checked').value
-	
-	
+  	const payment = document.querySelector('input[name = "selectedPayment"]:checked').value
+	 
 
 	$.ajax({
 		url:'/placeorder',
@@ -702,7 +714,13 @@
         title: 'Oops...',
         text: response.message
       });
-			}
+			}else if(response.upiAmountExceed===true){
+				Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: response.message
+      });
+			}	
 			else{
 				razorpayPayment(response)
 			}
@@ -712,7 +730,6 @@
 }
 
 	function razorpayPayment(order){
-		
 		var options = {
     "key": "rzp_test_cnVfltu2ex0dJP", // Enter the Key ID generated from the Dashboard
     "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
@@ -997,6 +1014,7 @@ function applyCoupon(event){
 
 		let couponinput = document.getElementById('couponinput').value.trim()
 		let checkoutTotal = document.getElementById('totAmt').value
+		console.log('tot:aa',checkoutTotal);
 		let couponButton = document.getElementById('couponbtn')
 		document.getElementById("removebtn").classList.remove("d-none");
 

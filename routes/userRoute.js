@@ -61,6 +61,7 @@ user_route.post('/removeUserCoupon',auth.isLogin,couponController.removeUserCoup
 user_route.get('/checkout',auth.isLogin,orderController.loadCheckout)
 user_route.post('/placeorder',auth.isLogin,orderController.placeOrder)
 user_route.post('/verifyPayment',auth.isLogin,orderController.verifyPayment)
+user_route.post('/pendingPayment',auth.isLogin,orderController.pendingPayment)
 user_route.get('/thankyou',auth.isLogin,userController.loadThankYou)
 user_route.get('/userProf',auth.isLogin,userController.loadUserProf)
 user_route.get('/orderDetails',auth.isLogin,orderController.loadOrderDetails)

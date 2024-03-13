@@ -128,6 +128,8 @@
                         } 
                     }) %>
 
+                    <input type="hidden" id="orderDataChart" value="<%= JSON.stringify(order) %>">
+
                 <div class="row">
                     <div class="col-lg-3">
                         <div class="card card-body mb-4">
@@ -167,12 +169,13 @@
                         </div>
                     </div>
                     <div class="col-lg-3">
+                        
                         <div class="card card-body mb-4">
                             <article class="icontext">
                                 <span class="icon icon-sm rounded-circle bg-info-light"><i class="text-info material-icons md-shopping_basket"></i></span>
                                 <div class="text">
                                     <h6 class="mb-1 card-title">Monthly Earning</h6>
-                                    <span>₹54800.00</span>
+                                    <span id="monthlyearning"></span>
                                     <span class="text-sm"> Based in your local time. </span>
                                 </div>
                             </article>
@@ -182,13 +185,20 @@
                 <div class="row">
                     <div class="col-xl-8 col-lg-12">
                         <div class="card mb-4">
-                            <article class="card-body">
-                                <h5 class="card-title">Sale statistics</h5>
-                                <canvas id="myChart" height="120px"></canvas>
-                            </article>
+                               <div class="col-mb-4">
+                                <article class="card-body">
+                                    <select name="interval" id="interval">
+                                        <option value="Monthly">Monthly</option>
+                                        <option value="Yearly">Yearly</option>
+                                    </select>
+                                    <h5 class="card-title">Sale statistics</h5>
+                                    <canvas id="myChart" height="120px"></canvas>
+                                </article>
+                               </div> 
+                            
                         </div>
                         <div class="row">
-                            <div class="col-lg-5">
+                            <!-- <div class="col-lg-5">
                                 <div class="card mb-4">
                                     <article class="card-body">
                                         <h5 class="card-title">New Members</h5>
@@ -226,91 +236,54 @@
                                         </div>
                                     </article>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-lg-7">
                                 <div class="card mb-4">
                                     <article class="card-body">
-                                        <h5 class="card-title">Recent activities</h5>
-                                        <ul class="verti-timeline list-unstyled font-sm">
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>Today</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Lorem ipsum dolor sit amet consectetur</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list active">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl animation-fade-right"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>17 May</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Debitis nesciunt voluptatum dicta reprehenderit</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>13 May</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Accusamus voluptatibus voluptas.</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>05 April</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>At vero eos et accusamus et iusto odio dignissi</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>26 Mar</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Responded to need “Volunteer Activities</div>
-                                                    </div>
-                                                </div>
-                                            </li>
+                                        <h5 class="card-title"><i class="bi bi-graph-up-arrow"></i> Top 10 Selling Products</h5>
+                                        <ul>
+                                                
+                                                    <% topProducts.forEach((productName,index)=>{ %>
+
+                                                    
+                                                        <li>
+                                                        <div class="media">
+
+                                                            <div class="me-3">
+                                                                <p><%= index+1 %>.</p>
+                                                            </div>
+
+                                                            <div class="me-3">
+                                                                <!-- <h6><i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i> <span></span></h6> -->
+                                                                <img src="<%= productName.images[0] %>" alt="" style="width: 50px; height: 50px;">
+                                                            </div>
+                                                            
+                                                            <div class="media-body">
+                                                                <p><%= productName.name %></p>
+                                                            </div>
+        
+                                                            
+                                                        </div>
+                                                    </li>
+                                                    <% }) %>
+                                                
+                                        
+                                        
                                         </ul>
                                     </article>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
                     <div class="col-xl-4 col-lg-12">
                         <div class="card mb-4">
                             <article class="card-body">
-                                <h5 class="card-title">Revenue Base on Area</h5>
+                                <h5 class="card-title">Sales of Categories</h5>
                                 <canvas id="myChart2" height="217"></canvas>
                             </article>
                         </div>
-                        <div class="card mb-4">
+                        <!-- <div class="card mb-4">
                             <article class="card-body">
                                 <h5 class="card-title">Marketing Chanel</h5>
                                 <span class="text-muted font-xs">Facebook</span>
@@ -334,13 +307,13 @@
                                     <div class="progress-bar" role="progressbar" style="width: 80%">80%</div>
                                 </div>
                             </article>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="card mb-4">
                     <header class="card-header">
                         <h4 class="card-title">Latest orders</h4>
-                        <div class="row align-items-center">
+                        <!-- <div class="row align-items-center">
                             <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
                                 <div class="custom_select">
                                     <select class="form-select select-nice">
@@ -372,7 +345,7 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </header>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -396,6 +369,9 @@
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <% order.forEach((order)=>{ %>
+
+                                        
                                         <tr>
                                             <td class="text-center">
                                                 <div class="form-check">
@@ -403,19 +379,20 @@
                                                     <label class="form-check-label" for="transactionCheck02"></label>
                                                 </div>
                                             </td>
-                                            <td><a href="#" class="fw-bold">#SK2540</a></td>
-                                            <td>Neal Matthews</td>
-                                            <td>07 Oct, 2021</td>
-                                            <td>$400</td>
+                                            <td><a href="#" class="fw-bold"><%= order._id %></a></td>
+                                            <td><%= order.userId.username %></td>
+                                            <td><%= order.date %></td>
+                                            <td><%= order.reducedTotal %>.00</td>
                                             <td>
-                                                <span class="badge badge-pill badge-soft-success">Paid</span>
+                                                <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
                                             </td>
-                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Mastercard</td>
+                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.paymentMethod.toUpperCase() %></td>
                                             <td>
                                                 <a href="#" class="btn btn-xs"> View details</a>
                                             </td>
                                         </tr>
-                                        <tr>
+                                    <% }) %>
+                                        <!-- <tr>
                                             <td class="text-center">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" id="transactionCheck03" />
@@ -509,7 +486,7 @@
                                             <td>
                                                 <a href="#" class="btn btn-xs"> View details</a>
                                             </td>
-                                        </tr>
+                                        </tr> -->
                                     </tbody>
                                 </table>
                             </div>

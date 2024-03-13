@@ -8,7 +8,7 @@ const orderSchema = mongoose.Schema({
         required:true
     },
     deliveryAddress:{
-        type:String,
+        type:Object,
         required:true
     },
     paymentMethod:{

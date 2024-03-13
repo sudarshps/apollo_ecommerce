@@ -101,7 +101,7 @@
 
             <select name="price" id="" class="category-dropdown-btn" onchange="priceChange(this.value)">
                 <option value="select">Select Price</option>
-                <option value="1000-5000"> ₹1000- ₹5000 </option>
+                <option value="0-5000"> ₹0- ₹5000 </option>
                 <option value="5000-10000"> ₹5000- ₹10000 </option>
                 <option value="10000-15000"> ₹10000- ₹15000 </option>
                 <option value="15000-20000"> ₹15000- ₹20000 </option>
@@ -117,7 +117,7 @@
 
         </div>
 
-        <div class="col-lg-2">
+        <!-- <div class="col-lg-2">
             <h6>Sort By:</h6>
             <div class="category-dropdown">
                 <select name="sort" id="" class="category-dropdown-btn">
@@ -131,7 +131,7 @@
                 </select>
             </div>
         
-    </div>
+    </div> -->
    </div>
 
 </div>
@@ -303,7 +303,49 @@
     //price changing filter
 
     function priceChange(priceRange){
-        
+        fetch(`/shop?price=${priceRange}`,{
+            method:'get',
+            headers:{
+                'Content-Type':'application/json'
+            },
+
+        }).then(response=>{
+            return response.json()
+        }).then(data => {
+    if(data.successPrice === true || data.allSuccessPrice) {
+        const { products } = data;
+        const productdiv = document.getElementById('productdiv');
+        let html = '';
+        for(let i = 0; i < products.length; i++) {
+            if(products[i].isListed === false) {
+                continue;
+            } else {
+                html += `
+                    <div class="col-12 col-md-4 col-lg-3 mb-5">
+                        <a class="product-item" href="/productDetails?id=${products[i]._id}">
+                            <img src="${products[i].images[0]}" class="img-fluid product-thumbnail">
+                            <h3 class="product-title">${products[i].name}</h3>`;
+                
+                if(products[i].offer !== null) { 
+                    html += `<strong class="product-price" style=" color: red; text-decoration: line-through;">₹${products[i].price}.00</strong><br>`;
+                    html += `<span style="color: green;">Offer Price : </span><strong style="color: green;" class="product-price">₹${products[i].price - products[i].price*(products[i].offer.percentage/100)}.00</strong>`;
+                } else { 
+                    html += `<strong class="product-price">₹${products[i].price}.00</strong>`;
+                } 
+                html += `
+                            <span class="icon-cross">
+                                <img src="images/cross.svg" class="img-fluid">
+                            </span>
+                        </a>
+                    </div>`;
+             } 
+         }
+         productdiv.innerHTML = html;
+    }
+})
+.catch(error=>{
+            console.log('error',error)
+        })
     }
 </script>
 

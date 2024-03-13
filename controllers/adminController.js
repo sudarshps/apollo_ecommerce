@@ -44,7 +44,59 @@ const loadDashboard = async(req,res)=>{
         const order = await orderModel.find().populate('userId').populate('items.product_id')
         const product = await productModel.find()
         const category = await categoryModel.find()
-        res.render('adminDashboard',{order,product,category})
+
+        let productIdFilter = []
+        const topSellingProducts = await orderModel.aggregate([
+           
+            { $match: { "items.status": "delivered" } },
+            { $unwind: '$items' },
+            
+            {
+                $group: {
+                    _id: "$items.product_id",
+                    totalQuantitySold: { $sum: "$items.quantity" }
+                }
+            },
+            
+            { $sort: { totalQuantitySold: -1 } },
+            
+            { $limit: 10 },
+
+            
+            // {
+            //     $lookup: {
+            //         from: "productModel", 
+            //         localField: "_id",
+            //         foreignField: "_id",
+            //         as: "product"
+            //     }
+            // },
+            
+            // { $unwind: "$product" },
+            
+            // {
+            //     $project: {
+            //         _id: 0,
+            //         productName: "$product.name", 
+            //         totalQuantitySold: 1
+            //     }
+            // }
+        ]);
+
+        topSellingProducts.forEach((n)=>{
+            productIdFilter.push(n._id)
+        })
+
+        const topProducts = await productModel.find({_id:{$in:productIdFilter}});
+
+        const indexMap = {}
+        productIdFilter.forEach((id,index)=>{
+            indexMap[id] = index
+        })
+
+        topProducts.sort((a,b)=> indexMap[a._id] - indexMap[b._id])
+
+        res.render('adminDashboard',{order,product,category,topSellingProducts,topProducts})
     } catch (error) {
         console.log(error.message)
     }
@@ -135,8 +187,13 @@ const loadEditCategory = async(req,res)=>{
 
 const postEditCategory = async(req,res)=>{
    try {
-    await categoryModel.findByIdAndUpdate({ _id: req.body.id }, { name: req.body.name, description: req.body.description })
-    res.redirect('/admin/category')
+    const ctgEdit = await categoryModel.findByIdAndUpdate({ _id: req.body.id }, 
+        { name: req.body.categoryName, description: req.body.description })
+    if(ctgEdit){
+        res.json({success:true})
+    }else{
+        res.json({success:false})
+    }
 
     
    } catch (error) {
@@ -149,10 +206,15 @@ const postEditCategory = async(req,res)=>{
 const postCategory = async(req,res)=>{
     try {
         const{name,description} = req.body
-        const category = await categoryModel.find()
+        const category = await categoryModel.findOne({name:name})
         if (!name || !description) {
-            res.render('category',{category});
-          }else{
+            res.json({success:false})
+          }else if(category){
+            res.json({existCategory:true,message:'The category is already exists!'})
+          }
+          
+          
+          else{
             const ctg = new categoryModel({
                 name: name,
                 description: description,
@@ -163,7 +225,8 @@ const postCategory = async(req,res)=>{
               let ctgData = await ctg.save()
               
               if(ctgData){
-                res.redirect('/admin/category')
+                res.json({success:true})
+                
               }
           }
 
@@ -263,9 +326,10 @@ const postAddProduct = async (req, res) => {
             });
 
             await Promise.all(sharpProm);
-
+            
             const ctg = req.body.category;
-            // console.log(category);
+            const ctgData = await categoryModel.findOne({name:ctg})
+            
 
             const imagePath = fileNames.map((filename) => `/uploads/${filename}`);
             // console.log(fg);
@@ -278,6 +342,7 @@ const postAddProduct = async (req, res) => {
                 category: ctg,
                 images: imagePath,
                 isListed: true,
+                categoryId:ctgData._id
                 
             });
 

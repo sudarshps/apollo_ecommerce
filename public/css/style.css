@@ -760,7 +760,9 @@ textarea {
   margin: 10px;
   width: 500px;
 }
-
+.address-info p {
+  margin: 4px 0; /* Adjust margin as needed */
+}
 
 
 

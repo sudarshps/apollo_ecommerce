@@ -147,9 +147,15 @@
                     </div>
                     <div class="col-md-3">
                         <p><strong>Shipping Address: </strong></p>
-                        <% const addressName = order.deliveryAddress.split('-') %>
-                        <% const customerName = addressName[0].trim() %>
-                        <span class="fw-bold"><%= customerName %></span>
+                        
+                        
+                        <p class="fw-bold"><%= order.deliveryAddress.name %></p>
+                        <P class="fw-bold"><%= order.deliveryAddress.localAddress %></p>
+                        <span class="fw-bold"><%= order.deliveryAddress.city %>,</span>
+                        <span class="fw-bold"><%= order.deliveryAddress.state %></span>
+                        <p class="fw-bold"><%= order.deliveryAddress.phone %></p>
+                        <p class="fw-bold"><%= order.deliveryAddress.email %></p>
+                        <p class="fw-bold"><%= order.deliveryAddress.pincode %></p>
                         
                         </div>
                     

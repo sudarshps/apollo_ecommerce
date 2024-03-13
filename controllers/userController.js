@@ -26,10 +26,30 @@ const loadHome = async(req,res)=>{
 const loadShop = async(req,res)=>{
     try {
         const categoryName = req.query.category
+        const priceRange = req.query.price
+        const categoryModel = await category.find()
+        if(priceRange!==undefined){
+            if(priceRange!=='select'){
+                const [minPrice, maxPrice] = priceRange.split("-");
+             const productPrice = await productModel.find({price:{$gte:minPrice,$lte:maxPrice}}).populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
+             res.json({successPrice:true,categoryModel,products:productPrice})
+            }else{
+                const products = await productModel.find().populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
+                res.json({allSuccessPrice:true,categoryModel,products})
+            }
+            
+        
+        }
+       
+        
         const products = await productModel.find().populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
         const productCategory = await productModel.find({category:categoryName}).populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
-        const categoryModel = await category.find()
-        if(categoryName===undefined){
+
+       
+        
+
+        
+        if(categoryName===undefined ){
             res.render('shop',{categoryModel,products})
         }else if(categoryName==='all'){
             res.json({allSuccess:true,categoryModel,products})
@@ -37,7 +57,16 @@ const loadShop = async(req,res)=>{
             res.json({success:true,categoryModel,products:productCategory})
         }
         
-        
+
+        //price filter
+
+        // if(priceRange===undefined){
+        //     res.render('shop',{categoryModel,products})
+        // }else if(priceRange==='select'){
+        //     res.json({allSuccessPrice:true,categoryModel,products})
+        // }else{
+        //     res.json({priceSuccess:true,categoryModel,products:productCategory})
+        // }
         
     } catch (error) {
         console.log(error.message)
