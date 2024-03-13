@@ -83,7 +83,7 @@
         <form class="col-md-12" method="post">
           <div class="site-blocks-table">
             <table class="table">
-             
+              <% if(wishlist.length>0) { %>
               <thead>
                 <tr>
                   <th class="product-thumbnail">Image</th>
@@ -95,7 +95,7 @@
               </thead>
               <tbody>
                
-                <% if(wishlist.length>0) { %>
+                
                   <% wishlist.forEach((items)=>{ %>
                     <tr>
                       <td class="product-thumbnail">
@@ -110,7 +110,12 @@
                      
                       
                       <td><a href="" class="btn btn-black btn-sm" onclick="dltWishlistItem(event,'<%= items.product_id._id %>')">X</a></td>
-                      <td><a class="btn btn-primary btn-sm" onclick="addToCartWishlist(event,'<%= items.product_id._id %>')"><i class="fa fa-shopping-cart"></i> Add to cart</a></td>
+                      <% if(items.product_id.quantity>0){ %>
+                        <td><a class="btn btn-primary btn-sm" onclick="addToCartWishlist(event,'<%= items.product_id._id %>')"><i class="fa fa-shopping-cart"></i> Add to cart</a></td>
+                      <% }else{ %>
+                        <td><h5 class="text-danger">Out of stock!</h5></td>
+                      <% } %>
+                      
 
                     </tr>
                   <% }) %>

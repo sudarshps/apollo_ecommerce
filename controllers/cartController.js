@@ -59,8 +59,7 @@ const addToCart = async(req,res)=>{
             }
             const quantity = 1
 
-
-            if(product){
+            if(product && product.quantity>0){
                 if(!existInCart){
                     const cartItem = await cartModel.findOneAndUpdate({user_id:userid},{
                         $push:{items:{
@@ -122,13 +121,16 @@ const changeQuantity = async(req,res)=>{
             const productid = req.body.productId
             const count = req.body.count
             const cart = await cartModel.findOne({user_id:req.session.user_id})
+            
             if(!cart){
                 return res.json({ success: false, message: 'Cart not found.' });
             }
             const cartProduct = cart.items.find((item) => item.product_id.toString() === productid);
+            
             if (!cartProduct) {
               return res.json({ success: false, message: 'Product not found in the cart.' });
             }
+
 
             const product = await productModel.findById({_id:productid})
             if (!product) {
@@ -138,7 +140,7 @@ const changeQuantity = async(req,res)=>{
 
               if(count==1){
                 await cartModel.updateOne({user_id:userid,'items.product_id':productid},
-                {$inc:{'items.$.quantity':1,'items.$.total_price':product.price}})
+                {$inc:{'items.$.quantity':1,'items.$.total_price':cartProduct.price}})
                 if(cartProduct.quantity>product.quantity-1){
                     res.json({success:false,message:'Exceeded the stock'})
                 }else{
@@ -148,7 +150,7 @@ const changeQuantity = async(req,res)=>{
               }else if(count==-1){
                 if (cartProduct.quantity > 1) {
                     await cartModel.updateOne({ user_id: userid, 'items.product_id': productid },
-                      { $inc: { 'items.$.quantity':-1, 'items.$.total_price': -product.price } }
+                      { $inc: { 'items.$.quantity':-1, 'items.$.total_price': -cartProduct.price } }
                     );
                     return res.json({success:true})
               }else{

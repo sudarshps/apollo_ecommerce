@@ -27,12 +27,19 @@ const addToWishlist = async(req,res)=>{
             }).replace(",", "");
         const userid = req.session.user_id
        const productId = req.body.productId
-       const wishlistData = await userModel.findByIdAndUpdate({_id:userid},{$push:{wishlist:{product_id:productId,date:date}}},{new:true})
-            if(wishlistData){
-                res.json({success:true})
+       const existProduct = await userModel.findOne({_id:userid,'wishlist.product_id':productId})
+       
+            if(!existProduct){
+                const wishlistData = await userModel.findByIdAndUpdate({_id:userid},{$push:{wishlist:{product_id:productId,date:date}}},{new:true})
+                if(wishlistData){
+                    res.json({success:true})
+                }else{
+                    res.json({success:false})
+                }
             }else{
-                res.json({success:false})
+                    res.json({existproduct:true,message:'Item is already in wishlist!'})
             }
+            
         
        
     } catch (error) {
@@ -64,7 +71,7 @@ const addToCart = async(req,res)=>{
         const product = await productModel.findOne({_id:productId,isListed:true})
         const existInCart = await cartModel.findOne({user_id:userid,'items.product_id':productId})
         let quantity = 1
-        if(userid){
+        if(userid && product.quantity>0){
             if(!existInCart){
                 const cartItem = await cartModel.findOneAndUpdate({user_id:userid},{
                     $push:{items:{

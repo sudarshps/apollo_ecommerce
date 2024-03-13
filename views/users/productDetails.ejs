@@ -117,7 +117,12 @@
                 
               </div>
               <span class="text-muted"><i class="fas fa-shopping-basket fa-sm mx-1"></i>154 orders</span>
-              <span class="text-success ms-2">In stock</span>
+              <% if(products.quantity>0){ %>
+                <span class="text-success ms-2">In stock</span>
+              <% }else{ %>
+                <span class="text-danger ms-2">Out of stock</span>
+              <% } %>
+              
               
             </div>
             
@@ -168,7 +173,12 @@
             </div>
             <!-- <a href="#" class="btn btn-warning shadow-0"> Buy now </a> -->
             <!-- <a href="/addToCart?id=<%= products._id %>" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a> -->
-            <a href="#" class="btn btn-primary shadow-0" onclick="addToCart(event,'<%= products._id %>')"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+            <% if(products.quantity>0){ %>
+              <a href="#" class="btn btn-primary shadow-0" onclick="addToCart(event,'<%= products._id %>')"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </a>
+            <% }else{ %>
+              <button class="btn btn-primary shadow-0" disabled> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
+            <% } %>
+            
             
           </div>
         </main>
@@ -360,18 +370,27 @@ function addToWishlist(event,productId){
 }).then(()=>{
     window.location.reload()
   })
-    }else{
+    }else if(response.existproduct){
       
         Swal.fire({
   icon: "error",
   title: "Oops...",
-  text: "Please login to continue!",
-}).then(()=>{
-    window.location.href='/login'
+  text: response.message,
 })
      
       
-    }
+    }else{
+      
+      Swal.fire({
+icon: "error",
+title: "Oops...",
+text: "Please login to continue!",
+}).then(()=>{
+  window.location.href='/login'
+})
+   
+    
+  }
   })
 
 }

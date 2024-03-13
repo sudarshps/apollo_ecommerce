@@ -221,12 +221,55 @@
                             </div>
 
 
-                            <div class="tab-pane fade" id="account-wallet">
+                            <!-- <div class="tab-pane fade" id="account-wallet">
                                 <div class="card-body pb-2">
                                     <h4>Wallet Balance:</h4>
                                     <h3>₹<%= user.wallet %>.00</h3>
                                 </div>
+                            </div> -->
+
+                            <div class="tab-pane fade" id="account-wallet">
+                                <div>
+                                    <div class="card-body pb-2">
+                                        <h4>Wallet Balance:</h4>
+                                        <h3><span id="wallet-balance" class="text-success">₹<%= user.wallet %>.00</span></h3>
+                                    </div>
+                                </div>
+                                
+                            
+                            <div>
+                                <% if(user.walletHistory.length>0){ %>
+                                <h4>Wallet History:</h4>
+                                <table class="table table-wallet">
+                                    
+                                    <thead>
+                                        
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Type</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <% user.walletHistory.forEach((walletHistory)=>{ %>
+                                        <tbody id="wallet-history">
+                                            <tr>
+                                            <td><%= walletHistory.date.toLocaleDateString() %></td>
+                                            <td><%= walletHistory.type %></td>
+                                            <% if(walletHistory.type==='Credit'){ %>                                                                      
+                                            <td class="text-success">+₹<%= walletHistory.amount %>.00</td>
+                                            <% }else{ %>
+                                                <td class="text-danger">-₹<%= walletHistory.amount %>.00</td>
+                                            <% } %>
+                                        </tr>
+                                         </tbody>
+                                   <%  }) %>
+                                    
+                                
+                                </table>
+                                <% } %>
                             </div>
+                        </div>
+                            
 
 
                             <div class="tab-pane fade" id="account-referral">

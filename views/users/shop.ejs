@@ -153,7 +153,9 @@
             <% }else{ %>
         <div class="col-12 col-md-4 col-lg-3 mb-5">
             <a class="product-item" href="/productDetails?id=<%= products[i]._id %>">
+
                 <img src="<%= products[i].images[0] %>" class="img-fluid product-thumbnail">
+                
                 <h3 class="product-title"><%= products[i].name %></h3>
                 
                 <% if(products[i].offer!==null || products[i].categoryId.offer!==null){ %>
@@ -174,6 +176,9 @@
                 <%} else{ %>
                     <strong class="product-price">₹<%= products[i].price %>.00</strong>
                 <% } %>
+                <% if(products[i].quantity<=0){ %>
+                    <h3 class="text-white bg-danger text-uppercase fs-5 mt-3 w-50" style="margin-left: 25%;">Sold Out!</h3>
+                    <% } %>
                 <span class="icon-cross">
                     <img src="images/cross.svg" class="img-fluid">
                 </span>

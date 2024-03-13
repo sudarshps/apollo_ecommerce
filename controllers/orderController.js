@@ -59,6 +59,7 @@ const placeOrder = async(req,res)=>{
         const payment = req.body.selectedpayment
         const reducedTotal = req.body.reducedTotal
         const couponid = req.body.couponid
+    
         const cartItems = await cartModel.findOne({user_id:userid}).populate({path:'items'})
         
         
@@ -107,6 +108,13 @@ const placeOrder = async(req,res)=>{
             const totalAmt = orderData.items.reduce((acc,item)=>{
                return acc+item.total_price
             },0)
+
+            if(orderData.items.length > 0){ 
+                orderData.items.forEach(async(orderItems)=>{
+                   await productModel.findOneAndUpdate({_id:orderItems.product_id},{$inc:{quantity:-orderItems.quantity}})
+                })
+            }
+            
             
             if(orderData && payment==='cod'){ 
                res.json({codSuccess:true})
@@ -114,35 +122,38 @@ const placeOrder = async(req,res)=>{
                const updateCouponUsed = await couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
                                    await couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
             }else if(orderData && payment==='upi'){
-               if(reducedAmount){
-                   generateRazorpay(orderId,orderData.reducedTotal,orderData).then((response)=>{
+            //    if(reducedAmount){
+                   generateRazorpay(orderId,orderData.reducedTotal,orderData,couponid).then(async(response)=>{
                        res.json(response)
+                      await couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
+                       await couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
                        console.log('resss:',response);
-                       console.log('ok');
-                       couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
-                       couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
-                   })
-               }else{
-                   generateRazorpay(orderId,totalAmt).then(async (response)=>{
-                       res.json(response)
-                       console.log('done');
-                       console.log('resss:',response);
-                    //    cartModel.deleteMany({user_id:userid})
-                       
                        
                    })
+            //    }else{
+            //        generateRazorpay(orderId,totalAmt).then(async (response)=>{
+            //            res.json(response)
+            //            console.log('done');
+            //            console.log('resss:',response);
+            //         //    cartModel.deleteMany({user_id:userid})
+                       
+                       
+            //        })
                
-            }
+            // }
            }else if(orderData && payment==='wallet'){
                const userModel = await User.findOne({_id:userid})
                const walletBalance = userModel.wallet
                if(reducedAmount>walletBalance){
                    res.json({walletsuccess:false,message:'Insufficient Balance in Wallet!'})
                }else{
-                   await User.findOneAndUpdate({_id:userid},{$inc:{wallet:-reducedAmount}})
+                   await User.findOneAndUpdate({_id:userid},{$inc:{wallet:-reducedAmount},$push:{walletHistory:{date:new Date,type:'Debit',amount:reducedAmount}}})
                    res.json({walletsuccess:true})
                    await cartModel.deleteMany({user_id:userid})
                    await orderModel.findOneAndUpdate({_id:orderData._id},{$set:{status:'placed'}})
+                   await couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
+                   await couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
+                   
                }
            }
         
@@ -155,13 +166,15 @@ const placeOrder = async(req,res)=>{
 }
 
 
-const generateRazorpay = (orderId,total_price) =>{
+const generateRazorpay = (orderId,total_price,couponId) =>{
     console.log('oid:',orderId,'tot:',total_price);
+    
         return new Promise((resolve,reject)=>{
             var options = {
                 amount: total_price*100,  
                 currency: "INR",
                 receipt: orderId
+                
               };
               instance.orders.create(options, function(err, order) {
                 console.log('razororder:',order);
@@ -178,12 +191,16 @@ const verifyPayment = async(req,res)=>{
     if(order && payment){
         await cartModel.deleteMany({user_id:userid})
         await orderModel.findOneAndUpdate({_id:order.receipt},{$set:{status:'placed'}})
+        // await couponModel.updateOne({_id:couponid},{$push:{userUsed:{userid:userid}}})
+        //            await couponModel.updateOne({_id:couponid},{$inc:{availability:-1}})
         res.json({success:true})
         
     }else{
         res.json({success:false})
     }
 }
+
+
 
 
 const cancelOrder = async(req,res)=>{
@@ -197,7 +214,8 @@ const cancelOrder = async(req,res)=>{
 
         if(orderData){
             if(orderData.paymentMethod==='upi'){
-                await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount}})
+                await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},$push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount}}})
+                
                 res.json({success:true})
             }else{
                 res.json({success:true})
