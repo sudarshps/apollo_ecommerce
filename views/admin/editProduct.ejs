@@ -111,10 +111,28 @@
                                     
                                 </div> <!-- col.// -->
                             </div> <!-- row.// -->
+                            
+                            
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>2. Pricing</h6>
+                                    <h6>2. Brand</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        
+                                        <input type="text" id='brand' value="<%= productData.brand %>" placeholder="Type here" class="form-control" name="brand">
+                                        <span id="brandError" class="error"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            
+                            
+                            
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>3. Pricing</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
@@ -128,7 +146,7 @@
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>3. Quantity</h6>
+                                    <h6>4. Quantity</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
@@ -144,7 +162,7 @@
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>4. Category</h6>
+                                    <h6>5. Category</h6>
                                 </div>
 
                                 <div class="col-md-9">
@@ -183,7 +201,7 @@
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>5. Media</h6>
+                                    <h6>6. Media</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
@@ -301,6 +319,8 @@ function changeImages(){
         
         const qty = document.getElementById('qtyin').value.trim()
 
+        const brand = document.getElementById('brand').value.trim()
+
         const categoryDropdown = document.getElementById('categoryDropdown').value.trim()
 
             console.log('ioi:',categoryDropdown);
@@ -340,6 +360,12 @@ function changeImages(){
         
         if(description===""){
             document.getElementById('descError').innerText = "Description should not empty!"
+            isValid = false
+        }
+
+        var alphabeticRegex = /^[a-zA-Z]+$/;
+        if(!alphabeticRegex.test(brand)){
+            document.getElementById('brandError').innerText = 'Brand should only contain alphabets!'
             isValid = false
         }
 

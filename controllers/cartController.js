@@ -13,16 +13,21 @@ const loadCart = async(req,res)=>{
         const productid = req.query.id
         const userid = req.session.user_id
         const cart = await cartModel.find()
-        const product = await productModel.findOne({_id:productid,isListed:true}).populate('offer')
+        const product = await productModel.findOne({_id:productid,isListed:true}).populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
         
             
                 if(!userid){
                     res.redirect('/login')
                 }else{
                     
-                    const cartDetails = await cartModel.findOne({user_id:userid}).populate({
-                    path:'items.product_id'
-                })
+                const cartDetails = await cartModel.findOne({ user_id: userid }).populate({
+                    path: 'items.product_id',
+                    populate: [
+                        { path: 'offer', model: 'offerModel' },
+                        { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+                    ]
+                });
+                
 
                 if (cartDetails && cartDetails.items) {
                     cartDetails.items = cartDetails.items.filter(item => item.product_id.isListed === true);
@@ -51,12 +56,12 @@ const addToCart = async(req,res)=>{
             const productid = req.body.productId
             const existInCart = await cartModel.findOne({user_id:userid,'items.product_id':productid})
             const product = await productModel.findOne({_id:productid,isListed:true}).populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
-            let price = product.price
-            if(product.offer && product.categoryId.offer){
-                price = product.price - product.price*(product.offer.percentage/100)
-            }else if(product.categoryId.offer){
-                price = product.price - product.price*(product.categoryId.offer.percentage/100)
-            }
+            // let price = product.price
+            // if(product.offer && product.categoryId.offer){
+            //     price = product.price - product.price*(product.offer.percentage/100)
+            // }else if(product.categoryId.offer){
+            //     price = product.price - product.price*(product.categoryId.offer.percentage/100)
+            // }
             const quantity = 1
 
             if(product && product.quantity>0){
@@ -65,8 +70,8 @@ const addToCart = async(req,res)=>{
                         $push:{items:{
                             product_id:productid,
                             quantity:quantity,
-                            price:price,
-                            total_price:price*quantity
+                            // price:price,
+                            // total_price:price*quantity
         
                         }
                   }},{upsert:true,new:true})
@@ -140,7 +145,7 @@ const changeQuantity = async(req,res)=>{
 
               if(count==1){
                 await cartModel.updateOne({user_id:userid,'items.product_id':productid},
-                {$inc:{'items.$.quantity':1,'items.$.total_price':cartProduct.price}})
+                {$inc:{'items.$.quantity':1}})
                 if(cartProduct.quantity>product.quantity-1){
                     res.json({success:false,message:'Exceeded the stock'})
                 }else{
@@ -150,7 +155,7 @@ const changeQuantity = async(req,res)=>{
               }else if(count==-1){
                 if (cartProduct.quantity > 1) {
                     await cartModel.updateOne({ user_id: userid, 'items.product_id': productid },
-                      { $inc: { 'items.$.quantity':-1, 'items.$.total_price': -cartProduct.price } }
+                      { $inc: { 'items.$.quantity':-1} }
                     );
                     return res.json({success:true})
               }else{

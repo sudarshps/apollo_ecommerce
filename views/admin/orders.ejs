@@ -132,7 +132,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    <% let orderTotal = 0 %>
                                     <% let no = 1 %>
                                     <% if (order && order.length > 0) { %>
                                         <% for(let i = order.length-1 ; i>=0 ; i--){ %>
@@ -141,14 +141,35 @@
                                     <tr>
                                         <td><%= no++ %></td>
                                         
-                                        <td><%= orderItem.product_id.name %></td>
+                                        <td><%= orderItem.product_id.brand %> - <%= orderItem.product_id.name %></td>
                                         
                                         <% if (order[i].userId) { %>
                                             <td><%= order[i].userId.email %></td>
                                         <% } else { %>
                                             <td>User Not Found</td>
                                         <% } %>
-                                        <td>₹<%= orderItem.total_price %>.00</td>
+
+
+
+                                        <% 
+                                        let itemPrice = orderItem.product_id.price;
+                                        if( orderItem.product_id.offer &&  orderItem.product_id.categoryId.offer){
+             
+                                      itemPrice -= (itemPrice * orderItem.product_id.offer.percentage / 100);
+             
+                                      } else if( orderItem.product_id.categoryId.offer){
+             
+                                    itemPrice -= (itemPrice *  orderItem.product_id.categoryId.offer.percentage / 100);
+             
+                                     } else if( orderItem.product_id.offer){
+             
+                                      itemPrice -= (itemPrice *  orderItem.product_id.offer.percentage / 100);
+             
+                                      }
+                                       %>
+
+                                       
+                                        <td>₹<%= itemPrice*orderItem.quantity %>.00</td>
                                         <% if(orderItem.status==='Cancelled'){ %>
                                             <td><span class="badge rounded-pill alert-danger"><%= orderItem.status %></span></td>
                                         <% }else if(orderItem.status==='delivered'){ %>

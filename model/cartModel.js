@@ -18,14 +18,14 @@ const cartSchema = new mongoose.Schema({
             default:1,
             required:true
         },
-        price:{
-            type:Number,
-            required:true
-        },
-        total_price:{
-            type:Number,
-            required:true
-        }
+        // price:{
+        //     type:Number,
+        //     required:true
+        // },
+        // total_price:{
+        //     type:Number,
+        //     required:true
+        // } 
         
     }],
 

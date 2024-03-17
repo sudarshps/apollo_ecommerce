@@ -121,7 +121,7 @@
                     order.forEach((order)=>{ 
                         for(let i=0;i<order.items.length;i++){ 
                            if(order.items[i].status==='delivered'){
-                               totalAmount+=order.items[i].total_price
+                               totalAmount+=order.items[i].product_id.price * order.items[i].quantity
                                count++
                            }
                            
@@ -201,39 +201,45 @@
                             <!-- <div class="col-lg-5">
                                 <div class="card mb-4">
                                     <article class="card-body">
-                                        <h5 class="card-title">New Members</h5>
-                                        <div class="new-member-list">
-                                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="/admin/imgs/people/avatar-4.png" alt="" class="avatar" />
-                                                    <div>
-                                                        <h6>Patric Adams</h6>
-                                                        <p class="text-muted font-xs">Sanfrancisco</p>
+                                        <h5 class="card-title">Top Selling Brands</h5>
+                                        <ul>
+                                                
+
+                                                   
+                                            <% topSellingProducts.forEach((productName,index)=>{ %>
+
+                                            
+                                                <li>
+                                                <div class="media">
+
+                                                    <div class="me-3">
+                                                        <p><%= index+1 %>.</p>
                                                     </div>
-                                                </div>
-                                                <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="/admin/imgs/people/avatar-2.png" alt="" class="avatar" />
-                                                    <div>
-                                                        <h6>Dilan Specter</h6>
-                                                        <p class="text-muted font-xs">Sanfrancisco</p>
+
+                                                    <div class="me-3">
+                                                        
+                                                            <img src="<%= productName.productImage[0] %>" alt="" style="width: 50px; height: 50px;">
+                                                        
                                                     </div>
-                                                </div>
-                                                <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="/admin/imgs/people/avatar-3.png" alt="" class="avatar" />
-                                                    <div>
-                                                        <h6>Tomas Baker</h6>
-                                                        <p class="text-muted font-xs">Sanfrancisco</p>
+                                                    
+                                                    <div class="media-body">
+                                                        <p><%= productName.productName %></p>
                                                     </div>
+
+                                                    <div>
+                                                        <p>x <%= productName.totalQuantitySold %></p>
+                                                    </div>
+
+                                                    
                                                 </div>
-                                                <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                            </div>
-                                        </div>
+                                            </li>
+                                            <% }) %>
+                                        
+                                           
+                                        
+                                
+                                
+                                </ul>
                                     </article>
                                 </div>
                             </div> -->
@@ -243,7 +249,9 @@
                                         <h5 class="card-title"><i class="bi bi-graph-up-arrow"></i> Top 10 Selling Products</h5>
                                         <ul>
                                                 
-                                                    <% topProducts.forEach((productName,index)=>{ %>
+
+                                                   
+                                                    <% topSellingProducts.forEach((productName,index)=>{ %>
 
                                                     
                                                         <li>
@@ -255,17 +263,24 @@
 
                                                             <div class="me-3">
                                                                 <!-- <h6><i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i> <span></span></h6> -->
-                                                                <img src="<%= productName.images[0] %>" alt="" style="width: 50px; height: 50px;">
+                                                                    <img src="<%= productName.productImage[0] %>" alt="" style="width: 50px; height: 50px;">
+                                                                
                                                             </div>
                                                             
                                                             <div class="media-body">
-                                                                <p><%= productName.name %></p>
+                                                                <span><%= productName.productBrand %> - </span><p><%= productName.productName %></p>
+                                                            </div>
+
+                                                            <div>
+                                                                <p>x <%= productName.totalQuantitySold %></p>
                                                             </div>
         
                                                             
                                                         </div>
                                                     </li>
                                                     <% }) %>
+                                                
+                                                   
                                                 
                                         
                                         
@@ -283,69 +298,51 @@
                                 <canvas id="myChart2" height="217"></canvas>
                             </article>
                         </div>
-                        <!-- <div class="card mb-4">
+                        <div class="card mb-4">
                             <article class="card-body">
-                                <h5 class="card-title">Marketing Chanel</h5>
-                                <span class="text-muted font-xs">Facebook</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 15%">15%</div>
-                                </div>
-                                <span class="text-muted font-xs">Instagram</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 65%">65%</div>
-                                </div>
-                                <span class="text-muted font-xs">Google</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 51%">51%</div>
-                                </div>
-                                <span class="text-muted font-xs">Twitter</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%">80%</div>
-                                </div>
-                                <span class="text-muted font-xs">Other</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%">80%</div>
-                                </div>
+                                <h5 class="card-title"><i class="bi bi-graph-up-arrow"></i> Top Selling Brands</h5>
+                                <ul>
+                                                
+
+                                                   
+                                    <% topSellingBrands.forEach((productBrand,index)=>{ %>
+
+                                    
+                                        <li>
+                                        <div class="media">
+
+                                            <div class="me-3">
+                                                <p><%= index+1 %>.</p>
+                                            </div>
+
+                                            
+                                            
+                                            <div class="media-body">
+                                                <p><%= productBrand._id %></p>
+                                            </div>
+
+                                            <div>
+                                                <p>x <%= productBrand.count %></p>
+                                            </div>
+
+                                            
+                                        </div>
+                                    </li>
+                                    <% }) %>
+                                
+                                   
+                                
+                        
+                        
+                        </ul>
                             </article>
-                        </div> -->
+                        </div>
                     </div>
                 </div>
                 <div class="card mb-4">
                     <header class="card-header">
                         <h4 class="card-title">Latest orders</h4>
-                        <!-- <div class="row align-items-center">
-                            <div class="col-md-3 col-12 me-auto mb-md-0 mb-3">
-                                <div class="custom_select">
-                                    <select class="form-select select-nice">
-                                        <option selected>All Categories</option>
-                                        <option>Women's Clothing</option>
-                                        <option>Men's Clothing</option>
-                                        <option>Cellphones</option>
-                                        <option>Computer & Office</option>
-                                        <option>Consumer Electronics</option>
-                                        <option>Jewelry & Accessories</option>
-                                        <option>Home & Garden</option>
-                                        <option>Luggage & Bags</option>
-                                        <option>Shoes</option>
-                                        <option>Mother & Kids</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-2 col-6">
-                                <input type="date" value="02.05.2021" class="form-control" />
-                            </div>
-                            <div class="col-md-2 col-6">
-                                <div class="custom_select">
-                                    <select class="form-select select-nice">
-                                        <option selected>Status</option>
-                                        <option>All</option>
-                                        <option>Paid</option>
-                                        <option>Chargeback</option>
-                                        <option>Refund</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div> -->
+                        
                     </header>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -369,7 +366,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <% order.forEach((order)=>{ %>
+                                        <% 
+                                        order.sort((a, b) => new Date(b.date) - new Date(a.date));
+                                        order.forEach((order)=>{ 
+                                            order.items.forEach((orderItem)=>{
+                                                
+                                                if(orderItem.status!=='Cancelled'){ %>
 
                                         
                                         <tr>
@@ -384,109 +386,17 @@
                                             <td><%= order.date %></td>
                                             <td><%= order.reducedTotal %>.00</td>
                                             <td>
-                                                <span class="badge badge-pill badge-soft-success"><%= order.status %></span>
+                                                <span class="badge badge-pill badge-soft-success"><%= orderItem.status %></span>
                                             </td>
                                             <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i><%= order.paymentMethod.toUpperCase() %></td>
                                             <td>
-                                                <a href="#" class="btn btn-xs"> View details</a>
+                                                <a href="/admin/orderDetails?id=<%= order._id %>" class="btn btn-xs"> View details</a>
                                             </td>
                                         </tr>
+                                    <% } %>
                                     <% }) %>
-                                        <!-- <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="transactionCheck03" />
-                                                    <label class="form-check-label" for="transactionCheck03"></label>
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="fw-bold">#SK2541</a></td>
-                                            <td>Jamal Burnett</td>
-                                            <td>07 Oct, 2021</td>
-                                            <td>$380</td>
-                                            <td>
-                                                <span class="badge badge-pill badge-soft-danger">Chargeback</span>
-                                            </td>
-                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa</td>
-                                            <td>
-                                                <a href="#" class="btn btn-xs"> View details</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="transactionCheck04" />
-                                                    <label class="form-check-label" for="transactionCheck04"></label>
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="fw-bold">#SK2542</a></td>
-                                            <td>Juan Mitchell</td>
-                                            <td>06 Oct, 2021</td>
-                                            <td>$384</td>
-                                            <td>
-                                                <span class="badge badge-pill badge-soft-success">Paid</span>
-                                            </td>
-                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Paypal</td>
-                                            <td>
-                                                <a href="#" class="btn btn-xs"> View details</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="transactionCheck05" />
-                                                    <label class="form-check-label" for="transactionCheck05"></label>
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="fw-bold">#SK2543</a></td>
-                                            <td>Barry Dick</td>
-                                            <td>05 Oct, 2021</td>
-                                            <td>$412</td>
-                                            <td>
-                                                <span class="badge badge-pill badge-soft-success">Paid</span>
-                                            </td>
-                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Mastercard</td>
-                                            <td>
-                                                <a href="#" class="btn btn-xs"> View details</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="transactionCheck06" />
-                                                    <label class="form-check-label" for="transactionCheck06"></label>
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="fw-bold">#SK2544</a></td>
-                                            <td>Ronald Taylor</td>
-                                            <td>04 Oct, 2021</td>
-                                            <td>$404</td>
-                                            <td>
-                                                <span class="badge badge-pill badge-soft-warning">Refund</span>
-                                            </td>
-                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Visa</td>
-                                            <td>
-                                                <a href="#" class="btn btn-xs"> View details</a>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="transactionCheck07" />
-                                                    <label class="form-check-label" for="transactionCheck07"></label>
-                                                </div>
-                                            </td>
-                                            <td><a href="#" class="fw-bold">#SK2545</a></td>
-                                            <td>Jacob Hunter</td>
-                                            <td>04 Oct, 2021</td>
-                                            <td>$392</td>
-                                            <td>
-                                                <span class="badge badge-pill badge-soft-success">Paid</span>
-                                            </td>
-                                            <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> Paypal</td>
-                                            <td>
-                                                <a href="#" class="btn btn-xs"> View details</a>
-                                            </td>
-                                        </tr> -->
+                               <% }) %>
+                                        
                                     </tbody>
                                 </table>
                             </div>
@@ -495,20 +405,7 @@
                         <!-- table-responsive end// -->
                     </div>
                 </div>
-                <!-- <div class="pagination-area mt-30 mb-50">
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-start">
-                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                            <li class="page-item"><a class="page-link" href="#">02</a></li>
-                            <li class="page-item"><a class="page-link" href="#">03</a></li>
-                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                            <li class="page-item"><a class="page-link" href="#">16</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div> -->
+                
             </section>
             <!-- content-main end// -->
             <footer class="main-footer font-xs">

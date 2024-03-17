@@ -148,7 +148,7 @@
                              order.forEach((order)=>{ 
                                  for(let i=0;i<order.items.length;i++){ 
                                     if(order.items[i].status==='delivered'){
-                                        totalAmount+=order.items[i].total_price
+                                        totalAmount+=order.items[i].product_id.price * order.items[i].quantity
                                         count++
                                     }
                                     
@@ -185,6 +185,29 @@
                                         <% for(let i = order.length-1 ; i>=0 ; i--){ %>
                                             <% order[i].items.forEach((orderItem) => { %>
                                                 <% if(orderItem.status==='delivered'){ %>
+
+
+                                                    <% 
+                                                    let itemPrice = orderItem.product_id.price;
+                                                    
+                                                    if( orderItem.product_id.offer &&  orderItem.product_id.categoryId.offer){
+                         
+                                                  itemPrice -= (itemPrice * orderItem.product_id.offer.percentage / 100);
+                         
+                                                  } else if( orderItem.product_id.categoryId && orderItem.product_id.categoryId.offer){
+                         
+                                                itemPrice -= (itemPrice *  orderItem.product_id.categoryId.offer.percentage / 100);
+                         
+                                                 } else if( orderItem.product_id.offer){
+                         
+                                                  itemPrice -= (itemPrice *  orderItem.product_id.offer.percentage / 100);
+                         
+                                                  }
+                                                   %>
+
+
+
+
                                     <tr>
                                         <td><%= no++ %></td>
 
@@ -204,7 +227,7 @@
                                         
                                         <td><%= order[i].date %></td>
 
-                                        <td>₹<%= orderItem.total_price %>.00</td>
+                                        <td>₹<%= itemPrice * orderItem.quantity %>.00</td>
                                        
                                         
                                         <!-- <td class="text-end">
@@ -383,10 +406,10 @@
                                 <td>${order[i].userId.mobile}</td>
                                 <td>${order[i].paymentMethod.toUpperCase()}</td>
                                 <td>${order[i].date}</td>
-                                <td>₹${orderItem.total_price}.00</td>
+                                <td>₹${orderItem.product_id.price * orderItem.quantity}.00</td>
                             </tr>`;
                         }
-                        salesAmount += orderItem.total_price
+                        salesAmount += orderItem.product_id.price * orderItem.quantity
                     });
                 }
                 // Append the HTML to the listdiv or do whatever you want with it

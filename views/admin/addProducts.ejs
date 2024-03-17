@@ -118,10 +118,29 @@
                                     
                                 </div> <!-- col.// -->
                             </div> <!-- row.// -->
+
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>2. Pricing</h6>
+                                    <h6>2. Brand</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        
+                                        <input type="text" id='brand' placeholder="Type here" class="form-control" name="brand">
+                                        <span id="brandError" class="error"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+
+
+
+
+
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>3. Pricing</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
@@ -135,7 +154,7 @@
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>3. Quantity</h6>
+                                    <h6>4. Quantity</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
@@ -151,7 +170,7 @@
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>4. Category</h6>
+                                    <h6>5. Category</h6>
                                 </div>
 
                                 <div class="col-md-9">
@@ -190,7 +209,7 @@
                             <hr class="mb-4 mt-0">
                             <div class="row">
                                 <div class="col-md-3">
-                                    <h6>5. Media</h6>
+                                    <h6>6. Media</h6>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
@@ -201,6 +220,7 @@
                                         
                                     </div>
                                     <button id="cropButton" type="button" style="display: none;">Crop Image</button>
+                                    <button id="cancelButton" type="button" style="display: none;">Cancel</button>
                                 </div> <!-- col.// -->
                             </div> <!-- .row end// -->
                             
@@ -261,7 +281,7 @@
 
         for (let i = 0; i < imageInput.files.length; i++) {
             const file = imageInput.files[i];
-
+            
             
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
@@ -285,7 +305,7 @@
                     imagePreview.appendChild(imgElement);
                 };
 
-                // Read the file as a data URL
+                
                 reader.readAsDataURL(file);
             }else {
                 alert("Please select only image files.");
@@ -297,66 +317,7 @@
     });
 
 
-    cropButton.addEventListener("click", function () {
-        if (cropper) {
-                    document.getElementById('croppedHeader').style.display = 'block'
-                    const croppedCanvas = cropper.getCroppedCanvas();
-                    const croppedImage = document.createElement("img");
-                    croppedImage.style.width = '200px';
-                    croppedImage.style.height = '200px'
-                    croppedImage.src = croppedCanvas.toDataURL();
 
-                    const croppedImageUrl = croppedCanvas.toDataURL();
-
-                    croppedImageContainer.appendChild(croppedImage);
-
-                    const blob = dataURLtoBlob(croppedImageUrl)
-
-                    const file = new File([blob], 'cropped_image.png')
-
-                    const inputElement = document.createElement('input');
-                    inputElement.type = 'file';
-                    inputElement.name = 'image';
-
-    
-                    const fileList = new DataTransfer();
-                    fileList.items.add(file);
-                    inputElement.files = fileList.files;
-
-                    
-                    //send data to server
-
-        //             const croppedImageBlob = croppedCanvas.toBlob(blob => {
-        //     // Create a FormData object
-        //     const formData = new FormData();
-        //     // Append the cropped image blob to the FormData object
-        //     formData.append('croppedImage', blob);
-
-        //     // Send FormData to server using fetch API
-        //     fetch('/admin/addProducts', {
-        //         method: 'POST',
-        //         body: formData
-        //     })
-        //     .then(response => {
-        //         if (response.ok) {
-        //             alert("Cropped image uploaded successfully!");
-        //         } else {
-        //             alert("Failed to upload cropped image.");
-        //         }
-        //     })
-        //     .catch(error => {
-        //         console.error('Error uploading cropped image:', error);
-        //     });
-        // }, 'image/jpeg');
-
-
-                    
-    } else {
-        alert("No image selected for cropping.");
-    }
-
-                
-            });
 
 
 
@@ -375,29 +336,67 @@
 
 
 
+    let currentImgElement;
+    let croppedImageUrl 
+    
+
+    function selectImageForCropping(index, imgElement) {
+    // Example: Highlight the selected image
+    const cropButton = document.getElementById('cropButton');
+    const cancelButton = document.getElementById('cancelButton')
+    cropButton.style.display = 'block';
+    cancelButton.style.display = 'block'
+
+    if (cropper) {
+        cropper.destroy();
+    }
+
+    cropper = new Cropper(imgElement, {
+        aspectRatio: 1,
+        viewMode: 1
+
+    });
+    currentImgElement = imgElement;
+
+    cropButton.addEventListener("click", function () {
+        const croppedCanvas = cropper.getCroppedCanvas();
+        croppedImageUrl = croppedCanvas.toDataURL();
+        const blob = dataURLtoBlob(croppedImageUrl)
+
+        const file = new File([blob], 'cropped_image_'+ (croppedImageFilesArray.length) + '.png')
+    
+        croppedImageFilesArray.push(file)
+        
+
+        console.log('ary:',croppedImageFilesArray);
+        
+        if(currentImgElement){
+            currentImgElement.src = croppedImageUrl;
+        }
+        cropper.destroy();
+        
+    });
+
+    cancelButton.addEventListener("click",function(){
+        cropper.destroy()
+    })
+
+    
+}
 
 
-    function selectImageForCropping(index,imgElement) {
-                // Example: Highlight the selected image
-                document.getElementById('cropButton').style.display= 'block'
-                if(cropper){
-                    cropper.destroy()
 
-                }
-                cropper = new Cropper(imgElement,{
-                    aspectRatio:1,
-                    viewMode:1
-                })
-            }
 
 });
 
-
+var croppedImageFilesArray = [];
+// let inputElement
         function addProduct(){
-
+           
             event.preventDefault();
 
         const name = document.getElementById('namein').value.trim()
+        const brand = document.getElementById('brand').value.trim()
         const price = document.getElementById('pricein').value.trim()
         const qty = document.getElementById('qtyin').value.trim()
         const description = document.getElementById('descin').value.trim()
@@ -407,6 +406,7 @@
         document.getElementById('priceError').innerText = ""
         document.getElementById('qtyError').innerText = ""
         document.getElementById('ctgError').innerText = ""
+        document.getElementById('brandError').innerText = ""
 
         var isValid = true
 
@@ -435,14 +435,14 @@
             isValid = false
         }
 
+        var alphabeticRegex = /^[a-zA-Z]+$/;
+        if(!alphabeticRegex.test(brand)){
+            document.getElementById('brandError').innerText = 'Brand should only contain alphabets!'
+            isValid = false
+        }
 
-        // let selectedCtg = null
 
-        // allRadio.forEach((radio)=>{
-        //     if(radio.checked){
-        //         selectedCtg = radio.id
-        //     }
-        // })
+        
 
         if (categoryDropdown === "") {
         // No category is selected, display an error message or handle validation
@@ -451,7 +451,7 @@
     }
 
 
-
+    
         if (!isValid) {
                 return false;
             }else{
@@ -464,21 +464,40 @@
             .then((result) => {
     if (result.isConfirmed) {
         const form = document.querySelector('form');
-        const formData = new FormData(form);
+        let formData = new FormData(form);
+        console.log('form:',formData);
 
-        // const croppedImage = document.getElementById('croppedImageContainer').getElementsByTagName('img')[0];
-        //         if (croppedImage) {
-        //             const blob = dataURLtoBlob(croppedImage.src);
-        //             const file = new File([blob], 'cropped_image.png');
+    //     if(croppedImageFilesArray.length>0){
 
-        //             // Replace the original image file with the cropped image file in FormData
-        //             formData.append('image', file);
-        //         }
-                
-               
-                
+            
 
 
+    //         croppedImageFilesArray.forEach((file,index)=>{
+
+    //             const inputElement = document.createElement('input');
+    // inputElement.type = 'file';
+    // inputElement.name = 'croppedImage';
+    
+    // const fileList = new DataTransfer();
+    // fileList.items.add(file);
+    
+    // inputElement.files = fileList.files;
+    
+    
+            
+    //         form.appendChild(inputElement); 
+        
+    //             // formData.append('croppedImage_'+(index+1),file)
+    //             // console.log('zzz:',file);
+    //         })
+
+    //         croppedImageFilesArray = [];
+            
+    //     }
+
+
+    //     formData = new FormData(form);
+        
                 
         
         fetch("/admin/addProducts", {
@@ -491,23 +510,13 @@
         })
         .catch(error => console.error('Error:', error));
     }
+
+    
 })
 
 
 
 
-}
-
-function dataURLtoBlob(dataURL) {
-    const parts = dataURL.split(';base64,');
-    const contentType = parts[0].split(':')[1];
-    const raw = window.atob(parts[1]);
-    const rawLength = raw.length;
-    const uInt8Array = new Uint8Array(rawLength);
-    for (let i = 0; i < rawLength; ++i) {
-        uInt8Array[i] = raw.charCodeAt(i);
-    }
-    return new Blob([uInt8Array], { type: contentType });
 }
 
             }

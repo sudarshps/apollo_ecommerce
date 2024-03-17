@@ -45,7 +45,6 @@ const loadDashboard = async(req,res)=>{
         const product = await productModel.find()
         const category = await categoryModel.find()
 
-        let productIdFilter = []
         const topSellingProducts = await orderModel.aggregate([
            
             { $match: { "items.status": "delivered" } },
@@ -62,41 +61,83 @@ const loadDashboard = async(req,res)=>{
             
             { $limit: 10 },
 
+            {
+                $lookup: {
+                    from: "productmodels", 
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "product"
+                }
+            },
             
-            // {
-            //     $lookup: {
-            //         from: "productModel", 
-            //         localField: "_id",
-            //         foreignField: "_id",
-            //         as: "product"
-            //     }
-            // },
+            { $unwind: "$product" },
             
-            // { $unwind: "$product" },
+            {
+                $project: {
+                    _id: 0,
+                    productName: "$product.name", 
+                    productImage:"$product.images",
+                    productBrand:"$product.brand",
+                    totalQuantitySold: 1
+                }
+            }
+        ])
+
+
+
+        //top selling brands
+
+
+        const topSellingBrands = await orderModel.aggregate([
+           
+            { $match: { "items.status": "delivered" } },
+            { $unwind: '$items' },
             
-            // {
-            //     $project: {
-            //         _id: 0,
-            //         productName: "$product.name", 
-            //         totalQuantitySold: 1
-            //     }
-            // }
-        ]);
+            {
+                $group: {
+                    _id: "$items.product_id",
+                    totalQuantitySold: { $sum: "$items.quantity" }
+                }
+            },
+            
+            { $sort: { totalQuantitySold: -1 } },
+            
+            { $limit: 10 },
 
-        topSellingProducts.forEach((n)=>{
-            productIdFilter.push(n._id)
-        })
+            {
+                $lookup: {
+                    from: "productmodels", 
+                    localField: "_id",
+                    foreignField: "_id",
+                    as: "product"
+                }
+            },
+            
+            { $unwind: "$product" },
 
-        const topProducts = await productModel.find({_id:{$in:productIdFilter}});
+        
+            
+            {
+                $project: {
+                    _id: 0,
+                    productBrand: "$product.brand", 
+                    productImage:"$product.images",
+                    totalQuantitySold: 1
+                }
+            },
 
-        const indexMap = {}
-        productIdFilter.forEach((id,index)=>{
-            indexMap[id] = index
-        })
+            {
+                $group:{
+                    _id:'$productBrand',
+                    count:{$sum:1}
+                }
+            },
+            { $sort: { count: -1 , _id: 1 } }
+        ])
 
-        topProducts.sort((a,b)=> indexMap[a._id] - indexMap[b._id])
 
-        res.render('adminDashboard',{order,product,category,topSellingProducts,topProducts})
+
+        res.render('adminDashboard',{order,product,category,topSellingProducts,topSellingBrands})
     } catch (error) {
         console.log(error.message)
     }
@@ -126,8 +167,13 @@ const loadCategory = async(req,res)=>{
 const loadOrders = async(req,res)=>{
     try {
         const users = await userModel.find()
-        const order = await orderModel.find().populate('userId').populate({path: 'items.product_id',
-        model: 'productModel'})
+        const order = await orderModel.find().populate('userId').populate({
+            path: 'items.product_id',
+            populate: [
+                { path: 'offer', model: 'offerModel' },
+                { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+            ]
+        });
         
           
         res.render('orders',{order})
@@ -147,7 +193,13 @@ const loadSalesReport = async(req,res)=>{
         .replace(/\//g, '-');
         const end =  endDateShort.toLocaleString('en-US', { year: 'numeric', month: 'short', day: '2-digit' })
         .replace(/\//g, '-');
-        const orderDateFilter = await orderModel.find({date:{$gte:start,$lte:end}}).populate('userId').populate('items.product_id')
+        const orderDateFilter = await orderModel.find({date:{$gte:start,$lte:end}}).populate('userId').populate({
+            path: 'items.product_id',
+            populate: [
+                { path: 'offer', model: 'offerModel' },
+                { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+            ]
+        });
         if(orderDateFilter){
             res.json({orderFilter:true,order:orderDateFilter})
         }else{
@@ -303,28 +355,31 @@ const listProducts = async(req,res)=>{
 }
 
 const postAddProduct = async (req, res) => {
+    
     uploads(req, res, async (err) => {
         var fileNames = [];
-        if (err) {
+        if (err) { 
             console.log('multer error', err);
-            return res.status(500).send("error uploading files");
-        }
+            return res.status(500).json({error:"error uploading files"});
+        } 
 
         try {
             const category = await categoryModel.find()
-            const { productname, description, price, quantity } = req.body;
+            const { productname, description, price, quantity,brand } = req.body;
+
             const sharpProm = req.files.map(async (file, index) => {
+                
                 const filename = `image_${index + 1}_${file.originalname}.${Date.now()}.jpg`;
                 const imagePath = `public/uploads/${filename}`;
 
                 await sharp(file.buffer).resize(800, 800, {
                     fit: 'contain',
-                    withoutEnlargement: true,
+                    withoutEnlargement: true, 
                     background: 'white',
                 }).toFile(imagePath, { quality: 90 });
                 fileNames.push(filename);
             });
-
+ 
             await Promise.all(sharpProm);
             
             const ctg = req.body.category;
@@ -337,6 +392,7 @@ const postAddProduct = async (req, res) => {
             const product = new productModel({
                 name: productname,
                 description: description,
+                brand:brand,
                 price: price,
                 quantity: quantity,
                 category: ctg,
@@ -457,7 +513,7 @@ const postChangeUserStatus = async (req, res, next) => {
     try {
         const products = await productModel.find()
         const category = await categoryModel.find()
-        const {productname,description,price,quantity} = req.body
+        const {productname,description,price,quantity,brand} = req.body
         const ctg = req.body.category
         const productId = req.query.id
         const sharpProm = req.files.map(async (file, index) => {
@@ -478,7 +534,7 @@ const postChangeUserStatus = async (req, res, next) => {
         const imagePath = fileNames.map((filename) => `/uploads/${filename}`);
 
 
-        await productModel.findByIdAndUpdate({_id:productId},{name:productname,description:description,price:price,quantity:quantity,category:ctg,$push:{images:imagePath}})
+        await productModel.findByIdAndUpdate({_id:productId},{name:productname,description:description,brand:brand,price:price,quantity:quantity,category:ctg,$push:{images:imagePath}})
         // res.json({data:true})
             res.render('productList',{category,products})
     }

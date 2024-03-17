@@ -30,6 +30,11 @@ const orderSchema = mongoose.Schema({
     reducedTotal:{
         type:Number
     },
+    couponId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'coupon',
+        default:null
+    },
     items:[{
         product_id:{
             type:mongoose.Schema.Types.ObjectId,
@@ -40,19 +45,20 @@ const orderSchema = mongoose.Schema({
             type:Number,
             required:true
         },
-        price:{
-            type:Number,
-            required:true
-        },
-        total_price:{
-            type:Number,
-            required:true
-        },
+        // price:{
+        //     type:Number,
+        //     required:true
+        // },
+        // total_price:{
+        //     type:Number,
+        //     required:true
+        // },
         status:{
             default:'Placed',
             type:String,
             
-        }
+        },
+        
     }]
 },
 {timestamps:true}  )

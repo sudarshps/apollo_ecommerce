@@ -72,6 +72,7 @@ user_route.post('/editAddress',auth.isLogin,userController.postEditAddress)
 user_route.post('/addrdlt',auth.isLogin,userController.deleteAddress)
 user_route.post('/getAddressDetails',auth.isLogin,userController.addressDetails)
 user_route.post('/cancelOrder',auth.isLogin,orderController.cancelOrder)
+user_route.post('/returnOrder',auth.isLogin,orderController.returnOrder)
 user_route.get('/logout',auth.isLogin,userController.logout)
 
 

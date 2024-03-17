@@ -35,42 +35,42 @@
 
                    if(order.items[i].status==='delivered' && orderMonth==='Jan'){
                        Jan++
-                       monthlyEarning.Jan += order.items[i].total_price
+                       monthlyEarning.Jan += order.items[i].product_id.price
                    }else if(order.items[i].status==='delivered' && orderMonth==='Feb'){
                         Feb++
-                        monthlyEarning.Feb += order.items[i].total_price
+                        monthlyEarning.Feb += order.items[i].product_id.price
                    }else if(order.items[i].status==='delivered' && orderMonth==='Mar'){
                     Mar++
-                    monthlyEarning.Mar += order.items[i].total_price
+                    monthlyEarning.Mar += order.items[i].product_id.price
                     }else if(order.items[i].status==='delivered' && orderMonth==='Apr'){
                          Apr++
-                         monthlyEarning.Apr += order.items[i].total_price
+                         monthlyEarning.Apr += order.items[i].product_id.price
                     }else if(order.items[i].status==='delivered' && orderMonth==='May'){
                         May++
-                        monthlyEarning.May += order.items[i].total_price
+                        monthlyEarning.May += order.items[i].product_id.price
                     }else if(order.items[i].status==='delivered' && orderMonth==='Jun'){
                      Jun++
-                     monthlyEarning.Jun += order.items[i].total_price
+                     monthlyEarning.Jun +=order.items[i].product_id.price
                     }else if(order.items[i].status==='delivered' && orderMonth==='Jul'){
                         Jul++
-                        monthlyEarning.Jul += order.items[i].total_price
+                        monthlyEarning.Jul += order.items[i].product_id.price
                    }
                    else if(order.items[i].status==='delivered' && orderMonth==='Aug'){
                     Aug++
-                    monthlyEarning.Aug += order.items[i].total_price
+                    monthlyEarning.Aug += order.items[i].product_id.price
                     }
                     else if(order.items[i].status==='delivered' && orderMonth==='Sep'){
                         Sep++
-                        monthlyEarning.Sep += order.items[i].total_price
+                        monthlyEarning.Sep += order.items[i].product_id.price
                    }else if(order.items[i].status==='delivered' && orderMonth==='Oct'){
                     Oct++
-                    monthlyEarning.Oct += order.items[i].total_price
+                    monthlyEarning.Oct += order.items[i].product_id.price
                      }else if(order.items[i].status==='delivered' && orderMonth==='Nov'){
                         Nov++
-                        monthlyEarning.Nov += order.items[i].total_price
+                        monthlyEarning.Nov += order.items[i].product_id.price
                    }else if(order.items[i].status==='delivered' && orderMonth==='Dec'){
                     Dec++
-                    monthlyEarning.Dec += order.items[i].total_price
+                    monthlyEarning.Dec += order.items[i].product_id.price
                }
                    
                 }
@@ -80,11 +80,11 @@
         for(let month in monthlyEarning){
             totalEarnings += monthlyEarning[month]
         }
-        
         let avgMonthEarnings = 0
         if(totalEarnings>0){
             avgMonthEarnings = totalEarnings/12
         }
+        
 
         document.getElementById('monthlyearning').innerText = `₹${parseInt(avgMonthEarnings)}.00`
          

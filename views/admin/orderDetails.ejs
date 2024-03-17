@@ -99,6 +99,24 @@
                 <% if(order && order.items.length>0) { %>
                     <% order.items.forEach((orderItem)=>{ %>
                         
+
+
+                        <% 
+                                        let itemPrice = orderItem.product_id.price;
+                                        if( orderItem.product_id.offer &&  orderItem.product_id.categoryId.offer){
+             
+                                      itemPrice -= (itemPrice * orderItem.product_id.offer.percentage / 100);
+             
+                                      } else if( orderItem.product_id.categoryId.offer){
+             
+                                    itemPrice -= (itemPrice *  orderItem.product_id.categoryId.offer.percentage / 100);
+             
+                                     } else if( orderItem.product_id.offer){
+             
+                                      itemPrice -= (itemPrice *  orderItem.product_id.offer.percentage / 100);
+             
+                                      }
+                                       %>
                         
                 <div class="card mb-4" id="reload">
                     
@@ -110,8 +128,8 @@
                         <div class="col-md-6">
                             <div class="table-responsive">
                                 <div>
-                            <p><strong>Product:</strong> <span class="fw-bold"><%= orderItem.product_id.name %></span></p>
-                            <p><strong>Price:</strong> <span class="fw-bold">₹<%= orderItem.product_id.price %>.00</span></p>
+                            <p><strong>Product:</strong> <span class="fw-bold"><%= orderItem.product_id.brand %> - <%= orderItem.product_id.name %></span></p>
+                            <p><strong>Price:</strong> <span class="fw-bold">₹<%= itemPrice*orderItem.quantity %>.00</span></p>
                             <p><strong>Quantity:</strong> <span class="fw-bold"><%= orderItem.quantity %></span></p>
                             <p><strong>Ordered on:</strong> <span class="fw-bold"><%= order.date %></span></p>
                             <p><strong>Payment Method:</strong> <span class="fw-bold"><%= order.paymentMethod %></span></p>

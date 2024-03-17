@@ -105,8 +105,25 @@
                             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                               <p class="text-muted mb-0 small">Qty: <%= orderData.items[i].quantity %></p>
                             </div>
+
+                            <% 
+									        let itemPrice = orderData.items[i].product_id.price;
+								        	if( orderData.items[i].product_id.offer &&  orderData.items[i].product_id.categoryId.offer){
+				 
+									      itemPrice -= (itemPrice *  orderData.items[i].product_id.offer.percentage / 100);
+				 
+									      } else if( orderData.items[i].product_id.categoryId.offer){
+				 
+								        itemPrice -= (itemPrice *  orderData.items[i].product_id.categoryId.offer.percentage / 100);
+				 
+								         } else if( orderData.items[i].product_id.offer){
+				 
+								          itemPrice -= (itemPrice *  orderData.items[i].product_id.offer.percentage / 100);
+				 
+								          }
+								           %>
                             <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                              <p class="text-muted mb-0 small">₹<%= orderData.items[i].total_price %>.00</p>
+                              <p class="text-muted mb-0 small">₹<%= itemPrice*orderData.items[i].quantity %>.00</p>
                             </div>
                           </div>
                          
@@ -123,18 +140,22 @@
           
                       <div class="d-flex justify-content-between pt-2">
                         <p class="text-muted mb-0">Invoice Id : <%= orderData._id %></p>
+                        <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges:</span> Free</p>
                         <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p> -->
                       </div>
           
                       <div class="d-flex justify-content-between">
                         <p class="text-muted mb-0">Ordered Date : <%= orderData.date %></p>
-                        <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
+                        <% if(orderData.couponId!==null){ %>
+                          <p class="text-danger mb-0"><span class="fw-bold me-4">Discount</span>-₹<%= orderData.couponId.discountAmount %>.00 </p>
+                        <% } %>
+                        
                         <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p> -->
                       </div>
                       
                       <div class="d-flex justify-content-between mb-5">
                         <p class="text-muted mb-0">Payment Method : <%= orderData.paymentMethod.toUpperCase() %></p>
-                        <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> ₹<%= orderData.reducedTotal %>.00</p>
+                        <p class="text-muted mb-0"><span class="fw-bold me-4">Total:</span> ₹<%= orderData.reducedTotal %>.00</p>
                         
                       </div>
 

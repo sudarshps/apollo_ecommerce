@@ -362,10 +362,27 @@
 								<tbody>
 								  <% let cartSum = 0 %>
 								  <% for(let i=0;i<cart.items.length;i++){ %>
+
+									<% 
+									let itemPrice = cart.items[i].product_id.price;
+									if(cart.items[i].product_id.offer && cart.items[i].product_id.categoryId.offer){
+				 
+									itemPrice -= (itemPrice * cart.items[i].product_id.offer.percentage / 100);
+				 
+									} else if(cart.items[i].product_id.categoryId.offer){
+				 
+								   itemPrice -= (itemPrice * cart.items[i].product_id.categoryId.offer.percentage / 100);
+				 
+								  } else if(cart.items[i].product_id.offer){
+				 
+								   itemPrice -= (itemPrice * cart.items[i].product_id.offer.percentage / 100);
+				 
+								  }
+								  %>
 								  <tr>
 									<td><%= cart.items[i].product_id.name %> <strong class="mx-2">x</strong> <%= cart.items[i].quantity %></td>
-									<td>₹<%= cart.items[i].total_price %>.00</td>
-									<!-- <%= cartSum+=cart.items[i].total_price %> -->
+									<td>₹<%= itemPrice*cart.items[i].quantity %>.00</td>
+									<!-- <%= cartSum+=itemPrice*cart.items[i].quantity %> -->
 									
 								  </tr>
 								  <% } %>

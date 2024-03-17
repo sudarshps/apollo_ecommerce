@@ -62,6 +62,9 @@ const userSchema = new mongoose.Schema({
     },
     amount:{
         type:Number
+    },
+    reason:{
+        type:String
     }
 }]
 

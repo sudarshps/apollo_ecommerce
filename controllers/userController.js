@@ -259,7 +259,13 @@ const loadUserProf = async(req,res)=>{
     try {
         const userid = req.session.user_id
         const user = await User.findOne({_id:userid})
-        const orderData = await orderModel.find({userId:userid}).populate({path:'items.product_id'})
+        const orderData = await orderModel.find({userId:userid}).populate({
+            path: 'items.product_id',
+            populate: [
+                { path: 'offer', model: 'offerModel' },
+                { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+            ]
+        });
         
         if(userid){
             res.render('userprofile',{user,orderData})

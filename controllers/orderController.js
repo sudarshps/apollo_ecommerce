@@ -23,9 +23,13 @@ const loadCheckout = async(req,res)=>{
         const user = await User.findOne({_id:userid})
         req.session.couponApplied = false
 
-        const cart = await cartModel.findOne({user_id:userid}).populate({
-            path:'items.product_id'
-        })
+        const cart = await cartModel.findOne({ user_id: userid }).populate({
+            path: 'items.product_id',
+            populate: [
+                { path: 'offer', model: 'offerModel' },
+                { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+            ]
+        });
 
         
         // console.log(cart);
@@ -44,7 +48,13 @@ const loadCheckout = async(req,res)=>{
 const loadOrderDetails = async(req,res)=>{
     try {
         const orderId = req.query.id
-        const orderData = await orderModel.findOne({_id:orderId}).populate({path:'items.product_id'}).populate('userId')
+        const orderData = await orderModel.findOne({_id:orderId}).populate({
+            path: 'items.product_id',
+            populate: [
+                { path: 'offer', model: 'offerModel' },
+                { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+            ]
+        }).populate('userId').populate('couponId')
         res.render('orderDetailsnew',{orderData})
         
     } catch (error) {
@@ -58,7 +68,13 @@ const placeOrder = async(req,res)=>{
         const address = req.body.selectedaddress
         const payment = req.body.selectedpayment
         const reducedTotal = req.body.reducedTotal
-        const couponid = req.body.couponid
+        let couponid = req.body.couponid
+
+        if(couponid===""){
+            couponid=null
+        }
+        
+        
         
         const addressData = await User.findOne({_id:userid,'address._id':address})
         const deliveryAddress = addressData.address.find(addr => addr._id.toString() === address.toString());
@@ -104,6 +120,7 @@ const placeOrder = async(req,res)=>{
                status:status,
                date:dateShort,
                expectedDelivery:deliveryDate,
+               couponId:couponid,
                items:cartItem,
             })
 
@@ -153,7 +170,7 @@ const placeOrder = async(req,res)=>{
                if(reducedAmount>walletBalance){
                    res.json({walletsuccess:false,message:'Insufficient Balance in Wallet!'})
                }else{
-                   await User.findOneAndUpdate({_id:userid},{$inc:{wallet:-reducedAmount},$push:{walletHistory:{date:new Date,type:'Debit',amount:reducedAmount}}})
+                   await User.findOneAndUpdate({_id:userid},{$inc:{wallet:-reducedAmount},$push:{walletHistory:{date:new Date,type:'Debit',amount:reducedAmount,reason:`Product Purchase`}}})
                    res.json({walletsuccess:true})
                    await cartModel.deleteMany({user_id:userid})
                    await orderModel.findOneAndUpdate({_id:orderData._id},{$set:{status:'placed'}})
@@ -231,14 +248,18 @@ const cancelOrder = async(req,res)=>{
     try {
         const userid = req.session.user_id
         const {productId,orderId,itemAmount} = req.body
+        console.log('itmamt:',itemAmount);
         
+        const productData = await productModel.findOne({_id:productId})
+        const productName = productData.name
         const orderData = await orderModel.findOneAndUpdate({userId:userid,'items.product_id':productId,_id:orderId},
         {$set:{'items.$.status':'Cancelled'}})
         
 
         if(orderData){
             if(orderData.paymentMethod==='upi' || orderData.paymentMethod==='wallet'){
-                await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},$push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount}}})
+                await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},
+                    $push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount,reason:`Order Cancelled - ${productName}`}}})
                 
                 res.json({success:true})
             }else{
@@ -255,12 +276,47 @@ const cancelOrder = async(req,res)=>{
 
 
 
+const returnOrder = async(req,res)=>{
+    try {
+        const userid = req.session.user_id
+        const {productId,orderId,itemAmount} = req.body
+        console.log('itmamt:',itemAmount);
+        
+        const productData = await productModel.findOne({_id:productId})
+        const productName = productData.name
+        const orderData = await orderModel.findOneAndUpdate({userId:userid,'items.product_id':productId,_id:orderId},
+        {$set:{'items.$.status':'Cancelled'}})
+        
+
+        if(orderData){
+            
+                await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},
+                    $push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount,reason:`Order Returned - ${productName}`}}})
+                
+                res.json({success:true})
+            
+        }else{
+            res.json({success:false})
+        }
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
 const loadOrderDetailsAdmin = async(req,res)=>{
     try {
         const orderId = req.query.id
         
         const users = await User.find()
-        const order = await orderModel.findOne({_id:orderId}).populate('userId').populate('items.product_id')
+        const order = await orderModel.findOne({_id:orderId}).populate('userId').populate({
+            path: 'items.product_id',
+            populate: [
+                { path: 'offer', model: 'offerModel' },
+                { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+            ]
+        });
         
         if(order){
             res.render('orderDetails',{order})
@@ -301,5 +357,6 @@ module.exports = {
     loadOrderDetailsAdmin,
     updateStatus,
     verifyPayment,
-    pendingPayment
+    pendingPayment,
+    returnOrder
 }

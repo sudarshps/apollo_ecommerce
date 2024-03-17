@@ -156,7 +156,7 @@
 
                 <img src="<%= products[i].images[0] %>" class="img-fluid product-thumbnail">
                 
-                <h3 class="product-title"><%= products[i].name %></h3>
+                <h3 class="product-title"><span><%= products[i].brand %> - </span><%= products[i].name %></h3>
                 
                 <% if(products[i].offer!==null || products[i].categoryId.offer!==null){ %>
                     <strong class="product-price" style=" color: red;
