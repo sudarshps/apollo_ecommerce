@@ -281,11 +281,11 @@
 
         for (let i = 0; i < imageInput.files.length; i++) {
             const file = imageInput.files[i];
-            
+            console.log('filesas:',file);
             
             if (file.type.startsWith('image/')) {
                 const reader = new FileReader();
-
+                console.log('reder:',reader);
                 reader.onload = function (event) {
                     
                     const imgElement = document.createElement("img");
@@ -476,7 +476,7 @@ var croppedImageFilesArray = [];
 
     //             const inputElement = document.createElement('input');
     // inputElement.type = 'file';
-    // inputElement.name = 'croppedImage';
+    // inputElement.name = 'croppedImage_' + (index + 1);
     
     // const fileList = new DataTransfer();
     // fileList.items.add(file);
@@ -487,7 +487,7 @@ var croppedImageFilesArray = [];
             
     //         form.appendChild(inputElement); 
         
-    //             // formData.append('croppedImage_'+(index+1),file)
+    //         formData.append('croppedImage_' + (index + 1), file);
     //             // console.log('zzz:',file);
     //         })
 

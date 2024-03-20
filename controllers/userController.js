@@ -533,7 +533,7 @@ const sentOtp = async({email},res)=>{
         //nodemailer
         const transporter = nodemailer.createTransport({
             service:'gmail',
-            host:'smtp.gmail.com',
+            host:process.env.MAIL_HOST,
             port:587,
             secure:true,
             auth:{
@@ -633,7 +633,7 @@ const sentResetLink = async(email,token,res)=>{
             service:'gmail',
             host:'smtp.gmail.com',
             port:587,
-            secure:true,
+            secure:false,
             auth:{
                 user:process.env.MAIL_USER,
                 pass:process.env.Mail_PASS
@@ -726,7 +726,6 @@ const otpValidate = async(req,res)=>{
         
         const {otpv,email} = req.body
         
-        console.log(otpv)
         const otpData = await otpModel.findOne({otp:otpv})
 
         if(otpData){
