@@ -538,7 +538,6 @@ const sentOtp = async({email},res)=>{
                 pass:process.env.Mail_PASS
             }
         })
-        console.log('hello');
 
         const mailOptions = {
             from:process.env.MAIL_USER,
