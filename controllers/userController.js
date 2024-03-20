@@ -533,9 +533,6 @@ const sentOtp = async({email},res)=>{
         //nodemailer
         const transporter = nodemailer.createTransport({
             service:'gmail',
-            host:process.env.MAIL_HOST,
-            port:587,
-            secure:true,
             auth:{
                 user:process.env.MAIL_USER,
                 pass:process.env.Mail_PASS
