@@ -640,7 +640,7 @@ const sentResetLink = async(email,token,res)=>{
 				pass: "omkm jhhx vdqi dcpo"
 			},
            
-		  });
+		  }); 
 
         const mailOptions = {
             from:process.env.MAIL_USER,
