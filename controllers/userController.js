@@ -532,16 +532,15 @@ const sentOtp = async({email},res)=>{
         console.log(genOtp)
         //nodemailer
         const transporter = nodemailer.createTransport({
-            service:'gmail',
-            host:"smtp.gmail.com",
-            port:587,
-            secure:false,
-            requireTLS:true,
-            auth:{
-                user:"sudarshwazza382@gmail.com",
-                pass:"omkm jhhx vdqi dcpo"
-            }
-        })
+			host: "smtp.gmail.com",
+			port: 587,
+			secure: false,
+			requireTLS: true,
+			auth: {
+				user: "sudarshwazza382@gmail.com",
+				pass: "omkm jhhx vdqi dcpo"
+			},
+		  });
 
         const mailOptions = {
             from:process.env.MAIL_USER,
