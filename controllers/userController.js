@@ -536,14 +536,11 @@ const sentOtp = async({email},res)=>{
 			port: 587,
 			secure: false,
 			requireTLS: true,
-			// auth: {
-			// 	user: "sudarshwazza382@gmail.com",
-			// 	pass: "omkm jhhx vdqi dcpo"
-			// },
-            auth: {
-				user: "cruizerabd@gmail.com",
-				pass: "anll gjih gomt aeww"
+			auth: {
+				user: "sudarshwazza382@gmail.com",
+				pass: "omkm jhhx vdqi dcpo"
 			},
+           
 		  });
 
         const mailOptions = {
