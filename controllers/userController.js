@@ -631,12 +631,16 @@ const sentOtp = async({email},res)=>{
 const sentResetLink = async(email,token,res)=>{
     try {
         const transporter = nodemailer.createTransport({
-            service:'gmail',
-            auth:{
-                user:process.env.MAIL_USER,
-                pass:process.env.MAIL_PASS
-            }
-        })
+			host: "smtp.gmail.com",
+			port: 587,
+			secure: false,
+			requireTLS: true,
+			auth: {
+				user: "sudarshwazza382@gmail.com",
+				pass: "omkm jhhx vdqi dcpo"
+			},
+           
+		  });
 
         const mailOptions = {
             from:process.env.MAIL_USER,
