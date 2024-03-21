@@ -671,7 +671,7 @@ const sentResetLink = async(email,token,res)=>{
                                 <div style="color: rgb(0, 0, 0); text-align: left;">
                                   <h1 style="margin: 1rem 0">Reset Link</h1>
                                   <p style="padding-bottom: 16px">Please click the reset link to reset password.</p>
-                                  <p style="padding-bottom: 16px"><strong style="font-size: 130%"><a href="http://https://apollofurniture.online/newPass?token=${token}">Reset Link</a></strong></p>
+                                  <p style="padding-bottom: 16px"><strong style="font-size: 130%"><a href="https://apollofurniture.online/newPass?token=${token}">Reset Link</a></strong></p>
                                   <p style="padding-bottom: 16px">If you didn’t request this, you can ignore this email.</p>
                                   <p style="padding-bottom: 16px">Thanks,<br>Apollo Furniture</p>
                                 </div>
