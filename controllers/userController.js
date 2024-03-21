@@ -535,7 +535,7 @@ const sentOtp = async({email},res)=>{
             service:'gmail',
             auth:{
                 user:"sudarshwazza382@gmail.com",
-                pass:"ojrj gdvy aunc vong"
+                pass:"ojrjgdvyauncvong"
             }
         })
 
