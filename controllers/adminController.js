@@ -239,13 +239,19 @@ const loadEditCategory = async(req,res)=>{
 
 const postEditCategory = async(req,res)=>{
    try {
-    const ctgEdit = await categoryModel.findByIdAndUpdate({ _id: req.body.id }, 
-        { name: req.body.categoryName, description: req.body.description })
-    if(ctgEdit){
-        res.json({success:true})
+    const existCategory = await categoryModel.findOne({name:req.body.categoryName})
+    if(!existCategory){
+        const ctgEdit = await categoryModel.findByIdAndUpdate({ _id: req.body.id }, 
+            { name: req.body.categoryName, description: req.body.description })
+        if(ctgEdit){
+            res.json({success:true})
+        }else{
+            res.json({success:false})
+        }
     }else{
-        res.json({success:false})
+        res.json({existCategory:true,message:'Category is already existing'})
     }
+    
 
     
    } catch (error) {
