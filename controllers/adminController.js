@@ -41,7 +41,7 @@ const verifyAdmin = async(req,res)=>{
 
 const loadDashboard = async(req,res)=>{
     try {
-        const order = await orderModel.find().populate('userId').populate('items.product_id')
+        const order = await orderModel.find().populate('userId').populate('items.product_id').sort({createdAt:-1})
         const product = await productModel.find()
         const category = await categoryModel.find()
 
@@ -145,10 +145,21 @@ const loadDashboard = async(req,res)=>{
 
 const loadProductList = async(req,res)=>{
     try {
+
+        const limit = 6
+        const queryPage = parseInt(req.query.page) || 1
+        const skip = (queryPage - 1) * limit
+
+        const totalProducts = await productModel.countDocuments()
+        const totalPage = Math.ceil(totalProducts/limit)
+        
+
+
         const offer = await offerModel.find()
         const category = await categoryModel.find()
-        const products = await productModel.find()
-        res.render('productList',{category,products,offer})
+        const products = await productModel.find().sort({createdAt:-1,_id:1}).skip(skip).limit(limit);
+
+        res.render('productList',{category,products,offer,totalPage})
     } catch (error) {
         console.log(error.message)
     }
@@ -156,9 +167,17 @@ const loadProductList = async(req,res)=>{
 
 const loadCategory = async(req,res)=>{
     try {
+
+        const limit = 4
+        const queryPage = parseInt(req.query.page) || 1
+        const skip = (queryPage - 1) * limit
+
+        const totalCategory = await categoryModel.countDocuments()
+        const totalPage = Math.ceil(totalCategory/limit)
+
         const offer = await offerModel.find()
-        const category = await categoryModel.find()
-        res.render('category',{category,offer})
+        const category = await categoryModel.find().sort({_id:1}).skip(skip).limit(limit);
+        res.render('category',{category,offer,totalPage})
     } catch (error) {
         console.log(error.message)
     }
@@ -166,17 +185,26 @@ const loadCategory = async(req,res)=>{
 
 const loadOrders = async(req,res)=>{
     try {
-        const users = await userModel.find()
+
+        const limit = 6
+        const queryPage = parseInt(req.query.page) || 1
+        const skip = (queryPage - 1) * limit
+
+        const totalOrders = await orderModel.countDocuments()
+        const totalPage = Math.ceil(totalOrders/limit)
+
         const order = await orderModel.find().populate('userId').populate({
             path: 'items.product_id',
             populate: [
                 { path: 'offer', model: 'offerModel' },
                 { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
             ]
-        });
+        }).sort({createdAt:-1,_id:1}).skip(skip).limit(limit);
         
           
-        res.render('orders',{order})
+            res.render('orders',{order,totalPage})
+          
+        
     } catch (error) {
         console.log(error.message)
     }

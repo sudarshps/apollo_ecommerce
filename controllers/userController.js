@@ -265,7 +265,7 @@ const loadUserProf = async(req,res)=>{
                 { path: 'offer', model: 'offerModel' },
                 { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
             ]
-        });
+        }).sort({createdAt:-1})
         
         if(userid){
             res.render('userprofile',{user,orderData})

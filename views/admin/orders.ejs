@@ -122,11 +122,12 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>#ID</th>
+                                        <th></th>
+                                        <th scope="col">Order ID</th>
                                         <th scope="col">Name</th>
                                         <th scope="col">Email</th>
                                         <th scope="col">Total</th>
-                                        <th scope="col">Status</th>
+                                        <!-- <th scope="col">Status</th> -->
                                         <th scope="col">Ordered Date</th>
                                         <th scope="col" class="text-end">Action</th>
                                     </tr>
@@ -135,51 +136,34 @@
                                     <% let orderTotal = 0 %>
                                     <% let no = 1 %>
                                     <% if (order && order.length > 0) { %>
-                                        <% for(let i = order.length-1 ; i>=0 ; i--){ %>
-                                            <% order[i].items.forEach((orderItem) => { %>
-                                                <% if(order[i].status!=='pending'){ %>
+                                        <% order.forEach((order)=>{ %>
+                                            <% order.items.forEach((orderItem)=>{ %>
+
+                                            
+                                        <% if(order.status!=='pending'){ %>
                                     <tr>
                                         <td><%= no++ %></td>
                                         
-                                        <td><%= orderItem.product_id.brand %> - <%= orderItem.product_id.name %></td>
+                                        <td><%= order._id %></td>
+
+                                        <td><%= order.userId.username %></td>
                                         
-                                        <% if (order[i].userId) { %>
-                                            <td><%= order[i].userId.email %></td>
+                                        <% if (order.userId) { %>
+                                            <td><%= order.userId.email %></td>
                                         <% } else { %>
                                             <td>User Not Found</td>
                                         <% } %>
 
 
 
-                                        <% 
-                                        let itemPrice = orderItem.product_id.price;
-                                        if( orderItem.product_id.offer &&  orderItem.product_id.categoryId.offer){
-             
-                                      itemPrice -= (itemPrice * orderItem.product_id.offer.percentage / 100);
-             
-                                      } else if( orderItem.product_id.categoryId.offer){
-             
-                                    itemPrice -= (itemPrice *  orderItem.product_id.categoryId.offer.percentage / 100);
-             
-                                     } else if( orderItem.product_id.offer){
-             
-                                      itemPrice -= (itemPrice *  orderItem.product_id.offer.percentage / 100);
-             
-                                      }
-                                       %>
+                                        
 
                                        
-                                        <td>₹<%= itemPrice*orderItem.quantity %>.00</td>
-                                        <% if(orderItem.status==='Cancelled'){ %>
-                                            <td><span class="badge rounded-pill alert-danger"><%= orderItem.status %></span></td>
-                                        <% }else if(orderItem.status==='delivered'){ %>
-                                        <td><span class="badge rounded-pill alert-success"><%= orderItem.status %></span></td>
-                                        <% }else{ %>
-                                            <td><span class="badge rounded-pill alert-warning"><%= orderItem.status %></span></td>
-                                        <% } %>
-                                        <td><%= order[i].date %></td>
+                                        <td>₹<%= order.reducedTotal %>.00</td>
+                                        
+                                        <td><%= order.date %></td>
                                         <td class="text-end">
-                                            <a href="/admin/orderDetails?id=<%= order[i]._id %>" class="btn btn-md rounded font-sm">View</a> 
+                                            <a href="/admin/orderDetails?id=<%= order._id %>" class="btn btn-md rounded font-sm">View</a> 
                                             <!-- <div class="dropdown">
                                                 <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
                                                 <div class="dropdown-menu">
@@ -192,8 +176,9 @@
                                         </td>
                                     </tr>
                                     <% } %>
+                                    
                                     <% }) %>
-                                    <% } %>
+                                    <% }) %>
                                     <% } %>
                                    
                                    
@@ -207,23 +192,24 @@
                     <!-- card-body end// -->
                 </div>
                 <!-- card end// -->
-                <!-- <div class="pagination-area mt-15 mb-50">
+                <div class="pagination-area mt-15 mb-50">
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-start">
-                            <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                            <li class="page-item"><a class="page-link" href="#">02</a></li>
-                            <li class="page-item"><a class="page-link" href="#">03</a></li>
-                            <li class="page-item"><a class="page-link dot" href="#">...</a></li>
-                            <li class="page-item"><a class="page-link" href="#">16</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="#"><i class="material-icons md-chevron_left"></i></a>
+                            </li>
+                            <% for(let i=1;i<=totalPage;i++){ %>
+                                <li class="page-item active"><a class="page-link" href="/admin/orders?page=<%= i %>"><%= i %> </a></li>
+                            <% } %>
                             <li class="page-item">
                                 <a class="page-link" href="#"><i class="material-icons md-chevron_right"></i></a>
                             </li>
                         </ul>
                     </nav>
-                </div> -->
+                </div>
             </section>
             <!-- content-main end// -->
-            <footer class="main-footer font-xs">
+            <!-- <footer class="main-footer font-xs">
                 <div class="row pb-30 pt-15">
                     <div class="col-sm-6">
                         <script>
@@ -235,7 +221,7 @@
                         <div class="text-sm-end">All rights reserved</div>
                     </div>
                 </div>
-            </footer>
+            </footer> -->
         </main>
         <script src="assets/js/vendors/jquery-3.6.0.min.js"></script>
         <script src="assets/js/vendors/bootstrap.bundle.min.js"></script>

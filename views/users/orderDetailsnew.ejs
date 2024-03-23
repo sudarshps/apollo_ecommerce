@@ -140,7 +140,12 @@
           
                       <div class="d-flex justify-content-between pt-2">
                         <p class="text-muted mb-0">Invoice Id : <%= orderData._id %></p>
-                        <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges:</span> Free</p>
+                        <% if(orderData.reducedTotal>10000){ %>
+                          <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges:</span> Free</p>
+                        <% }else{ %>
+                          <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges:</span> ₹100.00</p>
+                       <% } %>
+                        
                         <!-- <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p> -->
                       </div>
           
