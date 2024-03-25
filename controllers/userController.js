@@ -99,7 +99,12 @@ const loadProductDetails = async(req,res)=>{
     try {
         const id = req.query.id
         const products = await productModel.findOne({_id:id}).populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
-        res.render('productDetails',{products})
+        if(products){
+            res.render('productDetails',{products})
+        }else{
+            res.redirect('/shop')
+        }
+        
     } catch (error) {
         console.log(error.message)
     }
