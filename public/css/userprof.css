@@ -231,4 +231,7 @@ html:not(.dark-style) .account-settings-links .list-group-item.active {
 .table-wallet tbody tr:hover {
     background-color: #f5f5f5;
 }
+#navbaruser{
+    background-color: #3b5d50 !important;
+}
 

@@ -20,13 +20,14 @@
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 		<title>Apollo Furniture </title>
 	</head>
 
 	<body>
 
 		<!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" id="navbarcheckout" arial-label="Furni navigation bar">
 
 			<div class="container">
 				<a class="navbar-brand" href="/">Apollo Furniture<span>.</span></a>
@@ -492,27 +493,23 @@
 									  </button>
 									</div>
 									<div class="modal-body">
-									  <% if(coupon && coupon.length > 0) { %>
-							
-										<ul class="list-group">
-										  <% coupon.forEach((coupon)=> { %>
-											<li class="list-group-item">
-											  <div>
-												<h6><%= coupon.couponName %></h6>
-												<p><%= coupon.couponDescription %></p>
-												
-												<!-- <a href="#" class="btn btn-warning btn-sm" onclick="applyCoupon(event,'<%= coupon.couponCode %>')">Apply</a> -->
-											  </div>
-											</li>
-										  <% }) %>
-										</ul>
-									  <% } else { %>
-										<p>No coupons available.</p>
-							
-							
-							
-									  <% } %>
-									  </div>
+										<% if(coupon && coupon.length > 0) { %>
+											<ul class="list-group">
+												<% coupon.forEach((coupon)=> { %>
+													<li class="list-group-item d-flex justify-content-between align-items-center">
+														<div>
+															<h6 class="text-warning"><%= coupon.couponName %></h6>
+															<p><%= coupon.couponDescription %></p>
+														</div>
+														
+													</li>
+												<% }) %>
+											</ul>
+										<% } else { %>
+											<p>No coupons available.</p>
+										<% } %>
+									</div>
+									
 									  
 									<!-- <div class="modal-footer">
 									  <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
@@ -537,6 +534,9 @@
 
 			  <script>
 
+
+
+				
 
 
 

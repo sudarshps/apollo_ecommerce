@@ -73,26 +73,18 @@
             </a>
             
           </div>
-          
+
+
           <div class="d-flex justify-content-center mb-3" id="thumbnail-container">
-            <!-- <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= products.images[0] %>" />
-            </a> -->
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= products.images[1] %>" />
+                  <% if(products){ 
+                  products.images.forEach((img,index)=>{ %>
+            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image" onclick="previewImage(this,'<%= img %>')" class="item-thumb" style="cursor: pointer;">
+              <img width="60" height="60" class="rounded-2" src="<%= img %>" />
             </a>
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= products.images[2] %>" />
-            </a>
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= products.images[3] %>" />
-            </a>
-            <a data-fslightbox="mygalley" class="border mx-1 rounded-2" target="_blank" data-type="image"  class="item-thumb">
-              <img width="60" height="60" class="rounded-2" src="<%= products.images[4] %>" />
-            </a>
-           
-            
-          </div>
+        <% }) %>
+      <% } %>
+    </div>
+        
           <!-- thumbs-wrap.// -->
           <!-- gallery-wrap .end// -->
         </aside>
@@ -188,6 +180,13 @@
   <!-- content -->
 
   <script>
+
+
+
+function previewImage(element,imageSrc) {
+  
+    document.getElementById("productZoom").src = imageSrc;
+    }
 
 //image selection
 

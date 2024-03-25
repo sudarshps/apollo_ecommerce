@@ -9,4 +9,6 @@
   }
  #wishlistbtn{
   margin-left: 80%;
- }
+ }.highlighted {
+  border: 2px solid rgb(8, 73, 18); /* Adjust border color and width as needed */
+}
