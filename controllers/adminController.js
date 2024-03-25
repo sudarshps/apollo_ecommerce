@@ -349,7 +349,7 @@ const loadUsers = async(req,res)=>{
 const loadAddProducts = async(req,res)=>{
     try {
         const category = await categoryModel.find()
-        res.render('addProducts',{category})
+        res.render('addProduct',{category})
     } catch (error) {
         console.log(error.message)
     }
@@ -399,7 +399,7 @@ const postAddProduct = async (req, res) => {
 
         try {
             const category = await categoryModel.find()
-            const { productname, description, price, quantity,brand } = req.body;
+            const { productName, productDesc, productPrice, productQty,productBrand } = req.body;
 
             const sharpProm = req.files.map(async (file, index) => {
                 
@@ -407,7 +407,7 @@ const postAddProduct = async (req, res) => {
                 const imagePath = `public/uploads/${filename}`;
 
                 await sharp(file.buffer).resize(800, 800, {
-                    fit: 'contain',
+                    fit: 'contain', 
                     withoutEnlargement: true, 
                     background: 'white',
                 }).toFile(imagePath, { quality: 90 });
@@ -416,7 +416,7 @@ const postAddProduct = async (req, res) => {
  
             await Promise.all(sharpProm);
             
-            const ctg = req.body.category;
+            const ctg = req.body.productCat;
             const ctgData = await categoryModel.findOne({name:ctg})
             
 
@@ -424,11 +424,11 @@ const postAddProduct = async (req, res) => {
             // console.log(fg);
 
             const product = new productModel({
-                name: productname,
-                description: description,
-                brand:brand,
-                price: price,
-                quantity: quantity,
+                name: productName,
+                description: productDesc,
+                brand:productBrand,
+                price: productPrice,
+                quantity: productQty,
                 category: ctg,
                 images: imagePath,
                 isListed: true,
