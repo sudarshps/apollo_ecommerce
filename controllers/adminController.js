@@ -267,20 +267,40 @@ const loadEditCategory = async(req,res)=>{
 
 const postEditCategory = async(req,res)=>{
    try {
-    const existCategory = await categoryModel.findOne({name:req.body.categoryName})
+    const ctgId = req.body.id
+    const ctgName = req.body.categoryName
+    const ctgDescription = req.body.description
+    const existCategory = await categoryModel.findById(ctgId)
     if(!existCategory){
-        const ctgEdit = await categoryModel.findByIdAndUpdate({ _id: req.body.id }, 
-            { name: req.body.categoryName, description: req.body.description })
-        if(ctgEdit){
-            res.json({success:true})
+       res.json({success:false,message:'category not found!'})
+    }
+
+    if(ctgName!== existCategory.name){
+        const duplicateCtg = await categoryModel.findOne({name:ctgName})
+        if(duplicateCtg){
+            res.json({success:false,message:'category with the same name is existing!'})
         }else{
-            res.json({success:false})
+            existCategory.name = ctgName
+            existCategory.description = ctgDescription
+            const updatedCtg = await existCategory.save()
+    
+            if(updatedCtg){
+                res.json({success:true})
+            }else{
+                res.json({success:false})
+            }
         }
     }else{
-        res.json({existCategory:true,message:'Category is already existing'})
-    }
+        existCategory.name = ctgName
+            existCategory.description = ctgDescription
+            const updatedCtg = await existCategory.save()
     
-
+            if(updatedCtg){
+                res.json({success:true})
+            }else{
+                res.json({success:false})
+            }
+    }
     
    } catch (error) {
     console.log(error.message)
