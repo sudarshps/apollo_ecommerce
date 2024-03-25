@@ -260,9 +260,18 @@
 								  <div class="col-md-2">
 									<button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#editaddressmodal" id="addreditbt" onclick="addreditbtn(event, '<%= user.address[i]._id %>')">Edit</button>								  </div>
 								</div>
+								
 							  <% } %>
-							
-								<button type="button" class="btn btn-warning btn-sm" id="addrusebtn" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">Use this address</button>
+							  <div class="col-md-12">
+								<div class="row">
+									<div class="col-md-9">
+										
+									</div>
+									<div class="col-md-3">
+										<button type="button" class="btn btn-warning btn-sm" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">Use this address</button>
+									</div>
+								</div>
+							</div>
 							
 							
 						  </div>
@@ -329,8 +338,16 @@
 						
 						
 						
-	
-						  <button type="button" class="btn btn-warning" id="selectpmbtn" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">Select</button>
+						  <div class="col-md-12">
+							<div class="row">
+								<div class="col-md-10">
+									
+								</div>
+								<div class="col-md-2">
+									<button type="button" class="btn btn-warning" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree">Select</button>								</div>
+							</div>
+						</div>
+						  
 	
 
 
@@ -451,8 +468,8 @@
 							  
 							  <a href="" style="text-decoration: none;color: rgb(7, 77, 24); font-weight: bold; margin-left: 80px;" data-bs-toggle="modal" data-bs-target="#couponModal">Check for available coupons?</a>
 
-							  <div class="form-group" id="placebtn">
-								<button type="button" class="btn btn-primary btn-lg py-3 btn-block" onclick="placeOrderVld()">Place Order</button>
+							  <div class="form-group d-flex justify-content-end"">
+								<button type="button" class="btn btn-primary btn-sm py-3" onclick="placeOrderVld()">Place Order</button>
 							  </div>
 			
 			

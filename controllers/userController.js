@@ -471,7 +471,8 @@ const insertUser = async(req,res)=>{
     }else{
         if(validReferral){
             wallet = 50
-            await User.findOneAndUpdate({referralCode:referralInput},{$inc:{wallet:100}})
+            await User.findOneAndUpdate({referralCode:referralInput},{$inc:{wallet:100},$push:{walletHistory:{date:new Date,type:'Credit',amount:100,reason:`Referrel Amount`}}})
+            
         }
         const spassword = await securePassword(req.body.password)
         const user = new User({
@@ -484,6 +485,11 @@ const insertUser = async(req,res)=>{
             referralCode:referralCode,
             wallet:wallet
         })
+
+        if(user.wallet===50){
+            user.walletHistory.push({date:new Date,type:'Credit',amount:50,reason:'Referrel Amount'})
+        }
+        
         const userData = await user.save().then((result)=>{
             sentOtp(result,res),
             resendOtp(result,res)

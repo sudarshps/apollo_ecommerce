@@ -318,8 +318,6 @@ const postCategory = async(req,res)=>{
           }else if(category){
             res.json({existCategory:true,message:'The category is already exists!'})
           }
-          
-          
           else{
             const ctg = new categoryModel({
                 name: name,

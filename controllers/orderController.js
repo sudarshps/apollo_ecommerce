@@ -247,8 +247,8 @@ const pendingPayment = async(req,res)=>{
 const cancelOrder = async(req,res)=>{
     try {
         const userid = req.session.user_id
-        const {productId,orderId,itemAmount} = req.body
-        console.log('itmamt:',itemAmount);
+        const {productId,orderId} = req.body
+        let itemAmount = req.body.itemAmount
         
         const productData = await productModel.findOne({_id:productId})
         const productName = productData.name
@@ -258,10 +258,20 @@ const cancelOrder = async(req,res)=>{
 
         if(orderData){
             if(orderData.paymentMethod==='upi' || orderData.paymentMethod==='wallet'){
-                await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},
-                    $push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount,reason:`Order Cancelled - ${productName}`}}})
+                if(itemAmount<10000){
+                    let amount = parseInt(itemAmount)
+                    amount+=100
+                    await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},
+                        $push:{walletHistory:{date:new Date,type:'Credit',amount:amount,reason:`Order Cancelled - ${productName}`}}})
+                    
+                    res.json({success:true})
+                }else{
+                    await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},
+                        $push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount,reason:`Order Cancelled - ${productName}`}}})
+                    
+                    res.json({success:true})
+                }
                 
-                res.json({success:true})
             }else{
                 res.json({success:true})
             }
@@ -280,7 +290,6 @@ const returnOrder = async(req,res)=>{
     try {
         const userid = req.session.user_id
         const {productId,orderId,itemAmount} = req.body
-        console.log('itmamt:',itemAmount);
         
         const productData = await productModel.findOne({_id:productId})
         const productName = productData.name
