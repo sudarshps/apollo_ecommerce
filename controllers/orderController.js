@@ -8,6 +8,7 @@ const couponModel = require('../model/couponModel')
 const Razorpay = require('razorpay')
 
 
+
 var instance = new Razorpay({
     key_id: process.env.KEY_ID,
     key_secret: process.env.KEY_SECRET,
@@ -250,22 +251,31 @@ const cancelOrder = async(req,res)=>{
         const {productId,orderId} = req.body
         let itemAmount = req.body.itemAmount
         
+        let order = await orderModel.findOne({_id:orderId}).populate({path:'couponId',model:'coupon'})
         const productData = await productModel.findOne({_id:productId})
         const productName = productData.name
+        
         const orderData = await orderModel.findOneAndUpdate({userId:userid,'items.product_id':productId,_id:orderId},
         {$set:{'items.$.status':'Cancelled'}})
         
 
         if(orderData){
             if(orderData.paymentMethod==='upi' || orderData.paymentMethod==='wallet'){
+                
                 if(itemAmount<10000){
                     let amount = parseInt(itemAmount)
                     amount+=100
-                    await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},
+                    await User.findOneAndUpdate({_id:userid},{$inc:{wallet:amount},
                         $push:{walletHistory:{date:new Date,type:'Credit',amount:amount,reason:`Order Cancelled - ${productName}`}}})
                     
                     res.json({success:true})
-                }else{
+                }else if(order.couponId!==null){
+                    const discount = order.couponId.discountAmount
+                    await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount-discount},
+                        $push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount-discount,reason:`Order Cancelled - ${productName}`}}})
+                        res.json({success:true})
+                }
+                 else{
                     await User.findOneAndUpdate({_id:userid},{$inc:{wallet:itemAmount},
                         $push:{walletHistory:{date:new Date,type:'Credit',amount:itemAmount,reason:`Order Cancelled - ${productName}`}}})
                     

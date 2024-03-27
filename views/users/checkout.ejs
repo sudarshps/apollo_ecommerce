@@ -422,7 +422,7 @@
 										<p style="color: rgba(143, 112, 13, 0.959); font-size: 14px;">(Charges may included for orders below ₹10000.00)</p>
 									</td>
 
-									<% if(cartSum>10000){ %>
+									<% if(cartSum>=10000){ %>
 										<td id="deliverycharge">Free</td>
 									<% }else{ %>
 										<td id="deliverycharge">₹100.00</td>
@@ -433,7 +433,7 @@
 								
 									<tr>
 										<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
-										<%if (cartSum>10000){ %>
+										<%if (cartSum>=10000){ %>
 											<td class="text-black font-weight-bold" id="total"><strong>₹<%= cartSum %>.00</strong></td>
 										<% }else{ %>
 											<td class="text-black font-weight-bold" id="total"><strong>₹<%= cartSum+100 %>.00</strong></td>
