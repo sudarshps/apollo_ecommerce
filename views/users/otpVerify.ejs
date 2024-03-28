@@ -83,7 +83,7 @@
                       </button>
                     </form>
                       
-                      <p class="resend text-muted mb-0">
+                      <p class="resend text-muted mb-0" style="display: none;" id="resendotp">
                         Didn't receive code? <a href="/send-otp?email=<%= locals.email %>">Request again</a>
                       </p>
                     </div>
@@ -125,17 +125,18 @@ function validateForm(event) {
 
 
       function startTimer() {
-        var timer = 120; // Set the timer duration in seconds
+        var timer = 120; 
 
-        // Update the timer display every second
+        
         var countdown = setInterval(function() {
             document.getElementById('timer').innerText = timer ;
             timer--;
 
-            // If the timer reaches 0, clear the interval
+           
             if (timer < 0) {
                 clearInterval(countdown);
                 document.getElementById('timer').innerText = 'Expired';
+                document.getElementById('resendotp').style.display = 'block'
             }
         }, 1000);
     }

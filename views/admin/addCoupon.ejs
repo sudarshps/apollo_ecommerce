@@ -139,6 +139,7 @@
                   <div class="form-group mb-5">
                     <label class="form-label" for="">Expiry Date</label>
                     <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                    <span id="expError" class="text-danger"></span>
                   </div>
                   <div class="mt-4 text-center mt-4">
                     <button type="submit" class="btn btn-primary mr-2" onclick="postCoupon(event)">Submit</button>
@@ -167,6 +168,8 @@ async function postCoupon(event){
   let couponAvailability = document.getElementById('couponAvailability').value;
   let couponDiscountAmount = document.getElementById('couponDiscountAmount').value;
   let minAmount = document.getElementById('minAmount').value;
+  let expDate = document.getElementById('expiryDate').value
+  
 
 const nameRegex = /^[a-zA-Z0-9]+$/;
 const codeRegex = /^[a-zA-Z0-9]+$/;
@@ -214,6 +217,19 @@ const numericRegex = /^[0-9]+$/;
   } else {
     document.getElementById('minError').innerHTML = '';
   }
+
+  if(new Date(expDate)<new Date()){
+
+document.getElementById('expError').innerHTML = 'expiry date must be future date!';
+return false;
+} else if(expDate===null){
+document.getElementById('expError').innerHTML = 'select a date!';
+return false;
+
+}else{
+document.getElementById('expError').innerHTML = '';
+}
+
 
 
  var verifyData=$('#couponForm').serialize();

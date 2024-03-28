@@ -25,73 +25,67 @@ const loadHome = async(req,res)=>{
 
 const loadShop = async(req,res)=>{
     try {
-        const categoryName = req.query.category
-        const priceRange = req.query.price
-        const categoryModel = await category.find()
-        if(priceRange!==undefined){
-            if(priceRange!=='select'){
-                const [minPrice, maxPrice] = priceRange.split("-");
-             const productPrice = await productModel.find({price:{$gte:minPrice,$lte:maxPrice}}).populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
-             res.json({successPrice:true,categoryModel,products:productPrice})
-            }else{
-                const products = await productModel.find().populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
-                res.json({allSuccessPrice:true,categoryModel,products})
+       
+        const categoryModel = await category.find() 
+        const products = await productModel.find().populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
+    
+            res.render('shop',{categoryModel,products})
+        
+        
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+
+
+
+const filterSearch = async (req, res) => {
+    try {
+        const { price, searchInput } = req.body;
+        const ctgName = req.body.category;
+        const categoryModel = await category.find();
+
+        
+        if (price !== 'select' || searchInput !== '' || ctgName!='all') {
+            
+            let filter = {};
+            if (searchInput !== '') {
+                filter.$or = [
+                    { name: { $regex: new RegExp(searchInput, 'i') } }, 
+                    { description: { $regex: new RegExp(searchInput, 'i') } },
+                    {brand:{$regex: new RegExp(searchInput, 'i')}} 
+                ];
+            }
+            if (price !== 'select') {
+                const [minPrice, maxPrice] = price.split("-");
+                filter.price = { $gte: minPrice, $lte: maxPrice };
+            }
+            if (ctgName!=='all') {
+                filter.category = ctgName; 
             }
             
-        
+            const products = await productModel.find(filter)
+                .populate('offer')
+                .populate({ path: 'categoryId', populate: { path: 'offer', model: 'offerModel' } });
+                
+            res.render('shop', { products, categoryModel });
+        } else {
+            
+            const products = await productModel.find()
+                .populate('offer')
+                .populate({ path: 'categoryId', populate: { path: 'offer', model: 'offerModel' } });
+                
+            res.render('shop', { products, categoryModel });
         }
-       
-        
-        const products = await productModel.find().populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
-        const productCategory = await productModel.find({category:categoryName}).populate('offer').populate({path:'categoryId',populate:{path:'offer',model:'offerModel'}})
-
-       
-        
-
-        
-        if(categoryName===undefined ){
-            res.render('shop',{categoryModel,products})
-        }else if(categoryName==='all'){
-            res.json({allSuccess:true,categoryModel,products})
-        }else{
-            res.json({success:true,categoryModel,products:productCategory})
-        }
-        
-
-        //price filter
-
-        // if(priceRange===undefined){
-        //     res.render('shop',{categoryModel,products})
-        // }else if(priceRange==='select'){
-        //     res.json({allSuccessPrice:true,categoryModel,products})
-        // }else{
-        //     res.json({priceSuccess:true,categoryModel,products:productCategory})
-        // }
-        
     } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
+        res.status(500).json({ error: error.message });
     }
-}
+};
 
 
-const searchItems = async(req,res)=>{
-    try {
-        const value = req.query.value
-        const products = await productModel.find({$or:[{name:{$regex:value,$options:'i'}},{description:{$regex:value,$options:'i'}}]}).populate('offer')
-        const categoryModel = await category.find()
 
-        if(products.length>0){
-            res.json({success:true,products})
-        }else{
-            res.json({success:false})
-        }
-        
-        
-        
-    } catch (error) {
-        console.log(error.message)
-    }
-}
 
 
 
@@ -505,34 +499,6 @@ const insertUser = async(req,res)=>{
 
 
 
-// const insertUser = async(req,res)=>{
-//     try {
-//     const otp = await req.body.otpv
-//     const response = await otpModel.find({otp}).sort({createdAt:-1}).limit(1)
-//     if(response.length === 0 || otp !== response[0].otp){
-//         return res.render('otpVerify',{message:'OTP is not valid'})
-//     }
-//     const spassword = await securePassword(req.body.password)
-//     const user = new User({
-//              username:req.body.username,
-//              email:req.body.email,
-//              mobile:req.body.mobile,
-//              password:spassword,
-//              isVerified:0
-//     })
-//     const userData = await user.save()
-//     if(userData){
-//         res.render('index')
-//         }else{
-//         res.render('register',{message:'registration failed!'})
-//         }
-// } catch (error) {
-//     console.log(error)
-// }
-// }
-
-
-
 //otp 
 
 const sentOtp = async({email},res)=>{
@@ -803,6 +769,6 @@ module.exports = {
     loadResetPass,
     addressDetails,
     postEditAddress,
-    searchItems
+    filterSearch
     
 }

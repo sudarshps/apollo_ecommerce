@@ -24,7 +24,9 @@ const couponController = require('../controllers/couponController')
 user_route.get('/',auth.isLogout,userController.loadHome)
 user_route.get('/home',auth.isLogin,userController.loadHome)
 user_route.get('/shop',userController.loadShop)
-user_route.get('/searchItems',userController.searchItems)
+
+user_route.post('/shop',userController.filterSearch)
+
 user_route.get('/productDetails',userController.loadProductDetails)
 // user_route.get('/chairs',userController.loadChairs)
 user_route.get('/about',userController.loadAbout)
