@@ -8,7 +8,7 @@
 						<div class="col-lg-5">
 							<div class="intro-excerpt">
 								<h1>Modern Interior <span class="d-block">Design Studio</span></h1>
-								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+								<p class="mb-4">Give a refreshed look to your home with our best-crafted designs of furniture.</p>
 								<p><a href="/shop" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
 							</div>
 						</div>
@@ -30,7 +30,7 @@
 					<!-- Start Column 1 -->
 					<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
 						<h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-						<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. </p>
+						<p class="mb-4">Indulge in luxury craftsmanship – where every detail is meticulously considered, every material chosen for its excellence. Explore our collection and experience the epitome of style and quality.</p>
 						<p><a href="/shop" class="btn">Explore</a></p>
 					</div> 
 					<!-- End Column 1 -->
@@ -95,7 +95,7 @@
 				<div class="row justify-content-between">
 					<div class="col-lg-6">
 						<h2 class="section-title">Why Choose Us</h2>
-						<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+						<p>We provide a seamless fusion of exquisite craftsmanship, timeless designs, and exceptional service, ensuring your furniture shopping experience surpasses expectations at every turn.</p>
 
 						<div class="row my-5">
 							<div class="col-6 col-md-6">
@@ -103,8 +103,8 @@
 									<div class="icon">
 										<img src="images/truck.svg" alt="Image" class="imf-fluid">
 									</div>
-									<h3>Fast &amp; Free Shipping</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<h3>Fast Shipping</h3>
+									<p>Enjoy the convenience of fast and free shipping on all orders, ensuring your new furniture arrives promptly and hassle-free to transform your space with ease</p>
 								</div>
 							</div>
 
@@ -114,7 +114,7 @@
 										<img src="images/bag.svg" alt="Image" class="imf-fluid">
 									</div>
 									<h3>Easy to Shop</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<p>Experience effortless shopping with our user-friendly interface, allowing you to browse, select, and purchase your perfect pieces with ease and convenience.</p>
 								</div>
 							</div>
 
@@ -124,7 +124,7 @@
 										<img src="images/support.svg" alt="Image" class="imf-fluid">
 									</div>
 									<h3>24/7 Support</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<p>available whenever you need assistance or have questions, ensuring a smooth and stress-free shopping experience.</p>
 								</div>
 							</div>
 
@@ -134,7 +134,7 @@
 										<img src="images/return.svg" alt="Image" class="imf-fluid">
 									</div>
 									<h3>Hassle Free Returns</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<p>Experience peace of mind with our hassle-free returns policy, allowing you to shop confidently, knowing that if your purchase isn't perfect, we'll make it right.</p>
 								</div>
 							</div>
 
@@ -165,15 +165,15 @@
 					</div>
 					<div class="col-lg-5 ps-lg-5">
 						<h2 class="section-title mb-4">We Help You Make Modern Interior Design</h2>
-						<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada</p>
+						<p>We're dedicated to helping you realize your vision of modern interior design. Our curated selection of furniture pieces, complemented by expert advice and inspiration, empowers you to create spaces that reflect your unique style and personality. Whether you're revamping a room or starting from scratch, let us be your guide in transforming your home into a modern masterpiece</p>
 
-						<ul class="list-unstyled custom-list my-4">
+						<!-- <ul class="list-unstyled custom-list my-4">
 							<li>Donec vitae odio quis nisl dapibus malesuada</li>
 							<li>Donec vitae odio quis nisl dapibus malesuada</li>
 							<li>Donec vitae odio quis nisl dapibus malesuada</li>
 							<li>Donec vitae odio quis nisl dapibus malesuada</li>
-						</ul>
-						<p><a herf="#" class="btn">Explore</a></p>
+						</ul> -->
+						<p><a href="/shop" class="btn">Explore</a></p>
 					</div>
 				</div>
 			</div>
@@ -181,23 +181,27 @@
 		<!-- End We Help Section -->
 
 		<!-- Start Popular Product -->
-		<div class="popular-product">
+		<!-- <div class="popular-product">
 			<div class="container">
 				<div class="row">
+					<% for(let i=products.length-1;i>=17;i--){ %>
 
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="images/product-1.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Nordic Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
+						<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
+							<div class="product-item-sm d-flex">
+								<div class="thumbnail">
+									<img src="<%= products[i].images[0] %>" alt="Image" class="img-fluid">
+								</div>
+								<div class="pt-3">
+									<h3><%= products[i].name %></h3>
+									<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
+									<p><a href="#">Read More</a></p>
+								</div>
 							</div>
 						</div>
-					</div>
 
+					<% } %> -->
+					
+<!-- 
 					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
 						<div class="product-item-sm d-flex">
 							<div class="thumbnail">
@@ -222,15 +226,15 @@
 								<p><a href="#">Read More</a></p>
 							</div>
 						</div>
-					</div>
+					</div> -->
 
-				</div>
+				<!-- </div>
 			</div>
-		</div>
+		</div> -->
 		<!-- End Popular Product -->
 
 		<!-- Start Testimonial Slider -->
-		<div class="testimonial-section">
+		<!-- <div class="testimonial-section">
 			<div class="container">
 				<div class="row">
 					<div class="col-lg-7 mx-auto text-center">
@@ -269,10 +273,10 @@
 
 										</div>
 									</div>
-								</div> 
+								</div> -->
 								<!-- END item -->
 
-								<div class="item">
+								<!-- <div class="item">
 									<div class="row justify-content-center">
 										<div class="col-lg-8 mx-auto">
 
@@ -292,10 +296,10 @@
 
 										</div>
 									</div>
-								</div> 
+								</div>  -->
 								<!-- END item -->
 
-								<div class="item">
+								<!-- <div class="item">
 									<div class="row justify-content-center">
 										<div class="col-lg-8 mx-auto">
 
@@ -315,20 +319,20 @@
 
 										</div>
 									</div>
-								</div> 
+								</div>  -->
 								<!-- END item -->
 
-							</div>
+							<!-- </div>
 
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>  -->
 		<!-- End Testimonial Slider -->
 
 		<!-- Start Blog Section -->
-		<div class="blog-section">
+		<!-- <div class="blog-section">
 			<div class="container">
 				<div class="row mb-5">
 					<div class="col-md-6">
@@ -379,7 +383,7 @@
 
 				</div>
 			</div>
-		</div>
+		</div> -->
 		<!-- End Blog Section -->	
 
 		<%- include('../partials/footer') -%>

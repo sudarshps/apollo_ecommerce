@@ -1,98 +1,100 @@
 @import "lesshat";
 
+/* Base styles */
 .login {
   max-width: 500px;
   min-width: 400px;
   margin: 12px auto;
   margin-top: 10px;
-  .login-form {    
-    background-color:rgba(172,172,172,0.3);    
-    border:solid 1px rgba(0,0,0,.2);
-    border-radius:10px;
-    box-shadow: 0 1px 12px rgba(0,0,0,.5);
-    padding: 50px 30px 20px;    
-    .input-group {
-      margin-top: 10px;
-    } 
-    
-    .input-group-addon {
-      background:#fff;      
-      border-right: none;
-    }
-    
-    input[type="email"], input[type="password"] {
-      border-left: none;
-    }
-    
-    input[type="email"]:focus, input[type="password"]:focus {
-      border-left: 3px solid #e74c3c;
-      -webkit-transition:0.4s ease;  
-    }
-    
-    input[type="submit"]#login {    
-      width: 100%;
-      margin: 0 auto;
-      margin-top: 20px;    
-      text-align: center;
-      height: 55px;
-    }
-    
-    .login-bar {
-      margin-top: 10px;
-      label {
-        font-weight: normal;
-      }
-
-      input[type="checkbox"] {        
-        margin-right: 5px;
-      } 
-    }     
-  }
-  
-  .social {    
-    margin: 0 auto;
-    padding-top: 10px;
-    text-align: center;
-    a {      
-      padding-top: 15px;             
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-    }
-    a:hover {     
-      text-decoration:none;
-    }
-  }
-    
-  .register {
-    margin-top: 20px;
-    padding: 10px;
-    .register-inner {
-      margin: 0 auto;
-      text-align: center;
-      .btn {
-        font-size: 18px;
-        padding: 10px 30px; 
-        
-      }
-    }
-  }
-}#loginwrnmsg{
-    text-align: center;
-    border: 1px solid #ccc;
-    padding: 20px;
-}
-.error{
-  color: red;
-}
-#forgot{
-  margin-top: 5%;
-  margin-bottom: 10%;
-}
-#headfgt{
-  font-size: 20px;
 }
 
-#head2fgt{
-  font-size: 10px;
+.login-form {    
+  background-color:rgba(172,172,172,0.3);    
+  border:solid 1px rgba(0,0,0,.2);
+  border-radius:10px;
+  box-shadow: 0 1px 12px rgba(0,0,0,.5);
+  padding: 50px 30px 20px;    
+}
+
+.input-group {
+  margin-top: 10px;
+} 
+
+.input-group-addon {
+  background:#fff;      
+  border-right: none;
+}
+
+input[type="email"], input[type="password"] {
+  border-left: none;
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+  border-left: 3px solid #e74c3c;
+  -webkit-transition:0.4s ease;  
+}
+
+input[type="submit"]#login {    
+  width: 100%;
+  margin: 0 auto;
+  margin-top: 20px;    
+  text-align: center;
+  height: 55px;
+}
+
+.login-bar {
+  margin-top: 10px;
+}
+
+.login-bar label {
+  font-weight: normal;
+}
+
+.login-bar input[type="checkbox"] {        
+  margin-right: 5px;
+}
+
+.social {    
+  margin: 0 auto;
+  padding-top: 10px;
+  text-align: center;
+}
+
+.social a {      
+  padding-top: 15px;             
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+}
+
+.social a:hover {     
+  text-decoration:none;
+}
+
+.register {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.register-inner {
+  margin: 0 auto;
+  text-align: center;
+}
+
+.register-inner .btn {
+  font-size: 18px;
+  padding: 10px 30px; 
+}
+
+/* Responsive styles */
+@media screen and (max-width: 768px) {
+  .login {
+    max-width: 100%;
+    min-width: auto;
+    padding: 0 20px;
+  }
+
+  .login-form {
+    padding: 30px;
+  }
 }
