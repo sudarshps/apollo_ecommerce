@@ -106,7 +106,30 @@
                       <td class="product-name">
                         <a href="/productDetails?id=<%= items.product_id._id %>" style="text-decoration: none;"><h2 class="h5 text-black"><%= items.product_id.name %></h2></a>
                       </td>
-                      <td>₹<%= items.product_id.price %>.00</td>
+
+
+                      <% 
+                   let itemPrice = items.product_id.price;
+                   if(items.product_id.offer && items.product_id.categoryId.offer){
+
+                   itemPrice -= (itemPrice * items.product_id.offer.percentage / 100);
+
+                   } else if(items.product_id.categoryId && items.product_id.categoryId.offer){
+                    
+                  itemPrice -= (itemPrice * items.product_id.categoryId.offer.percentage / 100);
+
+                 } else if(items.product_id.offer){
+
+                  itemPrice -= (itemPrice * items.product_id.offer.percentage / 100);
+
+                  }
+
+                 
+
+                 %>
+
+
+                      <td>₹<%= itemPrice %>.00</td>
                      
                       
                       <td><a href="" class="btn btn-black btn-sm" onclick="dltWishlistItem(event,'<%= items.product_id._id %>')">X</a></td>

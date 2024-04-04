@@ -6,7 +6,13 @@ const cartModel = require('../model/cartModel')
 const loadWishlist = async(req,res)=>{
     try {
         const userid = req.session.user_id
-        const userData = await userModel.findOne({_id:userid}).populate('wishlist.product_id')
+        const userData = await userModel.findOne({_id:userid}).populate({
+            path: 'wishlist.product_id',
+            populate: [
+                { path: 'offer', model: 'offerModel' },
+                { path: 'categoryId', model: 'categoryModel',populate:{path:'offer',model:'offerModel'}}
+            ]
+        });
         const wishlist = userData.wishlist
         res.render('wishlist',{userData,wishlist})
     } catch (error) {
