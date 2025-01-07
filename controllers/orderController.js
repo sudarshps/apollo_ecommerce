@@ -208,7 +208,6 @@ const generateRazorpay = (orderId,total_price,couponId) =>{
 }
 
 const verifyPayment = async(req,res)=>{ 
-
     const {order,payment} = req.body
     const userid = req.session.user_id
     console.log('oid:',order,'pmnt:',payment);

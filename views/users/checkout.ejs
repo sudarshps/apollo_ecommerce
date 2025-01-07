@@ -783,18 +783,14 @@
 
 	function razorpayPayment(order){
 		var options = {
-    "key": "rzp_test_cnVfltu2ex0dJP", // Enter the Key ID generated from the Dashboard
+    "key": "rzp_test_fWVGgOj6U331Ac", // Enter the Key ID generated from the Dashboard
     "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
     "currency": "INR",
     "name": "Apollo Group",
     "description": "Test Transaction",
     "image": "https://example.com/your_logo",
-    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    "handler": function (response){
-        // alert(response.razorpay_payment_id);
-        // alert(response.razorpay_order_id);
-        // alert(response.razorpay_signature)
-
+    "order_id": order.id, 
+    "handler": function (response){	
 		verifyPayment(response,order)
     },
     "prefill": {
@@ -808,7 +804,7 @@
     "theme": {
         "color": "#3b5d50"
     }
-};
+}
 var rzp1 = new Razorpay(options);
 rzp1.open();
 	}

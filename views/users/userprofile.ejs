@@ -941,12 +941,6 @@ function newEditAddress(event, addrid) {
 }
 
 
-
-
-    
-
-
-
 function addrdltbtn(event,addrid){
 event.preventDefault()
 
@@ -1164,7 +1158,7 @@ function completePayment(event,orderId,totalPrice){
 
 function razorpayPayment(order){
 		var options = {
-    "key": "rzp_test_cnVfltu2ex0dJP", // Enter the Key ID generated from the Dashboard
+    "key": "rzp_test_fWVGgOj6U331Ac", // Enter the Key ID generated from the Dashboard
     "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
     "currency": "INR",
     "name": "Apollo Group",
@@ -1223,119 +1217,6 @@ rzp1.open();
 			}
 		})
 	}
-
-
-
-
-
-
-//address edit submition
-
-
-
-
-
-
-// $.ajax({
-//         url: "/getAddressDetails", // Update the URL to your backend route to fetch address details
-//         method: 'GET',
-//         data: {
-//             addrid // Pass the addressId as a parameter to the backend
-//         },
-//         success: function(response) {
-//             // Handle successful response
-//             if (response.success) {
-//                 // Assuming response.data contains the address details
-//                 var addressDetails = response.data;
-
-//                 // Populate form fields with address details
-//                 $('#namein').val(addressDetails.username);
-//                 $('#emailin').val(addressDetails.email);
-//                 $('#mobilein').val(addressDetails.mobile);
-//                 $('#addressin').val(addressDetails.address);
-//                 $('#pincodein').val(addressDetails.pincode);
-//                 $('#cityin').val(addressDetails.city);
-//                 $('#statein').val(addressDetails.state);
-
-//                 // Show the modal
-//                 $('#addressEditmodal').modal('show');
-//             } else {
-//                 // Handle error response
-//                 console.error('Error:', response.message);
-//                 // Optionally display an error message to the user
-//             }
-//         },
-//         error: function(xhr, status, error) {
-//             // Handle AJAX error
-//             console.error('AJAX Error:', error);
-//             // Optionally display an error message to the user
-//         }
-//     });
-
-
-
-// $('#addressEditmodal').modal('show');
-
-
-
-
-
-
-
-// $.ajax({
-//     method:'post',
-//     url:`/addrdlt?id=${addrid}`,
-//     success: (response) => {
-//         if (response.success) {
-//             Swal.fire({
-//   title: "Are you sure?",
-//   text: "Want to delete this address?",
-//   icon: "warning",
-//   showCancelButton: true,
-//   confirmButtonColor: "#3085d6",
-//   cancelButtonColor: "#d33",
-//   confirmButtonText: "Yes, delete it!"
-// }).then((result) => {
-//   if (result.isConfirmed) {
-//     Swal.fire({
-//       title: "Deleted!",
-//       text: "Deletion Successful.",
-//       icon: "success"
-//     })
-//     $('#reload').load('/userprof #reload');
-    
-
-//   }
-// });
-            
-//         } else {
-//             Swal.fire({
-//                 title: 'Error',
-//                 icon: 'error',
-//                 text: response.message,
-//                 timer: 2000,
-//             });
-//         }
-//     },
-//     error: (error) => {
-//         Swal.fire({
-//             title: 'Error',
-//             icon: 'error',
-//             text: response.message,
-//             timer: 1500,
-//         });
-//     }
-    
-// })
-
-
-
-
-
-
-
-
-
 
         </script>
         
